@@ -3,8 +3,6 @@ import kinect4WinSDK.Kinect;
 import kinect4WinSDK.SkeletonData;
 
 ControlP5 controls;
-Kinect kinect;
-ArrayList <SkeletonData> bodies;
 boolean showImage;
 boolean showDepth;
 boolean showMask;
@@ -12,12 +10,14 @@ boolean showSkeleton;
 
 int overlayRatio;
 
+Tracking tracker;
 
 void setup()
 {
   size(640, 480);
   background(0);
-  kinect = new Kinect(this);
+  
+  tracker = new Tracking(this);
   
   controls = new ControlP5(this);
   controls.addToggle("showImage")
@@ -37,7 +37,6 @@ void setup()
           .setPosition(10,height-110)
           .setSize(15,15);
   smooth();
-  bodies = new ArrayList<SkeletonData>();
   
   overlayRatio = 100;
   
@@ -47,19 +46,23 @@ void draw()
 {
   background(0);
   if(showImage)
-    image(kinect.GetImage(), 0, 0, 640, 480);
+    image(tracker.returnKinect().GetImage(), 0, 0, 640, 480);
   if(showDepth)
-    image(kinect.GetDepth(), 0, 0, 640, 480);
+    image(tracker.returnKinect().GetDepth(), 0, 0, 640, 480);
   if(showMask)  
-    image(kinect.GetMask(), 0, 0, 640, 480);
+    image(tracker.returnKinect().GetMask(), 0, 0, 640, 480);
   if(showSkeleton)
   {
-    for (int i=0; i<bodies.size (); i++) 
+    for (int i=0; i<tracker.getBodySize(); i++) 
     {
-      drawSkeleton(bodies.get(i));
-      drawPosition(bodies.get(i));
+      drawSkeleton(tracker.getBodyData(i));
+      drawPosition(tracker.getBodyData(i));
+      print("Left hand: "+tracker.getLeftHandPos());
+      print("Right hand: "+tracker.getRightHandPos());
     }
   }
+  
+  
 }
 
 void drawPosition(SkeletonData _s) 
@@ -169,25 +172,27 @@ void DrawBone(SkeletonData _s, int _j1, int _j2)
   }
 }
 
+
+//Kinect Events Similar to MousePressed, must be kept
 void appearEvent(SkeletonData _s) 
 {
   if (_s.trackingState == Kinect.NUI_SKELETON_NOT_TRACKED) 
   {
     return;
   }
-  synchronized(bodies) {
-    bodies.add(_s);
+  synchronized(tracker.getBodies()) {
+    tracker.addJoint(_s);
   }
 }
 
 void disappearEvent(SkeletonData _s) 
 {
-  synchronized(bodies) {
-    for (int i=bodies.size ()-1; i>=0; i--) 
+  synchronized(tracker.getBodies()) {
+    for (int i=tracker.getBodySize()-1; i>=0; i--) 
     {
-      if (_s.dwTrackingID == bodies.get(i).dwTrackingID) 
+      if (_s.dwTrackingID == tracker.getBodyData(i).dwTrackingID) 
       {
-        bodies.remove(i);
+        tracker.removeJoint(i);
       }
     }
   }
@@ -199,12 +204,12 @@ void moveEvent(SkeletonData _b, SkeletonData _a)
   {
     return;
   }
-  synchronized(bodies) {
-    for (int i=bodies.size ()-1; i>=0; i--) 
+  synchronized(tracker.getBodies()) {
+    for (int i=tracker.getBodySize()-1; i>=0; i--) 
     {
-      if (_b.dwTrackingID == bodies.get(i).dwTrackingID) 
+      if (_b.dwTrackingID == tracker.getBodyData(i).dwTrackingID) 
       {
-        bodies.get(i).copy(_a);
+        tracker.updateJoint(i,_a);
         break;
       }
     }
