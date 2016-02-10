@@ -1,3 +1,10 @@
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.effects.*;
+import ddf.minim.signals.*;
+import ddf.minim.spi.*;
+import ddf.minim.ugens.*;
+
 import shiffman.box2d.*;
 import org.jbox2d.collision.shapes.*;
 import org.jbox2d.common.*;
@@ -11,6 +18,8 @@ Tracking tracker;
 Minim minim;
 AudioPlayer backgroundMusic;
 
+
+PImage backgroundImg;
 // A reference to our box2d world
 Box2DProcessing box2d;
 
@@ -22,15 +31,17 @@ Bowl bowl;
 
 void setup() {
   background(0);
-  size(800,600);
+  size(1920, 1080);
   smooth(4);
   
   tracker = new Tracking(this);
   
   //Music initialization
   minim = new Minim(this);
-  backgroundMusic = minim.loadFile("temp.mp3");
+  backgroundMusic = minim.loadFile("alpha_musicBg.mp3");
   backgroundMusic.loop();
+  
+  backgroundImg = loadImage("backgroundImg.png");
   
   // Initialize box2d physics and create the world
   box2d = new Box2DProcessing(this);
@@ -56,7 +67,7 @@ void draw() {
   
 
   background(255);
-  
+  image(backgroundImg, 0, 0);
   
 
   // Draw all particles
