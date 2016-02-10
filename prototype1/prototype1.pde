@@ -56,7 +56,7 @@ void setup() {
     svgVrts.add(pentanana_shape.getChild(0).getVertex(i));
     //println(pentanana_shape.getChild(0).getVertex(i));
   }
-  println(svgVrts.size());
+  println(svgVrts);
   
   // Initialize box2d physics and create the world
   box2d = new Box2DProcessing(this);
@@ -75,7 +75,7 @@ void draw() {
   if (random(1) < 0.5) {
     float w = random(5,10);
     float h = random(5,10);
-    fruits.add(new Fruit(width/2,10,svgVrts,box2d));
+    fruits.add(new Fruit(random(0, width),-20,svgVrts,box2d));
   }
 
   // We must always step through time!
