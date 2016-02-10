@@ -12,12 +12,16 @@ import org.jbox2d.dynamics.*;
 import kinect4WinSDK.Kinect;
 import kinect4WinSDK.SkeletonData;
 import ddf.minim.*; //used for music
+import org.jbox2d.dynamics.joints.*;
+
+PImage pentanana_img;
+float img_scale;
+ArrayList<PVector> svgVrts;
 
 Tracking tracker;
 
 Minim minim;
 AudioPlayer backgroundMusic;
-
 
 PImage backgroundImg;
 // A reference to our box2d world
@@ -30,10 +34,10 @@ ArrayList<Fruit> fruits;
 Bowl bowl;
 
 void setup() {
-  background(0);
+  background(175, 238, 238);
   size(1920, 1080);
   smooth(4);
-  
+  colorMode(RGB, 255, 255, 255, 100);
   tracker = new Tracking(this);
   
   //Music initialization
@@ -42,7 +46,8 @@ void setup() {
   backgroundMusic.loop();
   
   backgroundImg = loadImage("backgroundImg.png");
-  
+  pentanana_img = loadImage("PENTANANA_500.png");
+
   // Initialize box2d physics and create the world
   box2d = new Box2DProcessing(this);
   box2d.createWorld();
@@ -52,7 +57,7 @@ void setup() {
   // Create the empty list
   fruits = new ArrayList<Fruit>();
   // Create the surface
-  bowl = new Bowl();
+  bowl = new Bowl(box2d);
 }
 
 void draw() {
@@ -60,7 +65,7 @@ void draw() {
   if (random(1) < 0.5) {
     float w = random(5,10);
     float h = random(5,10);
-    fruits.add(new Fruit(width/2,10,w,h));
+    fruits.add(new Fruit(random(0, width),-20,box2d));
   }
 
   // We must always step through time!
@@ -71,6 +76,7 @@ void draw() {
   
 
   // Draw all particles
+  println(fruits.size());
   for (Fruit p: fruits) {
     p.display();
   }
@@ -102,6 +108,7 @@ void draw() {
     }
   if(posLeft == null || posRight == null)
   {
+   // print("it's null");
   }
   else
   {
@@ -112,6 +119,8 @@ void draw() {
     // Draw the surface
     bowl.display();
   }
+  
+  //bowl.display();
 }
 
 //Kinect Events Similar to MousePressed, must be kept
