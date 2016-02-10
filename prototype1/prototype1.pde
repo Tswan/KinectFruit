@@ -4,8 +4,12 @@ import org.jbox2d.common.*;
 import org.jbox2d.dynamics.*;
 import kinect4WinSDK.Kinect;
 import kinect4WinSDK.SkeletonData;
+import ddf.minim.*; //used for music
 
 Tracking tracker;
+
+Minim minim;
+AudioPlayer backgroundMusic;
 
 // A reference to our box2d world
 Box2DProcessing box2d;
@@ -22,6 +26,11 @@ void setup() {
   smooth(4);
   
   tracker = new Tracking(this);
+  
+  //Music initialization
+  minim = new Minim(this);
+  backgroundMusic = minim.loadFile("temp.mp3");
+  backgroundMusic.loop();
   
   // Initialize box2d physics and create the world
   box2d = new Box2DProcessing(this);
