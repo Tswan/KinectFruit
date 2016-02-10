@@ -5,9 +5,8 @@ class Fruit {
   float fruit_w, fruit_h;
   PImage banana = loadImage("PENTANANA_500.png");
   
-  Fruit(float x, float y, ArrayList<PVector> vrts, Box2DProcessing mBox2DRef) {
+  Fruit(float x, float y, Box2DProcessing mBox2DRef) {
     box2d = mBox2DRef;
-    int numVrts = vrts.size();
     Vec2 center = new Vec2(x, y);
     Vec2[] vertices = new Vec2[6];
     

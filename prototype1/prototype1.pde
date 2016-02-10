@@ -15,7 +15,6 @@ import ddf.minim.*; //used for music
 import org.jbox2d.dynamics.joints.*;
 
 PImage pentanana_img;
-PShape pentanana_shape;
 float img_scale;
 ArrayList<PVector> svgVrts;
 
@@ -48,16 +47,7 @@ void setup() {
   
   backgroundImg = loadImage("backgroundImg.png");
   pentanana_img = loadImage("PENTANANA_500.png");
-  pentanana_shape = loadShape("PENTANANA_500_working.svg");
-  svgVrts = new ArrayList<PVector>();
-  
-  for(int i = 0; i < pentanana_shape.getChild(0).getVertexCount(); i++)
-  {
-    svgVrts.add(pentanana_shape.getChild(0).getVertex(i));
-    //println(pentanana_shape.getChild(0).getVertex(i));
-  }
-  println(svgVrts);
-  
+
   // Initialize box2d physics and create the world
   box2d = new Box2DProcessing(this);
   box2d.createWorld();
@@ -75,7 +65,7 @@ void draw() {
   if (random(1) < 0.5) {
     float w = random(5,10);
     float h = random(5,10);
-    fruits.add(new Fruit(random(0, width),-20,svgVrts,box2d));
+    fruits.add(new Fruit(random(0, width),-20,box2d));
   }
 
   // We must always step through time!
