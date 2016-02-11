@@ -34,8 +34,8 @@ ArrayList<Fruit> fruits;
 Bowl bowl;
 
 void setup() {
+  size(1920, 1080, P3D);
   background(175, 238, 238);
-  size(1920, 1080);
   smooth(4);
   colorMode(RGB, 255, 255, 255, 100);
   tracker = new Tracking(this);
@@ -45,7 +45,7 @@ void setup() {
   backgroundMusic = minim.loadFile("alpha_musicBg.mp3");
   backgroundMusic.loop();
   
-  backgroundImg = loadImage("backgroundImg.png");
+  backgroundImg = loadImage("backgroundImg2.png");
   pentanana_img = loadImage("PENTANANA_500.png");
 
   // Initialize box2d physics and create the world
@@ -57,7 +57,7 @@ void setup() {
   // Create the empty list
   fruits = new ArrayList<Fruit>();
   // Create the surface
-  bowl = new Bowl(box2d);
+  //bowl = new Bowl(box2d);
 }
 
 void draw() {
@@ -75,11 +75,7 @@ void draw() {
   image(backgroundImg, 0, 0);
   
 
-  // Draw all particles
-  println(fruits.size());
-  for (Fruit p: fruits) {
-    p.display();
-  }
+  
   
 
   // Particles that leave the screen, we delete them
@@ -106,12 +102,22 @@ void draw() {
       posRight = tracker.getRightHandPos();
       posLeft = tracker.getLeftHandPos();
     }
-  if(posLeft == null || posRight == null)
+  if(posLeft == null && posRight == null) {
+    /*if (bowl != null) {
+     bowl.destroyBowl();
+   }*/
+  }
+  else if(posLeft == null || posRight == null)
   {
-   // print("it's null");
+   if (bowl != null) {
+     bowl.destroyBowl();
+   }
   }
   else
   {
+    if (bowl == null) {
+      bowl = new Bowl(box2d);
+    }
     ellipse(posRight.x,posRight.y,10,10);
     ellipse(posLeft.x,posLeft.y,10,10);
     
@@ -119,7 +125,15 @@ void draw() {
     // Draw the surface
     bowl.display();
   }
+  // Draw all particles
+  println(fruits.size());
+  for (Fruit p: fruits) {
+    p.display();
+  }
   
+  if(posLeft != null || posRight != null && bowl != null) {
+    bowl.displayFront();
+  }
   //bowl.display();
 }
 

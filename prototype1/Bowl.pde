@@ -1,6 +1,8 @@
 class Bowl {
   Box2DProcessing mBox2DRef;
-  int bowlDiameter = 50;
+
+  PImage bowlBack = loadImage("bowl_back_200.png");
+  PImage bowlFront = loadImage("bowl_front_200.png");
   
   // We'll keep track of all of the surface points
   //ArrayList<Vec2> bowl;
@@ -9,6 +11,9 @@ class Bowl {
   PVector leftEnd = new PVector(800,500);
   PVector rightEnd = new PVector(1000, 500);
   
+  float angleBetweenTwoPoints;
+  Vec2 circleCenter;
+  
   int numSections = 20;
   
   PVector bridgeVec = PVector.sub( leftEnd, rightEnd );  
@@ -16,10 +21,10 @@ class Bowl {
   
   ArrayList<RectangleBody> getHalfCircle(PVector leftPoint, PVector rightPoint) { 
     ArrayList<RectangleBody> halfCircle = new ArrayList<RectangleBody>();
-    Vec2 circleCenter = new Vec2((rightPoint.x + leftPoint.x) / 2, (rightPoint.y + leftPoint.y) / 2); 
+    circleCenter = new Vec2((rightPoint.x + leftPoint.x) / 2, (rightPoint.y + leftPoint.y) / 2); 
     //float radius = sqrt(pow(circleCenter.x - leftPoint.x, 2) + pow(circleCenter.y - leftPoint.y, 2));
     float radius = 100;
-    float angleBetweenTwoPoints = atan((rightPoint.y - leftPoint.y) / (rightPoint.x - leftPoint.x));
+    angleBetweenTwoPoints = atan((rightPoint.y - leftPoint.y) / (rightPoint.x - leftPoint.x));
     //println(degrees(angleBetweenTwoPoints));
     //println("numSections: " + numSections);
     
@@ -82,17 +87,39 @@ class Bowl {
   
   void update(PVector posLeft, PVector posRight) {
       ArrayList<RectangleBody> bufferBowl = getHalfCircle(posLeft, posRight);
-      for (RectangleBody shape : bowl2) {
-        shape.DestroyBody();
-      }
+      destroyBowl();
       bowl2 = bufferBowl;
   }
   
   // A simple function to just draw the edge chain as a series of vertex points
   void display() {
-    print (bowl2.size());
-    for(RectangleBody c : bowl2) {
+    pushMatrix();
+    imageMode(CENTER);
+    translate(circleCenter.x, circleCenter.y);
+      rotate(angleBetweenTwoPoints);
+      image(bowlBack, 0,bowlBack.height/2);
+    popMatrix();
+    imageMode(CORNER);
+    /*for(RectangleBody c : bowl2) {
       c.draw();
-    }
+    }*/
+  }
+  
+  void displayFront() {
+    pushMatrix();
+    imageMode(CENTER);
+    translate(circleCenter.x, circleCenter.y);
+      rotate(angleBetweenTwoPoints);
+      tint(255, 85);
+      image(bowlFront, 0,bowlFront.height/2);
+      noTint();
+    popMatrix();
+    imageMode(CORNER);
+  }
+  
+  void destroyBowl() {
+    for (RectangleBody shape : bowl2) {
+        shape.DestroyBody();
+      }
   }
 }
