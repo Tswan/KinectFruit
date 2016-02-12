@@ -42,7 +42,7 @@ void setup() {
   
   //Music initialization
   minim = new Minim(this);
-  backgroundMusic = minim.loadFile("alpha_musicBg.mp3");
+  backgroundMusic = minim.loadFile("alpha_musicBg_original.mp3");
   backgroundMusic.loop();
   
   backgroundImg = loadImage("backgroundImg2.png");
