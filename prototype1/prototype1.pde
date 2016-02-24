@@ -1,9 +1,4 @@
 import ddf.minim.*;
-import ddf.minim.analysis.*;
-import ddf.minim.effects.*;
-import ddf.minim.signals.*;
-import ddf.minim.spi.*;
-import ddf.minim.ugens.*;
 
 import shiffman.box2d.*;
 import org.jbox2d.collision.shapes.*;
@@ -18,7 +13,7 @@ PImage pentanana_img;
 float img_scale;
 ArrayList<PVector> svgVrts;
 
-Tracking tracker;
+//Tracking tracker;
 
 Minim minim;
 AudioPlayer backgroundMusic;
@@ -38,7 +33,7 @@ void setup() {
   background(175, 238, 238);
   smooth(4);
   colorMode(RGB, 255, 255, 255, 100);
-  tracker = new Tracking(this);
+  //tracker = new Tracking(this);
   
   //Music initialization
   minim = new Minim(this);
@@ -95,13 +90,15 @@ void draw() {
   
   PVector posRight = null;
   PVector posLeft = null;
-    for (int i=0; i<tracker.getBodySize(); i++) 
-    {
-      print("Left hand: "+tracker.getLeftHandPos());
-      print("Right hand: "+tracker.getRightHandPos());
-      posRight = tracker.getRightHandPos();
-      posLeft = tracker.getLeftHandPos();
-    }
+  posRight = new PVector(mouseX + 10, mouseY);
+  posLeft = new PVector(mouseX - 10, mouseY);
+    //for (int i=0; i<tracker.getBodySize(); i++) 
+    //{
+    //  print("Left hand: "+tracker.getLeftHandPos());
+    //  print("Right hand: "+tracker.getRightHandPos());
+    //  posRight = tracker.getRightHandPos();
+    //  posLeft = tracker.getLeftHandPos();
+    //}
   if(posLeft == null && posRight == null) {
     /*if (bowl != null) {
      bowl.destroyBowl();
@@ -137,6 +134,7 @@ void draw() {
   //bowl.display();
 }
 
+/*
 //Kinect Events Similar to MousePressed, must be kept
 void appearEvent(SkeletonData _s) 
 {
@@ -179,3 +177,4 @@ void moveEvent(SkeletonData _b, SkeletonData _a)
     }
   }
 }
+*/
