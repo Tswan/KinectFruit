@@ -3,12 +3,16 @@ class Fruit {
   PolygonShape bananaShape;
   Body body;
   float fruit_w, fruit_h;
-  PImage banana = loadImage("PENTANANA_500.png");
+  PImage fruit_img;
+  boolean collided;
   
-  Fruit(float x, float y, Box2DProcessing mBox2DRef) {
+  Fruit(float x, float y, Box2DProcessing mBox2DRef, PImage fruitImage) {
+    
+    fruit_img = fruitImage;
     box2d = mBox2DRef;
     Vec2 center = new Vec2(x, y);
     Vec2[] vertices = new Vec2[6];
+    collided = false;
     
     vertices[0] = box2d.vectorPixelsToWorld(new Vec2(9.3, 0)); 
     vertices[1] = box2d.vectorPixelsToWorld(new Vec2(9.3, 20.8)); 
@@ -36,6 +40,8 @@ class Fruit {
     body = box2d.createBody(bd);
     body.createFixture(fd);
     body.setAngularVelocity(random(-5, 5));
+    body.setUserData(this);
+    
   }
   
   void display() {
@@ -46,7 +52,7 @@ class Fruit {
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(-a);
-    image(banana, 0, 0); 
+    image(fruit_img, 0, 0); 
     popMatrix();
   }
   
@@ -94,5 +100,16 @@ class Fruit {
       return true;
     }
     return false;
+  }
+  
+  //Make sure fruit only collide once
+  void collision()
+  {
+    collided = true;
+  }
+  
+  boolean hasCollided()
+  {
+    return collided;
   }
 }

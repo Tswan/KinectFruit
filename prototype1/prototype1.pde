@@ -4,6 +4,7 @@ import shiffman.box2d.*;
 import org.jbox2d.collision.shapes.*;
 import org.jbox2d.common.*;
 import org.jbox2d.dynamics.*;
+import org.jbox2d.dynamics.contacts.*;
 import kinect4WinSDK.Kinect;
 import kinect4WinSDK.SkeletonData;
 import ddf.minim.*; //used for music
@@ -17,6 +18,7 @@ ArrayList<PVector> svgVrts;
 
 Minim minim;
 AudioPlayer backgroundMusic;
+AudioPlayer pentanana_hit_sound;
 
 PImage backgroundImg;
 // A reference to our box2d world
@@ -37,8 +39,10 @@ void setup() {
   
   //Music initialization
   minim = new Minim(this);
-  backgroundMusic = minim.loadFile("alpha_musicBg_original.mp3");
-  backgroundMusic.loop();
+  //backgroundMusic = minim.loadFile("alpha_musicBg_original.mp3");
+  //backgroundMusic.loop();
+  
+  pentanana_hit_sound = minim.loadFile("bananaHits/banana_hit_1.mp3");
   
   backgroundImg = loadImage("backgroundImg2.png");
   pentanana_img = loadImage("PENTANANA_500.png");
@@ -53,6 +57,7 @@ void setup() {
   fruits = new ArrayList<Fruit>();
   // Create the surface
   //bowl = new Bowl(box2d);
+  box2d.listenForCollisions();
 }
 
 void draw() {
@@ -60,7 +65,7 @@ void draw() {
   if (random(1) < 0.5) {
     float w = random(5,10);
     float h = random(5,10);
-    fruits.add(new Fruit(random(0, width),-20,box2d));
+    fruits.add(new Fruit(random(0, width),-20,box2d,pentanana_img));
   }
 
   // We must always step through time!
@@ -123,7 +128,7 @@ void draw() {
     bowl.display();
   }
   // Draw all particles
-  println(fruits.size());
+  //println(fruits.size());
   for (Fruit p: fruits) {
     p.display();
   }
@@ -133,6 +138,35 @@ void draw() {
   }
   //bowl.display();
 }
+
+//Collision Detection
+void beginContact(Contact cp)
+{
+  
+  Fixture f1 = cp.getFixtureA();
+  Fixture f2 = cp.getFixtureB();
+  
+  Body b1 = f1.getBody();
+  Body b2 = f2.getBody();
+  
+  Object o1 = b1.getUserData();
+  Object o2 = b2.getUserData();
+  
+  if(o1.getClass() == Fruit.class || o2.getClass() == Fruit.class)
+  {
+    if(o1.getClass() == RectangleBody.class || o2.getClass() == RectangleBody.class)
+    {
+      pentanana_hit_sound.play(0);
+    }
+  }
+  
+}
+
+void endContact(Contact cp)
+{
+  
+}
+
 
 /*
 //Kinect Events Similar to MousePressed, must be kept

@@ -83,6 +83,7 @@ class Bowl {
     
     ArrayList<RectangleBody> bufferBowl = getHalfCircle(leftEnd, rightEnd);
     bowl2 = bufferBowl;
+    
   }
   
   void update(PVector posLeft, PVector posRight) {
