@@ -13,6 +13,7 @@ class Bowl {
   
   float angleBetweenTwoPoints;
   Vec2 circleCenter;
+  Vec2 bowlPosition;
   
   int numSections = 20;
   
@@ -40,15 +41,15 @@ class Bowl {
       RectangleBody section = null;
       if (i == 0 ) {
         PVector sectionPos = new PVector( RectanglePos.get(0).x, RectanglePos.get(0).y );
-         section = new RectangleBody( sectionPos.x, sectionPos.y, 15, 10, (int) degrees(angleBetweenTwoPoints) + 90 - (i * 9), BodyType.STATIC, mBox2DRef);
+         section = new RectangleBody( sectionPos.x, sectionPos.y, 15, 10, (int) degrees(angleBetweenTwoPoints) + 90 - (i * 9), BodyType.KINEMATIC, mBox2DRef);
       }
       else if ( i == numSections ) {
         PVector sectionPos = new PVector( RectanglePos.get(numSections - 1 ).x, RectanglePos.get(numSections - 1).y );
-        section = new RectangleBody( sectionPos.x, sectionPos.y, 15, 10, (int) degrees(angleBetweenTwoPoints) + 90 - (i * 9), BodyType.STATIC, mBox2DRef);
+        section = new RectangleBody( sectionPos.x, sectionPos.y, 15, 10, (int) degrees(angleBetweenTwoPoints) + 90 - (i * 9), BodyType.KINEMATIC, mBox2DRef);
       }
       else {//all middle sections
        PVector sectionPos = new PVector( RectanglePos.get(i).x, RectanglePos.get(i).y );
-       section = new RectangleBody(sectionPos.x, sectionPos.y, 15, 10, (int) degrees(angleBetweenTwoPoints) + 90 - (i * 9), BodyType.STATIC, mBox2DRef);
+       section = new RectangleBody(sectionPos.x, sectionPos.y, 15, 10, (int) degrees(angleBetweenTwoPoints) + 90 - (i * 9), BodyType.KINEMATIC, mBox2DRef);
        }
        
        //now that we have all pieces we want to connect them together with a "stretchy" joint
@@ -87,35 +88,48 @@ class Bowl {
   }
   
   void update(PVector posLeft, PVector posRight) {
-      ArrayList<RectangleBody> bufferBowl = getHalfCircle(posLeft, posRight);
-      destroyBowl();
-      bowl2 = bufferBowl;
+      //ArrayList<RectangleBody> bufferBowl = getHalfCircle(posLeft, posRight);
+      //destroyBowl();
+      RectangleBody leftMostBody = bowl2.get(bowl2.size() - 1);
+      
+      Vec2 previous = mBox2DRef.getBodyPixelCoord( leftMostBody.mBody );
+      
+      
+      float velX = (mouseX - previous.x) / 2;
+      float velY = -1 * (mouseY - previous.y) / 2;
+      for (RectangleBody shape : bowl2) {
+        shape.MoveBody(new Vec2(velX, velY));
+      }
+      //bowl2 = bufferBowl;
+      leftMostBody = bowl2.get(bowl2.size() - 1);
+      bowlPosition = mBox2DRef.getBodyPixelCoord( leftMostBody.mBody );
   }
   
   // A simple function to just draw the edge chain as a series of vertex points
   void display() {
     pushMatrix();
-    imageMode(CENTER);
-    translate(circleCenter.x, circleCenter.y);
-      rotate(angleBetweenTwoPoints);
-      image(bowlBack, 0,bowlBack.height/2);
-    popMatrix();
     imageMode(CORNER);
-    /*for(RectangleBody c : bowl2) {
+    translate(bowlPosition.x, bowlPosition.y);
+      rotate(angleBetweenTwoPoints);
+      image(bowlBack, 0, 0);
+    popMatrix();
+    //imageMode(CORNER);
+    for(RectangleBody c : bowl2) {
       c.draw();
-    }*/
+    }
   }
   
   void displayFront() {
     pushMatrix();
-    imageMode(CENTER);
-    translate(circleCenter.x, circleCenter.y);
+    imageMode(CORNER);
+    //imageMode(CENTER);
+    translate(bowlPosition.x, bowlPosition.y);
       rotate(angleBetweenTwoPoints);
       tint(255, 85);
-      image(bowlFront, 0,bowlFront.height/2);
+      image(bowlFront, 0, 0);
       noTint();
     popMatrix();
-    imageMode(CORNER);
+    //imageMode(CORNER);
   }
   
   void destroyBowl() {

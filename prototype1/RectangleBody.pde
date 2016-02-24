@@ -67,4 +67,12 @@ class RectangleBody
    {
      mBox2DRef.destroyBody(mBody);
    }
+   
+   void MoveBody(Vec2 newVelocity)
+   {
+     /*Vec2 previous = mBox2DRef.getBodyPixelCoord( mBody );
+     float velX = mouseX - previous.x;
+     float velY = mouseY + previous.y;*/
+     mBody.setLinearVelocity(newVelocity);
+   }
 }
