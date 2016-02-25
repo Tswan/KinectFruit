@@ -42,8 +42,15 @@ void setup() {
   
   //Music initialization
   minim = new Minim(this);
+<<<<<<< HEAD
   backgroundMusic = minim.loadFile("alpha_musicBg_original.mp3");
   backgroundMusic.loop();
+=======
+  //backgroundMusic = minim.loadFile("alpha_musicBg_original.mp3");
+  //backgroundMusic.loop();
+  
+  pentanana_hit_sound = minim.loadFile("bananaHits/banana_hit_2.mp3");
+>>>>>>> bb968c4... added timer and velocity check to sound effect trigger, sounds like popcorn for some reason...
   
   backgroundImg = loadImage("backgroundImg2.png");
   pentanana_img = loadImage("PENTANANA_500.png");
@@ -137,6 +144,61 @@ void draw() {
   //bowl.display();
 }
 
+<<<<<<< HEAD
+=======
+//Collision Detection
+void beginContact(Contact cp)
+{
+  
+  Fixture f1 = cp.getFixtureA();
+  Fixture f2 = cp.getFixtureB();
+  
+  Body b1 = f1.getBody();
+  Body b2 = f2.getBody();
+  
+  Object o1 = b1.getUserData();
+  Object o2 = b2.getUserData();
+  
+  //AudioPlayer hit = pentanana_hit_sound;
+  if(o1.getClass() == Fruit.class || o2.getClass() == Fruit.class)
+  {
+    if(o1.getClass() == RectangleBody.class)
+    {
+      Fruit f = (Fruit)o2;
+      if(f.body.getLinearVelocity().y < -5)
+      {
+        if(!f.hasCollided())
+        {
+          pentanana_hit_sound.play(0);
+          f.collision();
+        }
+      }
+      
+    }
+    else if(o2.getClass() == RectangleBody.class)
+    {
+      Fruit f = (Fruit)o1;
+      if(f.body.getLinearVelocity().y < -5)
+      {
+        if(!f.hasCollided())
+        {
+          pentanana_hit_sound.play(0);
+          f.collision();
+        }
+      }
+    }
+  }
+  
+}
+
+void endContact(Contact cp)
+{
+  
+}
+
+
+/*
+>>>>>>> bb968c4... added timer and velocity check to sound effect trigger, sounds like popcorn for some reason...
 //Kinect Events Similar to MousePressed, must be kept
 void appearEvent(SkeletonData _s) 
 {
