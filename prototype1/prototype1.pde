@@ -42,7 +42,7 @@ void setup() {
   //backgroundMusic = minim.loadFile("alpha_musicBg_original.mp3");
   //backgroundMusic.loop();
   
-  pentanana_hit_sound = minim.loadFile("bananaHits/banana_hit_1.mp3");
+  pentanana_hit_sound = minim.loadFile("bananaHits/banana_hit_2.mp3");
   
   backgroundImg = loadImage("backgroundImg2.png");
   pentanana_img = loadImage("PENTANANA_500.png");
@@ -152,11 +152,33 @@ void beginContact(Contact cp)
   Object o1 = b1.getUserData();
   Object o2 = b2.getUserData();
   
+  //AudioPlayer hit = pentanana_hit_sound;
   if(o1.getClass() == Fruit.class || o2.getClass() == Fruit.class)
   {
-    if(o1.getClass() == RectangleBody.class || o2.getClass() == RectangleBody.class)
+    if(o1.getClass() == RectangleBody.class)
     {
-      pentanana_hit_sound.play(0);
+      Fruit f = (Fruit)o2;
+      if(f.body.getLinearVelocity().y < -5)
+      {
+        if(!f.hasCollided())
+        {
+          pentanana_hit_sound.play(0);
+          f.collision();
+        }
+      }
+      
+    }
+    else if(o2.getClass() == RectangleBody.class)
+    {
+      Fruit f = (Fruit)o1;
+      if(f.body.getLinearVelocity().y < -5)
+      {
+        if(!f.hasCollided())
+        {
+          pentanana_hit_sound.play(0);
+          f.collision();
+        }
+      }
     }
   }
   

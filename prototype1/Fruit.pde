@@ -4,7 +4,11 @@ class Fruit {
   Body body;
   float fruit_w, fruit_h;
   PImage fruit_img;
+  
+  //Sound effect variables
   boolean collided;
+  int timer;
+  int soundDelay = 10000;
   
   Fruit(float x, float y, Box2DProcessing mBox2DRef, PImage fruitImage) {
     
@@ -105,11 +109,15 @@ class Fruit {
   //Make sure fruit only collide once
   void collision()
   {
+    timer = millis();
     collided = true;
   }
   
   boolean hasCollided()
   {
+    if(millis() - timer >= soundDelay)
+      collided = false;
+      
     return collided;
   }
 }
