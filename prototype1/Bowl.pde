@@ -93,9 +93,11 @@ class Bowl {
       
       Vec2 previous = mBox2DRef.getBodyPixelCoord( leftMostBody.mBody );
       
+      float CenterX = posLeft.x + (0.5 *(posRight.x -  posLeft.x));
+      float CenterY = posLeft.y + (0.5 *(posRight.y -  posLeft.y));
       
-      float velX = (mouseX - previous.x) / 2;
-      float velY = -1 * (mouseY - previous.y) / 2;
+      float velX = (CenterX - previous.x) / 2;
+      float velY = -1 * (CenterY - previous.y) / 2;
       for (RectangleBody shape : bowl2) {
         shape.MoveBody(new Vec2(velX, velY));
       }

@@ -1,14 +1,9 @@
-import ddf.minim.*;
-import ddf.minim.analysis.*;
-import ddf.minim.effects.*;
-import ddf.minim.signals.*;
-import ddf.minim.spi.*;
-import ddf.minim.ugens.*;
 
 import shiffman.box2d.*;
 import org.jbox2d.collision.shapes.*;
 import org.jbox2d.common.*;
 import org.jbox2d.dynamics.*;
+import org.jbox2d.dynamics.contacts.*;
 import kinect4WinSDK.Kinect;
 import kinect4WinSDK.SkeletonData;
 import ddf.minim.*; //used for music
@@ -22,6 +17,7 @@ Tracking tracker;
 
 Minim minim;
 AudioPlayer backgroundMusic;
+AudioPlayer pentanana_hit_sound;
 
 PImage backgroundImg;
 // A reference to our box2d world
@@ -42,15 +38,11 @@ void setup() {
   
   //Music initialization
   minim = new Minim(this);
-<<<<<<< HEAD
+
   backgroundMusic = minim.loadFile("alpha_musicBg_original.mp3");
   backgroundMusic.loop();
-=======
-  //backgroundMusic = minim.loadFile("alpha_musicBg_original.mp3");
-  //backgroundMusic.loop();
   
   pentanana_hit_sound = minim.loadFile("bananaHits/banana_hit_2.mp3");
->>>>>>> bb968c4... added timer and velocity check to sound effect trigger, sounds like popcorn for some reason...
   
   backgroundImg = loadImage("backgroundImg2.png");
   pentanana_img = loadImage("PENTANANA_500.png");
@@ -72,7 +64,7 @@ void draw() {
   if (random(1) < 0.5) {
     float w = random(5,10);
     float h = random(5,10);
-    fruits.add(new Fruit(random(0, width),-20,box2d));
+    fruits.add(new Fruit(random(0, width),-20,box2d,pentanana_img));
   }
 
   // We must always step through time!
@@ -144,8 +136,6 @@ void draw() {
   //bowl.display();
 }
 
-<<<<<<< HEAD
-=======
 //Collision Detection
 void beginContact(Contact cp)
 {
@@ -197,8 +187,6 @@ void endContact(Contact cp)
 }
 
 
-/*
->>>>>>> bb968c4... added timer and velocity check to sound effect trigger, sounds like popcorn for some reason...
 //Kinect Events Similar to MousePressed, must be kept
 void appearEvent(SkeletonData _s) 
 {

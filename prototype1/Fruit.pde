@@ -3,18 +3,15 @@ class Fruit {
   PolygonShape bananaShape;
   Body body;
   float fruit_w, fruit_h;
-<<<<<<< HEAD
-  PImage banana = loadImage("PENTANANA_500.png");
-=======
   PImage fruit_img;
   
   //Sound effect variables
   boolean collided;
   int timer;
   int soundDelay = 10000;
->>>>>>> bb968c4... added timer and velocity check to sound effect trigger, sounds like popcorn for some reason...
-  
-  Fruit(float x, float y, Box2DProcessing mBox2DRef) {
+
+  Fruit(float x, float y, Box2DProcessing mBox2DRef, PImage fruitImage) {
+    fruit_img = fruitImage;
     box2d = mBox2DRef;
     Vec2 center = new Vec2(x, y);
     Vec2[] vertices = new Vec2[6];
@@ -55,7 +52,7 @@ class Fruit {
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(-a);
-    image(banana, 0, 0); 
+    image(fruit_img, 0, 0); 
     popMatrix();
   }
   
@@ -104,8 +101,6 @@ class Fruit {
     }
     return false;
   }
-<<<<<<< HEAD
-=======
   
   //Make sure fruit only collide once
   void collision()
@@ -121,5 +116,5 @@ class Fruit {
       
     return collided;
   }
->>>>>>> bb968c4... added timer and velocity check to sound effect trigger, sounds like popcorn for some reason...
+
 }
