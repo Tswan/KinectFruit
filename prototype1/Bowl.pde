@@ -15,7 +15,8 @@ class Bowl {
   Vec2 circleCenter;
   Vec2 bowlPosition;
   
-  int numSections = 20;
+  int numSections = 15;
+  int rotateOffset = 180 / numSections;
   
   PVector bridgeVec = PVector.sub( leftEnd, rightEnd );  
   float sectionSpacing = bridgeVec.mag() / (float) numSections;  
@@ -31,9 +32,12 @@ class Bowl {
     
     ArrayList<Vec2> RectanglePos = new ArrayList<Vec2>();
     
-    for (int i = (int) degrees(angleBetweenTwoPoints); i < (int) degrees(angleBetweenTwoPoints) + 180; i+=9) {
+    for (int i = (int) degrees(angleBetweenTwoPoints); i < (int) degrees(angleBetweenTwoPoints) + 180; i+=rotateOffset) {
       float newPointX = radius * cos(radians(i)) + circleCenter.x;
       float newPointY = radius * sin(radians(i)) + circleCenter.y;
+      // get a shallow bowl
+      float newPointOffsetY = newPointY / 2;
+      newPointY -= newPointOffsetY;
       RectanglePos.add(new Vec2((int) newPointX, (int) newPointY));
     }
     
@@ -41,15 +45,15 @@ class Bowl {
       RectangleBody section = null;
       if (i == 0 ) {
         PVector sectionPos = new PVector( RectanglePos.get(0).x, RectanglePos.get(0).y );
-         section = new RectangleBody( sectionPos.x, sectionPos.y, 15, 10, (int) degrees(angleBetweenTwoPoints) + 90 - (i * 9), BodyType.KINEMATIC, mBox2DRef);
+         section = new RectangleBody( sectionPos.x, sectionPos.y, 15, 10, (int) degrees(angleBetweenTwoPoints) + 90 - (i * rotateOffset), BodyType.KINEMATIC, mBox2DRef);
       }
       else if ( i == numSections ) {
         PVector sectionPos = new PVector( RectanglePos.get(numSections - 1 ).x, RectanglePos.get(numSections - 1).y );
-        section = new RectangleBody( sectionPos.x, sectionPos.y, 15, 10, (int) degrees(angleBetweenTwoPoints) + 90 - (i * 9), BodyType.KINEMATIC, mBox2DRef);
+        section = new RectangleBody( sectionPos.x, sectionPos.y, 15, 10, (int) degrees(angleBetweenTwoPoints) + 90 - (i * rotateOffset), BodyType.KINEMATIC, mBox2DRef);
       }
       else {//all middle sections
        PVector sectionPos = new PVector( RectanglePos.get(i).x, RectanglePos.get(i).y );
-       section = new RectangleBody(sectionPos.x, sectionPos.y, 15, 10, (int) degrees(angleBetweenTwoPoints) + 90 - (i * 9), BodyType.KINEMATIC, mBox2DRef);
+       section = new RectangleBody(sectionPos.x, sectionPos.y, 15, 10, (int) degrees(angleBetweenTwoPoints) + 90 - (i * rotateOffset), BodyType.KINEMATIC, mBox2DRef);
        }
        
        //now that we have all pieces we want to connect them together with a "stretchy" joint
@@ -103,14 +107,15 @@ class Bowl {
       //bowl2 = bufferBowl;
       leftMostBody = bowl2.get(bowl2.size() - 1);
       bowlPosition = mBox2DRef.getBodyPixelCoord( leftMostBody.mBody );
+      bowlPosition.y -= 10;
   }
   
   // A simple function to just draw the edge chain as a series of vertex points
   void display() {
     pushMatrix();
-    imageMode(CORNER);
     translate(bowlPosition.x, bowlPosition.y);
       rotate(angleBetweenTwoPoints);
+      scale(1,0.5);
       image(bowlBack, 0, 0);
     popMatrix();
     //imageMode(CORNER);
@@ -121,11 +126,11 @@ class Bowl {
   
   void displayFront() {
     pushMatrix();
-    imageMode(CORNER);
     //imageMode(CENTER);
     translate(bowlPosition.x, bowlPosition.y);
       rotate(angleBetweenTwoPoints);
-      tint(255, 85);
+      tint(255, 50);
+      scale(1,0.5);
       image(bowlFront, 0, 0);
       noTint();
     popMatrix();

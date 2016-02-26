@@ -59,7 +59,7 @@ class RectangleBody
          fill(red(mColor) * 0.9f, green(mColor) * 0.9f, blue(mColor) * 0.9f); 
        }
        rectMode(CENTER);
-       rect( 0, 0, mWidth, mHeight );
+       //rect( 0, 0, mWidth, mHeight );
      popMatrix();
    }
    
