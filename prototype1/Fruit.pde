@@ -7,8 +7,10 @@ class Fruit {
   
   //Sound effect variables
   boolean collided;
+  boolean collidedWithTheBowl;
   int timer;
   int soundDelay = 10000;
+  String name;
   
   Fruit(float x, float y, Box2DProcessing mBox2DRef, PImage fruitImage, int identifier) {
     
@@ -17,17 +19,29 @@ class Fruit {
     Vec2 center = new Vec2(x, y);
     Vec2[] vertices = null;
     collided = false;
-    if(identifier == 0)//Banana custom polyshape
+    collidedWithTheBowl = false;
+    switch(identifier)
     {
-      vertices = new Vec2[6];
-    
-      vertices[0] = box2d.vectorPixelsToWorld(new Vec2(9.3, 0)); 
-      vertices[1] = box2d.vectorPixelsToWorld(new Vec2(9.3, 20.8)); 
-      vertices[2] = box2d.vectorPixelsToWorld(new Vec2(15.6, 39.4)); 
-      vertices[3] = box2d.vectorPixelsToWorld(new Vec2(3.9, 33.4)); 
-      vertices[4] = box2d.vectorPixelsToWorld(new Vec2(0, 15.4)); 
-      vertices[5] = box2d.vectorPixelsToWorld(new Vec2(5.8, 1.2)); 
-    }
+      case 0://Banana custom polyshape
+        vertices = new Vec2[6];
+        vertices[0] = box2d.vectorPixelsToWorld(new Vec2(9.3, 0)); 
+        vertices[1] = box2d.vectorPixelsToWorld(new Vec2(9.3, 20.8)); 
+        vertices[2] = box2d.vectorPixelsToWorld(new Vec2(15.6, 39.4)); 
+        vertices[3] = box2d.vectorPixelsToWorld(new Vec2(3.9, 33.4)); 
+        vertices[4] = box2d.vectorPixelsToWorld(new Vec2(0, 15.4)); 
+        vertices[5] = box2d.vectorPixelsToWorld(new Vec2(5.8, 1.2)); 
+        name = "banana";
+        break;
+     case 1://Coconut custom polyshape
+        break;
+     case 2://Orange custom polyshape
+        break;
+     case 3://Strawberry custom polyshape
+        break;
+     case 4://Apple custom polyshape
+        break;
+       
+  } 
     // This function puts the fruit in the Box2d world
     PolygonShape sd = new PolygonShape();
     sd.set(vertices, vertices.length);
@@ -37,7 +51,7 @@ class Fruit {
     FixtureDef fd = new FixtureDef();
     fd.shape = sd;
     // Parameters that affect physics
-    fd.density = 1f;
+    fd.density = 0.1f;
     fd.friction = 0.3f;
     fd.restitution = 0.5f;
     // Define the body and make it from the shape
@@ -76,7 +90,7 @@ class Fruit {
     FixtureDef fd = new FixtureDef();
     fd.shape = sd;
     // Parameters that affect physics
-    fd.density = 1f;
+    fd.density = 0f;
     fd.friction = 0.3f;
     fd.restitution = 0.5f;
 
@@ -116,6 +130,7 @@ class Fruit {
     collided = true;
   }
   
+  //reseting the collision
   boolean hasCollided()
   {
     if(millis() - timer >= soundDelay)
@@ -123,4 +138,37 @@ class Fruit {
       
     return collided;
   }
+  
+  boolean hasCollidedWithBowl()
+  {
+    return collidedWithTheBowl;
+  }
+  
+  void bowlCollision()
+  {
+    collidedWithTheBowl=true;
+    startStick();
+  }
+  //trigger the fruits to stick
+  void startStick()
+  {
+    Fixture f = body.getFixtureList();
+    f.setFriction(110000f);
+    f.setDensity(11000f);
+  }
+  
+  void bowlCollisionEnd()
+  {
+    collidedWithTheBowl=false;
+    stopStick();
+  }
+  
+  void stopStick()
+  {
+     Fixture f = body.getFixtureList();
+    f.setFriction(0.3f);
+    f.setDensity(0.1f);
+  }
+    
+  
 }

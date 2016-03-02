@@ -40,8 +40,8 @@ void setup() {
   
   //Music initialization
   minim = new Minim(this);
-  //backgroundMusic = minim.loadFile("alpha_musicBg_original.mp3");
-  //backgroundMusic.loop();
+  backgroundMusic = minim.loadFile("alpha_musicBg_original.mp3");
+  backgroundMusic.loop();
   
   pentanana_hit_sound = minim.loadFile("bananaHits/banana_hit_2.mp3");
   
@@ -154,7 +154,7 @@ void beginContact(Contact cp)
   Object o1 = b1.getUserData();
   Object o2 = b2.getUserData();
   
-  //AudioPlayer hit = pentanana_hit_sound;
+  //Hit sound trigger
   if(o1.getClass() == Fruit.class || o2.getClass() == Fruit.class)
   {
     if(o1.getClass() == RectangleBody.class)
@@ -184,11 +184,61 @@ void beginContact(Contact cp)
     }
   }
   
+  //Sticking trigger
+  if(o1.getClass() == Fruit.class && o2.getClass() == RectangleBody.class)
+  {
+    Fruit fruit1 = (Fruit)o1;
+    fruit1.bowlCollision();
+  }
+  
+  if(o2.getClass() == Fruit.class && o1.getClass() == RectangleBody.class)
+  {
+    Fruit fruit2 = (Fruit)o2;
+    fruit2.bowlCollision();
+  }
+  
+  if(o1.getClass() == Fruit.class && o2.getClass() == Fruit.class)
+  {
+    
+    Fruit fruit1 = (Fruit)o1;
+    Fruit fruit2 = (Fruit)o2;
+    
+    if(fruit1.hasCollidedWithBowl() || fruit2.hasCollidedWithBowl())
+    {
+      fruit1.bowlCollision();
+      fruit2.bowlCollision();
+    }
+  }
 }
 
 void endContact(Contact cp)
 {
+  /*
+  Fixture f1 = cp.getFixtureA();
+  Fixture f2 = cp.getFixtureB();
   
+  Body b1 = f1.getBody();
+  Body b2 = f2.getBody();
+  
+  Object o1 = b1.getUserData();
+  Object o2 = b2.getUserData();
+  
+  if(o1.getClass() == Fruit.class && o2.getClass() == Fruit.class)
+  {
+    
+    Fruit fruit1 = (Fruit)o1;
+    Fruit fruit2 = (Fruit)o2;
+    
+    if(fruit1.hasCollidedWithBowl())
+    {
+      fruit1.bowlCollisionEnd();
+      
+    }
+    if(fruit2.hasCollidedWithBowl())
+    {
+      fruit2.bowlCollisionEnd();
+    }
+  }*/
 }
 
 
