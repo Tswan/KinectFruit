@@ -31,7 +31,7 @@ class Bowl {
     circleCenter = new Vec2((rightPoint.x + leftPoint.x) / 2, (rightPoint.y + leftPoint.y) / 2); 
     //float radius = sqrt(pow(circleCenter.x - leftPoint.x, 2) + pow(circleCenter.y - leftPoint.y, 2));
     float radius = bowlWidth/2;
-    //angleBetweenTwoPoints = atan((rightPoint.y - leftPoint.y) / (rightPoint.x - leftPoint.x));
+    angleBetweenTwoPoints = atan((rightPoint.y - leftPoint.y) / (rightPoint.x - leftPoint.x));
     //println(degrees(angleBetweenTwoPoints));
     //println("numSections: " + numSections);
     
@@ -90,7 +90,6 @@ class Bowl {
   Bowl(Box2DProcessing box2D) {
     mBox2DRef = box2D;
     
-    
     ArrayList<CircleBody> bufferBowl = getHalfCircle(leftEnd, rightEnd);
     bowl2 = bufferBowl;
     
@@ -99,20 +98,22 @@ class Bowl {
   void update(PVector posLeft, PVector posRight) {
       //ArrayList<RectangleBody> bufferBowl = getHalfCircle(posLeft, posRight);
       //destroyBowl();
-      CircleBody leftMostBody = bowl2.get(bowl2.size() - 1);
+      CircleBody middleBody = bowl2.get(bowl2.size() / 2 - 1);
       
-      Vec2 previous = mBox2DRef.getBodyPixelCoord( leftMostBody.mBody );
+      Vec2 previous = mBox2DRef.getBodyPixelCoord( middleBody.mBody );
       
-      
-      float velX = (mouseX - previous.x) / 2;
-      float velY = -1 * (mouseY - previous.y) / 2;
+      float velX = (posRight.x + posLeft.x) / 2 - previous.x;
+      //float velY = 0;
+      float velY = previous.y - (posLeft.y + (0.5*(posRight.y - posLeft.y)));
       for (CircleBody shape : bowl2) {
         shape.MoveBody(new Vec2(velX, velY));
       }
       //bowl2 = bufferBowl;
-      leftMostBody = bowl2.get(bowl2.size() - 1);
-      bowlPosition = mBox2DRef.getBodyPixelCoord( leftMostBody.mBody );
+      middleBody = bowl2.get(bowl2.size() - 1);
+      bowlPosition = mBox2DRef.getBodyPixelCoord( middleBody.mBody );
       bowlPosition.y -= 10;
+      
+      
   }
   
   // A simple function to just draw the edge chain as a series of vertex points
@@ -137,9 +138,9 @@ class Bowl {
     popMatrix();
     //imageMode(CORNER);\
     fill(0);
-    /*for(CircleBody c : bowl2) {
+    for(CircleBody c : bowl2) {
       c.draw();
-    }*/
+    }
     noFill();
   }
   

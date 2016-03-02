@@ -15,6 +15,7 @@ PImage[] fruit_images;
 float img_scale;
 ArrayList<PVector> svgVrts;
 
+
 //Tracking tracker;
 
 Minim minim;
@@ -27,6 +28,10 @@ Box2DProcessing box2d;
 
 // An ArrayList of particles that will fall on the surface
 ArrayList<Fruit> fruits;
+
+
+PVector posRight = null;
+PVector posLeft = null;
 
 // An object to store information about the uneven surface
 Bowl bowl;
@@ -60,6 +65,8 @@ void setup() {
   // Create the surface
   //bowl = new Bowl(box2d);
   box2d.listenForCollisions();
+  
+  posLeft = new PVector(200, 500);
 }
 
 void draw() {
@@ -76,10 +83,6 @@ void draw() {
   background(255);
   image(backgroundImg, 0, 0);
   
-
-  
-  
-
   // Particles that leave the screen, we delete them
   // (note they have to be deleted from both the box2d world and our list
   for (int i = fruits.size()-1; i >= 0; i--) {
@@ -95,10 +98,10 @@ void draw() {
   fill(0);
   text("framerate: " + (int)frameRate,12,16);
   
-  PVector posRight = null;
-  PVector posLeft = null;
-  posRight = new PVector(mouseX + 10, mouseY);
-  posLeft = new PVector(mouseX - 10, mouseY);
+  posRight = null;
+  //posLeft = null;
+  posRight = new PVector(mouseX, mouseY);
+  
     //for (int i=0; i<tracker.getBodySize(); i++) 
     //{
     //  print("Left hand: "+tracker.getLeftHandPos());
@@ -139,6 +142,12 @@ void draw() {
     bowl.displayFront();
   }
   //bowl.display();
+}
+
+void mousePressed() {
+  if (mouseButton == LEFT) {
+    posLeft.y += 10;
+  }
 }
 
 //Collision Detection
