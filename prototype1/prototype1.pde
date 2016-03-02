@@ -157,7 +157,7 @@ void beginContact(Contact cp)
   //Hit sound trigger
   if(o1.getClass() == Fruit.class || o2.getClass() == Fruit.class)
   {
-    if(o1.getClass() == RectangleBody.class)
+    if(o1.getClass() == CircleBody.class)
     {
       Fruit f = (Fruit)o2;
       if(f.body.getLinearVelocity().y < -5)
@@ -170,7 +170,7 @@ void beginContact(Contact cp)
       }
       
     }
-    else if(o2.getClass() == RectangleBody.class)
+    else if(o2.getClass() == CircleBody.class)
     {
       Fruit f = (Fruit)o1;
       if(f.body.getLinearVelocity().y < -5)
