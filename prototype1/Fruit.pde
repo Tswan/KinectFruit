@@ -10,21 +10,24 @@ class Fruit {
   int timer;
   int soundDelay = 10000;
   
-  Fruit(float x, float y, Box2DProcessing mBox2DRef, PImage fruitImage) {
+  Fruit(float x, float y, Box2DProcessing mBox2DRef, PImage fruitImage, int identifier) {
     
     fruit_img = fruitImage;
     box2d = mBox2DRef;
     Vec2 center = new Vec2(x, y);
-    Vec2[] vertices = new Vec2[6];
+    Vec2[] vertices = null;
     collided = false;
+    if(identifier == 0)//Banana custom polyshape
+    {
+      vertices = new Vec2[6];
     
-    vertices[0] = box2d.vectorPixelsToWorld(new Vec2(9.3, 0)); 
-    vertices[1] = box2d.vectorPixelsToWorld(new Vec2(9.3, 20.8)); 
-    vertices[2] = box2d.vectorPixelsToWorld(new Vec2(15.6, 39.4)); 
-    vertices[3] = box2d.vectorPixelsToWorld(new Vec2(3.9, 33.4)); 
-    vertices[4] = box2d.vectorPixelsToWorld(new Vec2(0, 15.4)); 
-    vertices[5] = box2d.vectorPixelsToWorld(new Vec2(5.8, 1.2)); 
-    
+      vertices[0] = box2d.vectorPixelsToWorld(new Vec2(9.3, 0)); 
+      vertices[1] = box2d.vectorPixelsToWorld(new Vec2(9.3, 20.8)); 
+      vertices[2] = box2d.vectorPixelsToWorld(new Vec2(15.6, 39.4)); 
+      vertices[3] = box2d.vectorPixelsToWorld(new Vec2(3.9, 33.4)); 
+      vertices[4] = box2d.vectorPixelsToWorld(new Vec2(0, 15.4)); 
+      vertices[5] = box2d.vectorPixelsToWorld(new Vec2(5.8, 1.2)); 
+    }
     // This function puts the fruit in the Box2d world
     PolygonShape sd = new PolygonShape();
     sd.set(vertices, vertices.length);

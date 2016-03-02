@@ -10,7 +10,8 @@ import kinect4WinSDK.SkeletonData;
 import ddf.minim.*; //used for music
 import org.jbox2d.dynamics.joints.*;
 
-PImage pentanana_img;
+//For adding in mulitiple images of the fruit
+PImage[] fruit_images;
 float img_scale;
 ArrayList<PVector> svgVrts;
 
@@ -45,7 +46,8 @@ void setup() {
   pentanana_hit_sound = minim.loadFile("bananaHits/banana_hit_2.mp3");
   
   backgroundImg = loadImage("backgroundImg2.png");
-  pentanana_img = loadImage("PENTANANA_500.png");
+  fruit_images = new PImage[6];
+  fruit_images[0] = loadImage("PENTANANA_500.png");
 
   // Initialize box2d physics and create the world
   box2d = new Box2DProcessing(this);
@@ -65,7 +67,7 @@ void draw() {
   if (random(1) < 0.5) {
     float w = random(5,10);
     float h = random(5,10);
-    fruits.add(new Fruit(random(0, width),-20,box2d,pentanana_img));
+    fruits.add(new Fruit(random(0, width),-20,box2d,fruit_images[0],0));//So we can have a randome value the corisponds to the fruit image and the fruit being made
   }
 
   // We must always step through time!
