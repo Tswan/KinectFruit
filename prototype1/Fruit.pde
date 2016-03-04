@@ -21,27 +21,70 @@ class Fruit {
     collided = false;
     collidedWithTheBowl = false;
     switch(identifier)
-    {
-      case 0://Banana custom polyshape
-        vertices = new Vec2[6];
-        vertices[0] = box2d.vectorPixelsToWorld(new Vec2(9.3, 0)); 
-        vertices[1] = box2d.vectorPixelsToWorld(new Vec2(9.3, 20.8)); 
-        vertices[2] = box2d.vectorPixelsToWorld(new Vec2(15.6, 39.4)); 
-        vertices[3] = box2d.vectorPixelsToWorld(new Vec2(3.9, 33.4)); 
-        vertices[4] = box2d.vectorPixelsToWorld(new Vec2(0, 15.4)); 
-        vertices[5] = box2d.vectorPixelsToWorld(new Vec2(5.8, 1.2)); 
-        name = "banana";
+     {
+       case 0://Banana custom polyshape
+         vertices = new Vec2[8];
+         vertices[0] = box2d.vectorPixelsToWorld(new Vec2(40, 0)); 
+         vertices[1] = box2d.vectorPixelsToWorld(new Vec2(25, 0)); 
+         vertices[2] = box2d.vectorPixelsToWorld(new Vec2(0, 52)); 
+         vertices[3] = box2d.vectorPixelsToWorld(new Vec2(12, 117)); 
+         vertices[4] = box2d.vectorPixelsToWorld(new Vec2(54, 142)); 
+         vertices[5] = box2d.vectorPixelsToWorld(new Vec2(61, 134));
+         vertices[6] = box2d.vectorPixelsToWorld(new Vec2(41, 102));
+         vertices[7] = box2d.vectorPixelsToWorld(new Vec2(33, 44)); 
+         name = "banana";
+         break;
+      case 1://Coconut custom polyshape
+        vertices = new Vec2[8];
+        vertices[0] = box2d.vectorPixelsToWorld(new Vec2(80, 0));
+        vertices[1] = box2d.vectorPixelsToWorld(new Vec2(44, 0));
+        vertices[2] = box2d.vectorPixelsToWorld(new Vec2(7, 42));
+        vertices[3] = box2d.vectorPixelsToWorld(new Vec2(0, 75));
+        vertices[4] = box2d.vectorPixelsToWorld(new Vec2(31, 132));
+        vertices[5] = box2d.vectorPixelsToWorld(new Vec2(77, 132));
+        vertices[6] = box2d.vectorPixelsToWorld(new Vec2(114, 192));
+        vertices[7] = box2d.vectorPixelsToWorld(new Vec2(111, 48));
+        name = "coconut";
         break;
-     case 1://Coconut custom polyshape
+      case 2://Orange custom polyshape
+        vertices = new Vec2[8];
+        vertices[0] = box2d.vectorPixelsToWorld(new Vec2(60, 3));
+        vertices[1] = box2d.vectorPixelsToWorld(new Vec2(45, 0));
+        vertices[2] = box2d.vectorPixelsToWorld(new Vec2(30, 20));
+        vertices[3] = box2d.vectorPixelsToWorld(new Vec2(14, 25));
+        vertices[4] = box2d.vectorPixelsToWorld(new Vec2(0, 54));
+        vertices[5] = box2d.vectorPixelsToWorld(new Vec2(31, 81));
+        vertices[6] = box2d.vectorPixelsToWorld(new Vec2(69, 60));
+        vertices[7] = box2d.vectorPixelsToWorld(new Vec2(57, 30));
+        name = "orange";
         break;
-     case 2://Orange custom polyshape
+      case 3://Apple custom polyshape
+        vertices = new Vec2[8];
+        vertices[0] = box2d.vectorPixelsToWorld(new Vec2(48, 0));
+        vertices[1] = box2d.vectorPixelsToWorld(new Vec2(40, 2));
+        vertices[2] = box2d.vectorPixelsToWorld(new Vec2(32, 17));
+        vertices[3] = box2d.vectorPixelsToWorld(new Vec2(10, 20));
+        vertices[4] = box2d.vectorPixelsToWorld(new Vec2(0, 55));
+        vertices[5] = box2d.vectorPixelsToWorld(new Vec2(38, 81));
+        vertices[6] = box2d.vectorPixelsToWorld(new Vec2(71, 47));
+        vertices[7] = box2d.vectorPixelsToWorld(new Vec2(51, 18));
+        name = "apple";
         break;
-     case 3://Strawberry custom polyshape
+      case 4://Strawberry custom polyshape
+        vertices = new Vec2[8];
+        vertices[0] = box2d.vectorPixelsToWorld(new Vec2(38, 8));
+        vertices[1] = box2d.vectorPixelsToWorld(new Vec2(19, 0));
+        vertices[2] = box2d.vectorPixelsToWorld(new Vec2(0, 8));
+        vertices[3] = box2d.vectorPixelsToWorld(new Vec2(7, 19));
+        vertices[4] = box2d.vectorPixelsToWorld(new Vec2(12, 34));
+        vertices[5] = box2d.vectorPixelsToWorld(new Vec2(18, 44));
+        vertices[6] = box2d.vectorPixelsToWorld(new Vec2(24, 44));
+        vertices[7] = box2d.vectorPixelsToWorld(new Vec2(29, 25));
+        name = "strawberry";
         break;
-     case 4://Apple custom polyshape
-        break;
-       
-  } 
+     }
+     
+     
     // This function puts the fruit in the Box2d world
     PolygonShape sd = new PolygonShape();
     sd.set(vertices, vertices.length);

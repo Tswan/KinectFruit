@@ -52,7 +52,11 @@ void setup() {
   
   backgroundImg = loadImage("backgroundImg2.png");
   fruit_images = new PImage[6];
-  fruit_images[0] = loadImage("PENTANANA_500.png");
+  fruit_images[0] = loadImage("banana.png");
+  fruit_images[1] = loadImage("coconut.png");
+  fruit_images[2] = loadImage("orange.png");
+  fruit_images[3] = loadImage("apple.png");
+  fruit_images[4] = loadImage("strawberry.png");
 
   // Initialize box2d physics and create the world
   box2d = new Box2DProcessing(this);
