@@ -107,6 +107,13 @@ class Fruit {
     body.setAngularVelocity(random(-5, 5));
   }
   
+  // Give the position of the body
+  Vec2 getPos()
+  {
+    Vec2 pos = box2d.getBodyPixelCoord(body);
+    return pos;
+  }
+  
   // This function removes the particle from the box2d world
   void killBody() {
     box2d.destroyBody(body);
@@ -144,17 +151,22 @@ class Fruit {
     return collidedWithTheBowl;
   }
   
-  void bowlCollision()
+  void bowlCollision(Vec2 target)
   {
     collidedWithTheBowl=true;
-    startStick();
+    startStick(target);
   }
+  
   //trigger the fruits to stick
-  void startStick()
+  void startStick(Vec2 target)
   {
-    Fixture f = body.getFixtureList();
-    f.setFriction(110000f);
-    f.setDensity(11000f);
+    Vec2 worldTarget = box2d.coordPixelsToWorld(target.x,target.y);   
+    Vec2 bodyVec = body.getWorldCenter();
+    worldTarget.subLocal(bodyVec);
+    worldTarget = new Vec2(worldTarget.x*5,worldTarget.y-10);
+    worldTarget.normalize();
+    worldTarget.mulLocal((float) 50);
+    body.applyForce(worldTarget, bodyVec);
   }
   
   void bowlCollisionEnd()
@@ -165,9 +177,7 @@ class Fruit {
   
   void stopStick()
   {
-     Fixture f = body.getFixtureList();
-    f.setFriction(0.3f);
-    f.setDensity(0.1f);
+    
   }
     
   

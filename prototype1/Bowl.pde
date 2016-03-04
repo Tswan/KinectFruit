@@ -144,6 +144,11 @@ class Bowl {
     noFill();
   }
   
+  Vec2 getPos()
+  {
+    return new Vec2(bowlPosition.x+bowlBack.width/2,bowlPosition.y);
+  }
+  
   void destroyBowl() {
     for (CircleBody shape : bowl2) {
         shape.DestroyBody();

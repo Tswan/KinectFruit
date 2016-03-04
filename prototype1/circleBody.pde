@@ -53,6 +53,12 @@ class CircleBody
      popMatrix();
    }
    
+   Vec2 getPos()
+   {
+      Vec2 pos = mBox2DRef.getBodyPixelCoord(mBody);
+      return pos;
+   }
+   
    void DestroyBody()
    {
      mBox2DRef.destroyBody(mBody);

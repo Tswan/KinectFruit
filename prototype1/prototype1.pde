@@ -194,16 +194,18 @@ void beginContact(Contact cp)
   }
   
   //Sticking trigger
-  if(o1.getClass() == Fruit.class && o2.getClass() == RectangleBody.class)
+  if(o1.getClass() == Fruit.class && o2.getClass() == CircleBody.class)
   {
     Fruit fruit1 = (Fruit)o1;
-    fruit1.bowlCollision();
+    CircleBody c2 = (CircleBody)o2;
+    fruit1.bowlCollision(c2.getPos());
   }
   
-  if(o2.getClass() == Fruit.class && o1.getClass() == RectangleBody.class)
+  if(o2.getClass() == Fruit.class && o1.getClass() == CircleBody.class)
   {
     Fruit fruit2 = (Fruit)o2;
-    fruit2.bowlCollision();
+    CircleBody c1 = (CircleBody)o1;
+    fruit2.bowlCollision(c1.getPos());
   }
   
   if(o1.getClass() == Fruit.class && o2.getClass() == Fruit.class)
@@ -212,10 +214,14 @@ void beginContact(Contact cp)
     Fruit fruit1 = (Fruit)o1;
     Fruit fruit2 = (Fruit)o2;
     
-    if(fruit1.hasCollidedWithBowl() || fruit2.hasCollidedWithBowl())
+    if(fruit2.hasCollidedWithBowl())
     {
-      fruit1.bowlCollision();
-      fruit2.bowlCollision();
+      fruit1.bowlCollision(new Vec2(bowl.getPos().x,fruit2.getPos().y));
+    }
+    
+    if(fruit1.hasCollidedWithBowl())
+    {
+      fruit2.bowlCollision(new Vec2(bowl.getPos().x,fruit1.getPos().y));
     }
   }
 }
