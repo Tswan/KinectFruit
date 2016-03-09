@@ -48,8 +48,8 @@ class CircleBody
        else {
          fill(red(mColor) * 0.9f, green(mColor) * 0.9f, blue(mColor) * 0.9f); 
        }
-       rectMode(CENTER);
-       ellipse( 0, 0, mRadius, mRadius );
+       //rectMode(CENTER);
+       //ellipse( 0, 0, mRadius, mRadius );
      popMatrix();
    }
    
