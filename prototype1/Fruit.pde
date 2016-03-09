@@ -8,6 +8,7 @@ class Fruit {
   //Sound effect variables
   boolean collided;
   boolean collidedWithTheBowl;
+  int bowlId;
   int timer;
   int soundDelay = 10000;
   String name;
@@ -195,6 +196,11 @@ class Fruit {
   {
     collidedWithTheBowl=true;
     startStick(target);
+  }
+  
+  int getBowlId()
+  {
+    return bowlId;
   }
   
   //trigger the fruits to stick

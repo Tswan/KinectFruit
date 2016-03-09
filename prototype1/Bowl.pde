@@ -26,12 +26,17 @@ class Bowl {
   PVector bridgeVec = PVector.sub( leftEnd, rightEnd );  
   float sectionSpacing = bridgeVec.mag() / (float) numSections;  
   
+  boolean dead = false;
+  
   Bowl(Box2DProcessing box2D) {
     mBox2DRef = box2D;
     
-    
     ArrayList<CircleBody> bufferBowl = getHalfCircle(leftEnd, rightEnd);
     bowl2 = bufferBowl;
+    
+    CircleBody middleBody = bowl2.get(bowl2.size() - 1);
+    bowlPosition = mBox2DRef.getBodyPixelCoord( middleBody.mBody );
+    bowlPosition.y -= 10;
   }
   
   ArrayList<CircleBody> getHalfCircle(PVector leftPoint, PVector rightPoint) { 
@@ -147,9 +152,20 @@ class Bowl {
     return new Vec2(bowlPosition.x+bowlBack.width/2,bowlPosition.y);
   }
   
+  boolean isDead()
+  {
+    return dead;
+  }
+  
+  void kill()
+  {
+    dead = true;
+  }
+  
   void destroyBowl() {
     for (CircleBody shape : bowl2) {
         shape.DestroyBody();
       }
+    
   }
 }
