@@ -47,9 +47,8 @@ class Tracking
     bodies.remove(i);
   }
   
-  PVector checkJoint( int _j1)
+  PVector checkJoint(SkeletonData _s, int _j1)
   {
-    SkeletonData _s = bodies.get(skeletonIndex);
     PVector pos = null;
     if (_s.skeletonPositionTrackingState[_j1] != Kinect.NUI_SKELETON_POSITION_NOT_TRACKED)
     {
@@ -58,22 +57,26 @@ class Tracking
     return pos;
   }
   
-  PVector getLeftHandPos()
+  PVector getLeftHandPos(SkeletonData _s)
   {
-    PVector pos = checkJoint(Kinect.NUI_SKELETON_POSITION_HAND_LEFT);
+    //ArrayList<PVector> Positions = new ArrayList<PVector>();
+    PVector pos = checkJoint(_s,Kinect.NUI_SKELETON_POSITION_HAND_LEFT);
+    //Positions.add(pos);
     return pos;
   }
   
-  PVector getRightHandPos()
+  PVector getRightHandPos(SkeletonData _s)
   {
-    PVector pos = checkJoint(Kinect.NUI_SKELETON_POSITION_HAND_RIGHT);
+    //ArrayList<PVector> Positions = new ArrayList<PVector>();
+    PVector pos = checkJoint(_s,Kinect.NUI_SKELETON_POSITION_HAND_RIGHT);
+   // Positions.add(pos);
     return pos;
   }
   
   void drawPosition(SkeletonData _s) 
   {
     noStroke();
-    fill(0, 100, 255);
+    fill(0, 0, 0);
     String s1 = str(_s.dwTrackingID);
     text(s1, _s.position.x*width, _s.position.y*height);
     //text(s1, _s.position.x*width/2, _s.position.y*height/2);
@@ -167,7 +170,7 @@ class Tracking
   void DrawBone(SkeletonData _s, int _j1, int _j2) 
   {
     noFill();
-    stroke(255, 255, 0);
+    stroke(0, 0, 0);
     if (_s.skeletonPositionTrackingState[_j1] != Kinect.NUI_SKELETON_POSITION_NOT_TRACKED &&
       _s.skeletonPositionTrackingState[_j2] != Kinect.NUI_SKELETON_POSITION_NOT_TRACKED) {
       line(_s.skeletonPositions[_j1].x*width, // /2,

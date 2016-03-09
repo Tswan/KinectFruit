@@ -7,21 +7,82 @@ class Fruit {
   
   //Sound effect variables
   boolean collided;
+  boolean collidedWithTheBowl;
   int timer;
   int soundDelay = 10000;
+  String name;
 
-  Fruit(float x, float y, Box2DProcessing mBox2DRef, PImage fruitImage) {
+  Fruit(float x, float y, Box2DProcessing mBox2DRef, PImage fruitImage, int identifier) {
+    
     fruit_img = fruitImage;
     box2d = mBox2DRef;
     Vec2 center = new Vec2(x, y);
-    Vec2[] vertices = new Vec2[6];
-    
-    vertices[0] = box2d.vectorPixelsToWorld(new Vec2(9.3, 0)); 
-    vertices[1] = box2d.vectorPixelsToWorld(new Vec2(9.3, 20.8)); 
-    vertices[2] = box2d.vectorPixelsToWorld(new Vec2(15.6, 39.4)); 
-    vertices[3] = box2d.vectorPixelsToWorld(new Vec2(3.9, 33.4)); 
-    vertices[4] = box2d.vectorPixelsToWorld(new Vec2(0, 15.4)); 
-    vertices[5] = box2d.vectorPixelsToWorld(new Vec2(5.8, 1.2)); 
+    Vec2[] vertices = null;
+    collided = false;
+    collidedWithTheBowl = false;
+    switch(identifier)
+     {
+       case 0://Banana custom polyshape
+         vertices = new Vec2[8];
+         vertices[0] = box2d.vectorPixelsToWorld(new Vec2(40, 0)); 
+         vertices[1] = box2d.vectorPixelsToWorld(new Vec2(25, 0)); 
+         vertices[2] = box2d.vectorPixelsToWorld(new Vec2(0, 52)); 
+         vertices[3] = box2d.vectorPixelsToWorld(new Vec2(12, 117)); 
+         vertices[4] = box2d.vectorPixelsToWorld(new Vec2(54, 142)); 
+         vertices[5] = box2d.vectorPixelsToWorld(new Vec2(61, 134));
+         vertices[6] = box2d.vectorPixelsToWorld(new Vec2(41, 102));
+         vertices[7] = box2d.vectorPixelsToWorld(new Vec2(33, 44)); 
+         name = "banana";
+         break;
+      case 1://Coconut custom polyshape
+        vertices = new Vec2[8];
+        vertices[0] = box2d.vectorPixelsToWorld(new Vec2(80, 0));
+        vertices[1] = box2d.vectorPixelsToWorld(new Vec2(44, 0));
+        vertices[2] = box2d.vectorPixelsToWorld(new Vec2(7, 42));
+        vertices[3] = box2d.vectorPixelsToWorld(new Vec2(0, 75));
+        vertices[4] = box2d.vectorPixelsToWorld(new Vec2(31, 132));
+        vertices[5] = box2d.vectorPixelsToWorld(new Vec2(77, 132));
+        vertices[6] = box2d.vectorPixelsToWorld(new Vec2(114, 192));
+        vertices[7] = box2d.vectorPixelsToWorld(new Vec2(111, 48));
+        name = "coconut";
+        break;
+      case 2://Orange custom polyshape
+        vertices = new Vec2[8];
+        vertices[0] = box2d.vectorPixelsToWorld(new Vec2(60, 3));
+        vertices[1] = box2d.vectorPixelsToWorld(new Vec2(45, 0));
+        vertices[2] = box2d.vectorPixelsToWorld(new Vec2(30, 20));
+        vertices[3] = box2d.vectorPixelsToWorld(new Vec2(14, 25));
+        vertices[4] = box2d.vectorPixelsToWorld(new Vec2(0, 54));
+        vertices[5] = box2d.vectorPixelsToWorld(new Vec2(31, 81));
+        vertices[6] = box2d.vectorPixelsToWorld(new Vec2(69, 60));
+        vertices[7] = box2d.vectorPixelsToWorld(new Vec2(57, 30));
+        name = "orange";
+        break;
+      case 3://Apple custom polyshape
+        vertices = new Vec2[8];
+        vertices[0] = box2d.vectorPixelsToWorld(new Vec2(48, 0));
+        vertices[1] = box2d.vectorPixelsToWorld(new Vec2(40, 2));
+        vertices[2] = box2d.vectorPixelsToWorld(new Vec2(32, 17));
+        vertices[3] = box2d.vectorPixelsToWorld(new Vec2(10, 20));
+        vertices[4] = box2d.vectorPixelsToWorld(new Vec2(0, 55));
+        vertices[5] = box2d.vectorPixelsToWorld(new Vec2(38, 81));
+        vertices[6] = box2d.vectorPixelsToWorld(new Vec2(71, 47));
+        vertices[7] = box2d.vectorPixelsToWorld(new Vec2(51, 18));
+        name = "apple";
+        break;
+      case 4://Strawberry custom polyshape
+        vertices = new Vec2[8];
+        vertices[0] = box2d.vectorPixelsToWorld(new Vec2(38, 8));
+        vertices[1] = box2d.vectorPixelsToWorld(new Vec2(19, 0));
+        vertices[2] = box2d.vectorPixelsToWorld(new Vec2(0, 8));
+        vertices[3] = box2d.vectorPixelsToWorld(new Vec2(7, 19));
+        vertices[4] = box2d.vectorPixelsToWorld(new Vec2(12, 34));
+        vertices[5] = box2d.vectorPixelsToWorld(new Vec2(18, 44));
+        vertices[6] = box2d.vectorPixelsToWorld(new Vec2(24, 44));
+        vertices[7] = box2d.vectorPixelsToWorld(new Vec2(29, 25));
+        name = "strawberry";
+        break;
+     }
     
     // This function puts the fruit in the Box2d world
     PolygonShape sd = new PolygonShape();
@@ -32,7 +93,7 @@ class Fruit {
     FixtureDef fd = new FixtureDef();
     fd.shape = sd;
     // Parameters that affect physics
-    fd.density = 1f;
+    fd.density = 0.1f;
     fd.friction = 0.3f;
     fd.restitution = 0.5f;
     // Define the body and make it from the shape
@@ -42,6 +103,7 @@ class Fruit {
     body = box2d.createBody(bd);
     body.createFixture(fd);
     body.setAngularVelocity(random(-5, 5));
+    body.setUserData(this);
   }
   
   void display() {
@@ -69,8 +131,8 @@ class Fruit {
     FixtureDef fd = new FixtureDef();
     fd.shape = sd;
     // Parameters that affect physics
-    fd.density = 1f;
-    fd.friction = 0.3f;
+    fd.density = 10f;
+    fd.friction = 30f;
     fd.restitution = 0.5f;
 
     // Define the body and make it from the shape
@@ -84,6 +146,13 @@ class Fruit {
     // Give it some initial random velocity
     body.setLinearVelocity(new Vec2(random(-5, 5), random(2, 5)));
     body.setAngularVelocity(random(-5, 5));
+  }
+  
+  // Give the position of the body
+  Vec2 getPos()
+  {
+    Vec2 pos = box2d.getBodyPixelCoord(body);
+    return pos;
   }
   
   // This function removes the particle from the box2d world
@@ -115,6 +184,40 @@ class Fruit {
       collided = false;
       
     return collided;
+  }
+  
+  boolean hasCollidedWithBowl()
+  {
+    return collidedWithTheBowl;
+  }
+  
+  void bowlCollision(Vec2 target)
+  {
+    collidedWithTheBowl=true;
+    startStick(target);
+  }
+  
+  //trigger the fruits to stick
+  void startStick(Vec2 target)
+  {
+    Vec2 worldTarget = box2d.coordPixelsToWorld(target.x,target.y);   
+    Vec2 bodyVec = body.getWorldCenter();
+    worldTarget.subLocal(bodyVec);
+    worldTarget = new Vec2(worldTarget.x*5,worldTarget.y-10);
+    worldTarget.normalize();
+    worldTarget.mulLocal((float) 1000);
+    body.applyForce(worldTarget, bodyVec);
+  }
+  
+  void bowlCollisionEnd()
+  {
+    collidedWithTheBowl=false;
+    stopStick();
+  }
+  
+  void stopStick()
+  {
+    
   }
 
 }

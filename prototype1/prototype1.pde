@@ -9,7 +9,8 @@ import kinect4WinSDK.SkeletonData;
 import ddf.minim.*; //used for music
 import org.jbox2d.dynamics.joints.*;
 
-PImage pentanana_img;
+//For adding in mulitiple images of the fruit
+PImage[] fruit_images;
 float img_scale;
 ArrayList<PVector> svgVrts;
 
@@ -29,6 +30,8 @@ ArrayList<Fruit> fruits;
 // An object to store information about the uneven surface
 Bowl bowl;
 
+
+
 void setup() {
   size(1920, 1080, P3D);
   background(175, 238, 238);
@@ -45,7 +48,12 @@ void setup() {
   pentanana_hit_sound = minim.loadFile("bananaHits/banana_hit_2.mp3");
   
   backgroundImg = loadImage("backgroundImg2.png");
-  pentanana_img = loadImage("PENTANANA_500.png");
+  fruit_images = new PImage[6];
+  fruit_images[0] = loadImage("banana.png");
+  fruit_images[1] = loadImage("coconut.png");
+  fruit_images[2] = loadImage("orange.png");
+  fruit_images[3] = loadImage("apple.png");
+  fruit_images[4] = loadImage("strawberry.png");
 
   // Initialize box2d physics and create the world
   box2d = new Box2DProcessing(this);
@@ -55,26 +63,23 @@ void setup() {
 
   // Create the empty list
   fruits = new ArrayList<Fruit>();
-  // Create the surface
-  //bowl = new Bowl(box2d);
+  //bowl = new ArrayList<Bowl>();
+  
+  
+  //Listen for collisions
+  box2d.listenForCollisions();
+  
 }
 
 void draw() {
   // If the mouse is pressed, we make new particles
-  if (random(1) < 0.5) {
+  if (random(6) < 0.5) {
     float w = random(5,10);
     float h = random(5,10);
-    fruits.add(new Fruit(random(0, width),-20,box2d,pentanana_img));
+    fruits.add(new Fruit(random(0, width),-60,box2d,fruit_images[0],0));
   }
-
-  // We must always step through time!
-  
-
   background(255);
   image(backgroundImg, 0, 0);
-  
-
-  
   
 
   // Particles that leave the screen, we delete them
@@ -92,48 +97,51 @@ void draw() {
   fill(0);
   text("framerate: " + (int)frameRate,12,16);
   
-  PVector posRight = null;
-  PVector posLeft = null;
-    for (int i=0; i<tracker.getBodySize(); i++) 
-    {
-      print("Left hand: "+tracker.getLeftHandPos());
-      print("Right hand: "+tracker.getRightHandPos());
-      posRight = tracker.getRightHandPos();
-      posLeft = tracker.getLeftHandPos();
-    }
-  if(posLeft == null && posRight == null) {
-    /*if (bowl != null) {
-     bowl.destroyBowl();
-   }*/
-  }
-  else if(posLeft == null || posRight == null)
+  for (int i=0; i<tracker.getBodySize(); i++) 
   {
-   if (bowl != null) {
-     bowl.destroyBowl();
-   }
-  }
-  else
-  {
-    if (bowl == null) {
-      bowl = new Bowl(box2d);
-    }
-    ellipse(posRight.x,posRight.y,10,10);
-    ellipse(posLeft.x,posLeft.y,10,10);
+    //tracker.drawSkeleton(tracker.bodies.get(i));
     
-    bowl.update(posLeft, posRight);
-    // Draw the surface
-    bowl.display();
+    println("Left hand: "+tracker.getLeftHandPos(tracker.bodies.get(i)));
+    println("Right hand: "+tracker.getRightHandPos(tracker.bodies.get(i)));
+    PVector posRight = tracker.getRightHandPos(tracker.bodies.get(i));
+    PVector posLeft = tracker.getLeftHandPos(tracker.bodies.get(i));
+    
+    
+    if(posLeft == null || posRight == null)
+    {
+     /*if (bowl != null) {
+       bowl.destroyBowl();
+     }*/
+    }
+    else
+    {
+      if (bowl == null) 
+      {
+        bowl = new Bowl(box2d);
+      }
+      ellipse(posRight.x,posRight.y,10,10);
+      ellipse(posLeft.x,posLeft.y,10,10);
+      //Update bowl position
+      bowl.update(posLeft, posRight);
+      
+      // Draw the surface
+      bowl.display();
+      
+    }
+    
+    
+    
+    if(posLeft != null || posRight != null && bowl != null) 
+    {
+      bowl.displayFront();
+    }
+     
   }
+  
   // Draw all particles
-  println(fruits.size());
   for (Fruit p: fruits) {
     p.display();
   }
-  
-  if(posLeft != null || posRight != null && bowl != null) {
-    bowl.displayFront();
-  }
-  //bowl.display();
 }
 
 //Collision Detection
@@ -149,7 +157,7 @@ void beginContact(Contact cp)
   Object o1 = b1.getUserData();
   Object o2 = b2.getUserData();
   
-  //AudioPlayer hit = pentanana_hit_sound;
+  ///Hit sound trigger
   if(o1.getClass() == Fruit.class || o2.getClass() == Fruit.class)
   {
     if(o1.getClass() == RectangleBody.class)
@@ -176,6 +184,38 @@ void beginContact(Contact cp)
           f.collision();
         }
       }
+    }
+  }
+  
+  //Sticking trigger
+  if(o1.getClass() == Fruit.class && o2.getClass() == CircleBody.class)
+  {
+    Fruit fruit1 = (Fruit)o1;
+    CircleBody c2 = (CircleBody)o2;
+    fruit1.bowlCollision(c2.getPos());
+  }
+  
+  if(o2.getClass() == Fruit.class && o1.getClass() == CircleBody.class)
+  {
+    Fruit fruit2 = (Fruit)o2;
+    CircleBody c1 = (CircleBody)o1;
+    fruit2.bowlCollision(c1.getPos());
+  }
+  
+  if(o1.getClass() == Fruit.class && o2.getClass() == Fruit.class)
+  {
+    
+    Fruit fruit1 = (Fruit)o1;
+    Fruit fruit2 = (Fruit)o2;
+    
+    if(fruit2.hasCollidedWithBowl())
+    {
+      //fruit1.bowlCollision(new Vec2(bowl.getPos().x,fruit2.getPos().y));
+    }
+    
+    if(fruit1.hasCollidedWithBowl())
+    {
+      //fruit2.bowlCollision(new Vec2(bowl.getPos().x,fruit1.getPos().y));
     }
   }
   
