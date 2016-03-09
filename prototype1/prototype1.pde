@@ -12,12 +12,8 @@ import org.jbox2d.dynamics.joints.*;
 
 //For adding in mulitiple images of the fruit
 PImage[] fruit_images;
-float img_scale;
-ArrayList<PVector> svgVrts;
-
 
 //Tracking tracker;
-
 Minim minim;
 AudioPlayer backgroundMusic;
 AudioPlayer pentanana_hit_sound;
@@ -29,12 +25,10 @@ Box2DProcessing box2d;
 // An ArrayList of particles that will fall on the surface
 ArrayList<Fruit> fruits;
 
+PVector[] posRight = new PVector[2];
+PVector[] posLeft = new PVector[2];
 
-PVector posRight = null;
-PVector posLeft = null;
-
-// An object to store information about the uneven surface
-Bowl bowl;
+Bowl[] bowl = new Bowl[2];
 
 void setup() {
   size(1920, 1080, P3D);
@@ -42,6 +36,15 @@ void setup() {
   smooth(4);
   colorMode(RGB, 255, 255, 255, 100);
   //tracker = new Tracking(this);
+  
+  bowl[0] = null;
+  bowl[1] = null;
+  
+  posRight[0] = null;
+  posRight[1] = null;
+  
+  posLeft[0] = null;
+  posLeft[1] = null;
   
   //Music initialization
   minim = new Minim(this);
@@ -70,15 +73,16 @@ void setup() {
   //bowl = new Bowl(box2d);
   box2d.listenForCollisions();
   
-  posLeft = new PVector(200, 500);
+  posLeft[0] = new PVector(200, 500);
 }
 
 void draw() {
   // If the mouse is pressed, we make new particles
-  if (random(1) < 0.5) {
+  if ((int) random(0, 10) == 1) {
     float w = random(5,10);
-    float h = random(5,10);
-    fruits.add(new Fruit(random(0, width),-20,box2d,fruit_images[0],0));//So we can have a randome value the corisponds to the fruit image and the fruit being made
+    float h = random(50,10);
+    int fruitIdx = (int) random(0,5);
+    fruits.add(new Fruit(random(0, width),-20,box2d,fruit_images[fruitIdx],fruitIdx));//So we can have a randome value the corisponds to the fruit image and the fruit being made
   }
 
   // We must always step through time!
@@ -102,39 +106,24 @@ void draw() {
   fill(0);
   text("framerate: " + (int)frameRate,12,16);
   
-  posRight = null;
-  //posLeft = null;
-  posRight = new PVector(mouseX, mouseY);
+  posRight[0] = new PVector(mouseX, mouseY);
   
-    //for (int i=0; i<tracker.getBodySize(); i++) 
-    //{
-    //  print("Left hand: "+tracker.getLeftHandPos());
-    //  print("Right hand: "+tracker.getRightHandPos());
-    //  posRight = tracker.getRightHandPos();
-    //  posLeft = tracker.getLeftHandPos();
-    //}
-  if(posLeft == null && posRight == null) {
-    /*if (bowl != null) {
-     bowl.destroyBowl();
-   }*/
-  }
-  else if(posLeft == null || posRight == null)
-  {
-   if (bowl != null) {
-     bowl.destroyBowl();
-   }
-  }
-  else
-  {
-    if (bowl == null) {
-      bowl = new Bowl(box2d);
+  for (int x = 0; x < posLeft.length; x++) {
+    if (posLeft[x] != null && posRight[x] != null) {
+      if (bowl[x] == null) {
+        bowl[x] = new Bowl(box2d);
+      } else {
+        ellipse(posRight[x].x,posRight[x].y,10,10);
+        ellipse(posLeft[x].x,posLeft[x].y,10,10);
+        bowl[x].update(posLeft[x], posRight[x]);
+        // Draw the surface
+        bowl[x].display();
+      }
+    } else if(posLeft[x] == null || posRight[x] == null) {
+     if (bowl[x] != null) {
+       bowl[x].destroyBowl();
+     }
     }
-    ellipse(posRight.x,posRight.y,10,10);
-    ellipse(posLeft.x,posLeft.y,10,10);
-    
-    bowl.update(posLeft, posRight);
-    // Draw the surface
-    bowl.display();
   }
   // Draw all particles
   //println(fruits.size());
@@ -142,16 +131,12 @@ void draw() {
     p.display();
   }
   
-  if(posLeft != null || posRight != null && bowl != null) {
-    bowl.displayFront();
+  for (int y = 0; y < posLeft.length; y++) {
+    if(posLeft[y] != null || posRight[y] != null && bowl[y] != null) {
+      bowl[y].displayFront();
+    }
   }
   //bowl.display();
-}
-
-void mousePressed() {
-  if (mouseButton == LEFT) {
-    posLeft.y += 10;
-  }
 }
 
 //Collision Detection
@@ -220,12 +205,12 @@ void beginContact(Contact cp)
     
     if(fruit2.hasCollidedWithBowl())
     {
-      fruit1.bowlCollision(new Vec2(bowl.getPos().x,fruit2.getPos().y));
+      //fruit1.bowlCollision(new Vec2(bowl.getPos().x,fruit2.getPos().y));
     }
     
     if(fruit1.hasCollidedWithBowl())
     {
-      fruit2.bowlCollision(new Vec2(bowl.getPos().x,fruit1.getPos().y));
+      //fruit2.bowlCollision(new Vec2(bowl.getPos().x,fruit1.getPos().y));
     }
   }
 }

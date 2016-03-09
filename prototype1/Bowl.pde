@@ -93,6 +93,10 @@ class Bowl {
     ArrayList<CircleBody> bufferBowl = getHalfCircle(leftEnd, rightEnd);
     bowl2 = bufferBowl;
     
+    CircleBody middleBody = bowl2.get(bowl2.size() - 1);
+    bowlPosition = mBox2DRef.getBodyPixelCoord( middleBody.mBody );
+    bowlPosition.y -= 10;
+    
   }
   
   void update(PVector posLeft, PVector posRight) {
