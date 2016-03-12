@@ -8,6 +8,7 @@ class Bowl {
   int bowlHeight = 130;
   int imageOffsetY = 15;
   int circleRad = 5;
+  int bowlIndex;
   
   // We'll keep track of all of the surface points
   //ArrayList<Vec2> bowl;
@@ -25,6 +26,17 @@ class Bowl {
   
   PVector bridgeVec = PVector.sub( leftEnd, rightEnd );  
   float sectionSpacing = bridgeVec.mag() / (float) numSections;  
+  
+  Bowl(Box2DProcessing box2D, int bowlId) {
+    mBox2DRef = box2D;
+    bowlIndex = bowlId;
+    ArrayList<CircleBody> bufferBowl = getHalfCircle(leftEnd, rightEnd);
+    bowl2 = bufferBowl;
+    
+    CircleBody middleBody = bowl2.get(bowl2.size() - 1);
+    bowlPosition = mBox2DRef.getBodyPixelCoord( middleBody.mBody );
+    bowlPosition.y -= 10;
+  }
   
   ArrayList<CircleBody> getHalfCircle(PVector leftPoint, PVector rightPoint) { 
     ArrayList<CircleBody> halfCircle = new ArrayList<CircleBody>();
@@ -50,15 +62,15 @@ class Bowl {
       CircleBody section = null;
       if (i == 0 ) {
         PVector sectionPos = new PVector( RectanglePos.get(0).x, RectanglePos.get(0).y );
-         section = new CircleBody( sectionPos.x, sectionPos.y, circleRad, BodyType.KINEMATIC, mBox2DRef);
+         section = new CircleBody(bowlIndex, sectionPos.x, sectionPos.y, circleRad, BodyType.KINEMATIC, mBox2DRef);
       }
       else if ( i == numSections ) {
         PVector sectionPos = new PVector( RectanglePos.get(numSections - 1 ).x, RectanglePos.get(numSections - 1).y );
-        section = new CircleBody( sectionPos.x, sectionPos.y, circleRad, BodyType.KINEMATIC, mBox2DRef);
+        section = new CircleBody(bowlIndex, sectionPos.x, sectionPos.y, circleRad, BodyType.KINEMATIC, mBox2DRef);
       }
       else {//all middle sections
        PVector sectionPos = new PVector( RectanglePos.get(i).x, RectanglePos.get(i).y );
-       section = new CircleBody(sectionPos.x, sectionPos.y, circleRad, BodyType.KINEMATIC, mBox2DRef);
+       section = new CircleBody(bowlIndex, sectionPos.x, sectionPos.y, circleRad, BodyType.KINEMATIC, mBox2DRef);
        }
        
        //now that we have all pieces we want to connect them together with a "stretchy" joint
@@ -85,18 +97,6 @@ class Bowl {
        halfCircle.add(section);
     }
     return halfCircle;
-  }
-  
-  Bowl(Box2DProcessing box2D) {
-    mBox2DRef = box2D;
-    
-    ArrayList<CircleBody> bufferBowl = getHalfCircle(leftEnd, rightEnd);
-    bowl2 = bufferBowl;
-    
-    CircleBody middleBody = bowl2.get(bowl2.size() - 1);
-    bowlPosition = mBox2DRef.getBodyPixelCoord( middleBody.mBody );
-    bowlPosition.y -= 10;
-    
   }
   
   void update(PVector posLeft, PVector posRight) {
@@ -147,10 +147,10 @@ class Bowl {
     }
     noFill();
   }
-  
+    
   Vec2 getPos()
   {
-    return new Vec2(bowlPosition.x+bowlBack.width/2,bowlPosition.y);
+    return new Vec2(bowlPosition.x+bowlBack.width/2,bowlPosition.y + bowlBack.height);
   }
   
   void destroyBowl() {

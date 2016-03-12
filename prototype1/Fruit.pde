@@ -2,6 +2,7 @@ class Fruit {
   Box2DProcessing box2d;
   PolygonShape bananaShape;
   Body body;
+  int collidedBowlIndex;
   float fruit_w, fruit_h;
   PImage fruit_img;
   
@@ -13,7 +14,7 @@ class Fruit {
   String name;
   
   Fruit(float x, float y, Box2DProcessing mBox2DRef, PImage fruitImage, int identifier) {
-    
+    collidedBowlIndex = -1;
     fruit_img = fruitImage;
     box2d = mBox2DRef;
     Vec2 center = new Vec2(x, y);
@@ -96,7 +97,7 @@ class Fruit {
     // Parameters that affect physics
     fd.density = 0.1f;
     fd.friction = 0.3f;
-    fd.restitution = 0.5f;
+    fd.restitution = 0f;
     // Define the body and make it from the shape
     BodyDef bd = new BodyDef();
     bd.type = BodyType.DYNAMIC;
@@ -134,8 +135,8 @@ class Fruit {
     fd.shape = sd;
     // Parameters that affect physics
     fd.density = 0f;
-    fd.friction = 0.3f;
-    fd.restitution = 0.5f;
+    fd.friction = 3f;
+    fd.restitution = 0f;
 
     // Define the body and make it from the shape
     BodyDef bd = new BodyDef();
@@ -200,15 +201,24 @@ class Fruit {
     startStick(target);
   }
   
+  int getBowlCollidedIndex() {
+    return collidedBowlIndex;
+  }
+  
+  void setBowlCollidedIndex(int bowlIdx) {
+    collidedBowlIndex = bowlIdx;
+  }
+  
   //trigger the fruits to stick
   void startStick(Vec2 target)
   {
+    println("started to stick");
     Vec2 worldTarget = box2d.coordPixelsToWorld(target.x,target.y);   
     Vec2 bodyVec = body.getWorldCenter();
     worldTarget.subLocal(bodyVec);
     worldTarget = new Vec2(worldTarget.x*5,worldTarget.y-10);
     worldTarget.normalize();
-    worldTarget.mulLocal((float) 50);
+    worldTarget.mulLocal((float) 500);
     body.applyForce(worldTarget, bodyVec);
   }
   

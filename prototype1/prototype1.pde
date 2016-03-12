@@ -80,13 +80,16 @@ void draw() {
   // If the mouse is pressed, we make new particles
   if ((int) random(0, 10) == 1) {
     float w = random(5,10);
-    float h = random(50,10);
     int fruitIdx = (int) random(0,5);
-    fruits.add(new Fruit(random(0, width),-20,box2d,fruit_images[fruitIdx],fruitIdx));//So we can have a randome value the corisponds to the fruit image and the fruit being made
+    // make the coconut less frequent
+    if (fruitIdx == 1) {
+      int addedRand = (int) random(0, 5);
+      if (addedRand != 1) {
+        fruitIdx = addedRand;
+      }
+    }
+    fruits.add(new Fruit(random(0, width),-100,box2d,fruit_images[fruitIdx],fruitIdx));//So we can have a randome value the corisponds to the fruit image and the fruit being made
   }
-
-  // We must always step through time!
-  
 
   background(255);
   image(backgroundImg, 0, 0);
@@ -111,7 +114,7 @@ void draw() {
   for (int x = 0; x < posLeft.length; x++) {
     if (posLeft[x] != null && posRight[x] != null) {
       if (bowl[x] == null) {
-        bowl[x] = new Bowl(box2d);
+        bowl[x] = new Bowl(box2d, x);
       } else {
         ellipse(posRight[x].x,posRight[x].y,10,10);
         ellipse(posLeft[x].x,posLeft[x].y,10,10);
@@ -158,6 +161,7 @@ void beginContact(Contact cp)
     if(o1.getClass() == CircleBody.class)
     {
       Fruit f = (Fruit)o2;
+      CircleBody c = (CircleBody) o1;
       if(f.body.getLinearVelocity().y < -5)
       {
         if(!f.hasCollided())
@@ -166,11 +170,11 @@ void beginContact(Contact cp)
           f.collision();
         }
       }
-      
     }
     else if(o2.getClass() == CircleBody.class)
     {
       Fruit f = (Fruit)o1;
+      CircleBody c = (CircleBody) o2;
       if(f.body.getLinearVelocity().y < -5)
       {
         if(!f.hasCollided())
@@ -188,6 +192,7 @@ void beginContact(Contact cp)
     Fruit fruit1 = (Fruit)o1;
     CircleBody c2 = (CircleBody)o2;
     fruit1.bowlCollision(c2.getPos());
+    fruit1.setBowlCollidedIndex(c2.getBowlIndex());
   }
   
   if(o2.getClass() == Fruit.class && o1.getClass() == CircleBody.class)
@@ -195,6 +200,7 @@ void beginContact(Contact cp)
     Fruit fruit2 = (Fruit)o2;
     CircleBody c1 = (CircleBody)o1;
     fruit2.bowlCollision(c1.getPos());
+    fruit2.setBowlCollidedIndex(c1.getBowlIndex());
   }
   
   if(o1.getClass() == Fruit.class && o2.getClass() == Fruit.class)
@@ -205,12 +211,14 @@ void beginContact(Contact cp)
     
     if(fruit2.hasCollidedWithBowl())
     {
-      //fruit1.bowlCollision(new Vec2(bowl.getPos().x,fruit2.getPos().y));
+      fruit1.bowlCollision(new Vec2(bowl[fruit2.getBowlCollidedIndex()].getPos().x,fruit2.getPos().y));
+      fruit1.setBowlCollidedIndex(fruit2.getBowlCollidedIndex());
     }
     
     if(fruit1.hasCollidedWithBowl())
     {
-      //fruit2.bowlCollision(new Vec2(bowl.getPos().x,fruit1.getPos().y));
+      fruit2.bowlCollision(new Vec2(bowl[fruit1.getBowlCollidedIndex()].getPos().x,fruit1.getPos().y));
+      fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex()); 
     }
   }
 }

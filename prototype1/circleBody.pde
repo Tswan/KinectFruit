@@ -2,15 +2,16 @@ class CircleBody
 {
    Body      mBody;
    float     mRadius;
+   int       bowlIndex;
    Box2DProcessing mBox2DRef;
    
    color mColor = color(255,255,255);
   
-   CircleBody(float xInit, float yInit, float initRad, BodyType type, Box2DProcessing box2D)
+   CircleBody(int bowlId, float xInit, float yInit, float initRad, BodyType type, Box2DProcessing box2D)
    {
      mRadius = initRad;
      mBox2DRef = box2D;
-     
+     bowlIndex = bowlId;
      // Body def
      BodyDef bd = new BodyDef();
      bd.type = type;
@@ -27,8 +28,8 @@ class CircleBody
      FixtureDef fd = new FixtureDef();
      fd.shape = cs;
      fd.density = 1f * 1.0f/initRad;
-     fd.friction = 0.3f;
-     fd.restitution = 0.5f;
+     fd.friction = 3f;
+     fd.restitution = 0f;
      
      //attach the body
      mBody.createFixture( fd );
@@ -52,6 +53,10 @@ class CircleBody
        //ellipse( 0, 0, mRadius, mRadius );
      popMatrix();
    }
+   
+  int getBowlIndex() {
+    return bowlIndex;
+  }
    
    Vec2 getPos()
    {
