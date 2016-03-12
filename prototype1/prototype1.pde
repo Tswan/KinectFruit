@@ -53,7 +53,7 @@ void setup() {
   
   pentanana_hit_sound = minim.loadFile("bananaHits/banana_hit_2.mp3");
   
-  backgroundImg = loadImage("backgroundImg2.png");
+  backgroundImg = loadImage("backgroundImgBlue.png");
   fruit_images = new PImage[6];
   fruit_images[0] = loadImage("banana.png");
   fruit_images[1] = loadImage("coconut.png");
@@ -129,6 +129,7 @@ void draw() {
     } else if(posLeft[x] == null || posRight[x] == null) {
      if (bowl[x] != null) {
        bowl[x].destroyBowl();
+       bowl[x] = null;
      }
     }
   }
