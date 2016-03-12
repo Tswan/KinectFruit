@@ -98,13 +98,17 @@ void draw() {
   // (note they have to be deleted from both the box2d world and our list
   for (int i = fruits.size()-1; i >= 0; i--) {
     Fruit p = fruits.get(i);
-    if (p.isOffScreen()) {
+    if (p.isDead()) {
+      p.killBody();
+      fruits.remove(i);
+    }
+    else if (p.isOffScreen()) {
+      p.killBody();
       fruits.remove(i);
     }
   }
   
   box2d.step();
-
   // Just drawing the framerate to see how many particles it can handle
   fill(0);
   text("framerate: " + (int)frameRate,12,16);
@@ -129,9 +133,10 @@ void draw() {
     }
   }
   // Draw all particles
-  //println(fruits.size());
   for (Fruit p: fruits) {
-    p.display();
+    if (p != null) {
+      p.display();
+    }
   }
   
   for (int y = 0; y < posLeft.length; y++) {
@@ -139,13 +144,11 @@ void draw() {
       bowl[y].displayFront();
     }
   }
-  //bowl.display();
 }
 
 //Collision Detection
 void beginContact(Contact cp)
 {
-  
   Fixture f1 = cp.getFixtureA();
   Fixture f2 = cp.getFixtureB();
   
@@ -211,14 +214,41 @@ void beginContact(Contact cp)
     
     if(fruit2.hasCollidedWithBowl())
     {
-      fruit1.bowlCollision(new Vec2(bowl[fruit2.getBowlCollidedIndex()].getPos().x,fruit2.getPos().y));
-      fruit1.setBowlCollidedIndex(fruit2.getBowlCollidedIndex());
+      int coconutIndex = 1;
+      int strawberryIndex = 4;
+      if (fruit1.getFruitIndex() == coconutIndex && fruit2.getFruitIndex() != coconutIndex) {
+        if (fruit2.getPos().y > fruit1.getPos().y) {
+          fruit2.setDeath();
+        }
+      }
+      else if (fruit2.getFruitIndex() == strawberryIndex && fruit1.getFruitIndex() != strawberryIndex) {
+        if (fruit2.getPos().y > fruit1.getPos().y) {
+          fruit2.setDeath();
+        }
+      }
+      else {
+        fruit1.bowlCollision(new Vec2(bowl[fruit2.getBowlCollidedIndex()].getPos().x,fruit2.getPos().y));
+        fruit1.setBowlCollidedIndex(fruit2.getBowlCollidedIndex());
+      }
     }
     
     if(fruit1.hasCollidedWithBowl())
     {
-      fruit2.bowlCollision(new Vec2(bowl[fruit1.getBowlCollidedIndex()].getPos().x,fruit1.getPos().y));
-      fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex()); 
+      int coconutIndex = 1;
+      int strawberryIndex = 4;
+      if (fruit2.getFruitIndex() == coconutIndex && fruit1.getFruitIndex() != coconutIndex) {
+        if (fruit1.getPos().y > fruit2.getPos().y) {
+          fruit1.setDeath();
+        }
+      } else if (fruit1.getFruitIndex() == strawberryIndex && fruit2.getFruitIndex() != strawberryIndex) {
+        if (fruit1.getPos().y > fruit2.getPos().y) {
+          fruit1.setDeath();
+        }
+      }
+      else {
+        fruit2.bowlCollision(new Vec2(bowl[fruit1.getBowlCollidedIndex()].getPos().x,fruit1.getPos().y));
+        fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex()); 
+      }
     }
   }
 }
