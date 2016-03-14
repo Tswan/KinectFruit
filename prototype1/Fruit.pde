@@ -232,7 +232,7 @@ class Fruit {
     worldTarget.subLocal(bodyVec);
     worldTarget = new Vec2(worldTarget.x*5,worldTarget.y-40);
     worldTarget.normalize();
-    worldTarget.mulLocal((float) 500);
+    worldTarget.mulLocal((float) 1000);
     body.applyForce(worldTarget, bodyVec);
   }
   
