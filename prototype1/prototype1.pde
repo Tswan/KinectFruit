@@ -15,6 +15,8 @@ PImage[] fruit_images;
 
 PImage[] tree_images;
 
+PImage[] fruit_particle_images;
+
 //Tracking tracker;
 Minim minim;
 AudioPlayer backgroundMusic;
@@ -28,6 +30,8 @@ Box2DProcessing box2d;
 ArrayList<Fruit> fruits;
 
 ArrayList<Tree> trees;
+
+ArrayList<FruitParticleSystem> explodingFruits;
 
 PVector[] posRight = new PVector[2];
 PVector[] posLeft = new PVector[2];
@@ -72,6 +76,13 @@ void setup() {
   tree_images[3] = loadImage("Tree_Apple_Final.png");
   tree_images[4] = loadImage("Tree_Strawberry_Final.png");
 
+  fruit_particle_images = new PImage[5];
+  fruit_particle_images[0] = loadImage("Final_Banana_Particle.png");
+  fruit_particle_images[1] = loadImage("Final_Coconut_Particle.png");
+  fruit_particle_images[2] = loadImage("Final_Orange_Particle.png");
+  fruit_particle_images[3] = loadImage("Final_Apple_Particle.png");
+  fruit_particle_images[4] = loadImage("Final_Strawberry_Particle.png");
+  
   // Initialize box2d physics and create the world
   box2d = new Box2DProcessing(this);
   box2d.createWorld();
@@ -82,6 +93,8 @@ void setup() {
   fruits = new ArrayList<Fruit>();
   
   trees = new ArrayList<Tree>();
+  
+  explodingFruits = new ArrayList<FruitParticleSystem>();
   // Create the surface
   //bowl = new Bowl(box2d);
   box2d.listenForCollisions();
@@ -165,6 +178,16 @@ void draw() {
       bowl[y].displayFront();
     }
   }
+  
+  // exploding fruits
+  for (int w = 0; w < explodingFruits.size(); w++) {
+    if (!explodingFruits.get(w).isDead()) {
+      explodingFruits.get(w).update();
+      explodingFruits.get(w).display();
+    } else {
+      explodingFruits.remove(w);
+    }
+  }
 }
 
 //Collision Detection
@@ -240,6 +263,7 @@ void beginContact(Contact cp)
       if (fruit1.getFruitIndex() == coconutIndex && fruit2.getFruitIndex() != coconutIndex) {
         if (fruit2.getPos().y > fruit1.getPos().y) {
           fruit2.setDeath();
+          explodingFruits.add(new FruitParticleSystem(fruit2.getPos().x, fruit2.getPos().y, fruit_particle_images[fruit2.getFruitIndex()]));
         } else {
           fruit1.bowlCollision(new Vec2(bowl[fruit2.getBowlCollidedIndex()].getPos().x,fruit2.getPos().y));
           fruit1.setBowlCollidedIndex(fruit2.getBowlCollidedIndex());
@@ -248,6 +272,7 @@ void beginContact(Contact cp)
       else if (fruit2.getFruitIndex() == strawberryIndex && fruit1.getFruitIndex() != strawberryIndex) {
         if (fruit2.getPos().y > fruit1.getPos().y) {
           fruit2.setDeath();
+          explodingFruits.add(new FruitParticleSystem(fruit2.getPos().x, fruit2.getPos().y, fruit_particle_images[fruit2.getFruitIndex()]));
         } else {
           fruit1.bowlCollision(new Vec2(bowl[fruit2.getBowlCollidedIndex()].getPos().x,fruit2.getPos().y));
           fruit1.setBowlCollidedIndex(fruit2.getBowlCollidedIndex());
@@ -266,6 +291,7 @@ void beginContact(Contact cp)
       if (fruit2.getFruitIndex() == coconutIndex && fruit1.getFruitIndex() != coconutIndex) {
         if (fruit1.getPos().y > fruit2.getPos().y) {
           fruit1.setDeath();
+          explodingFruits.add(new FruitParticleSystem(fruit1.getPos().x, fruit1.getPos().y, fruit_particle_images[fruit1.getFruitIndex()]));
         } else {
           fruit2.bowlCollision(new Vec2(bowl[fruit1.getBowlCollidedIndex()].getPos().x,fruit1.getPos().y));
           fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex()); 
@@ -273,6 +299,7 @@ void beginContact(Contact cp)
       } else if (fruit1.getFruitIndex() == strawberryIndex && fruit2.getFruitIndex() != strawberryIndex) {
         if (fruit1.getPos().y > fruit2.getPos().y) {
           fruit1.setDeath();
+          explodingFruits.add(new FruitParticleSystem(fruit1.getPos().x, fruit1.getPos().y, fruit_particle_images[fruit1.getFruitIndex()]));
         } else {
           fruit2.bowlCollision(new Vec2(bowl[fruit1.getBowlCollidedIndex()].getPos().x,fruit1.getPos().y));
           fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex()); 
@@ -303,6 +330,7 @@ void killAllBowlFruits(){
   for(Fruit fruit : fruits) {
     if (fruit.hasCollidedWithBowl()) {
       fruit.setDeath();
+      explodingFruits.add(new FruitParticleSystem(fruit.getPos().x, fruit.getPos().y, fruit_particle_images[fruit.getFruitIndex()]));
     }
   }
 }
