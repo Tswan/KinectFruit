@@ -70,11 +70,11 @@ void setup() {
   fruit_images[4] = loadImage("strawberry.png");
   
   tree_images = new PImage[5];
-  tree_images[0] = loadImage("Tree_Banana_Final.png");
-  tree_images[1] = loadImage("Tree_Coconut_Final.png");
-  tree_images[2] = loadImage("Tree_Orange_Final.png");
-  tree_images[3] = loadImage("Tree_Apple_Final.png");
-  tree_images[4] = loadImage("Tree_Strawberry_Final.png");
+  tree_images[0] = loadImage("Tree_Banana_Final_Small.png");
+  tree_images[1] = loadImage("Tree_Coconut_Final_Small.png");
+  tree_images[2] = loadImage("Tree_Orange_Final_Small.png");
+  tree_images[3] = loadImage("Tree_Apple_Final_Small.png");
+  tree_images[4] = loadImage("Tree_Strawberry_Final_Small.png");
 
   fruit_particle_images = new PImage[5];
   fruit_particle_images[0] = loadImage("Final_Banana_Particle.png");
@@ -143,8 +143,8 @@ void draw() {
   
   box2d.step();
   // Just drawing the framerate to see how many particles it can handle
-  fill(0);
-  text("framerate: " + (int)frameRate,12,16);
+  //fill(0);
+  //text("framerate: " + (int)frameRate,12,16);
   
   posRight[0] = new PVector(mouseX, mouseY);
   
