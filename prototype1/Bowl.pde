@@ -8,6 +8,7 @@ class Bowl {
   int bowlHeight = 130;
   int imageOffsetY = 15;
   int circleRad = 5;
+  int bowlIndex;
   
   // We'll keep track of all of the surface points
   //ArrayList<Vec2> bowl;
@@ -28,9 +29,9 @@ class Bowl {
   
   boolean dead = false;
   
-  Bowl(Box2DProcessing box2D) {
+  Bowl(Box2DProcessing box2D, int bowlId) {
     mBox2DRef = box2D;
-    
+    bowlIndex = bowlId;
     ArrayList<CircleBody> bufferBowl = getHalfCircle(leftEnd, rightEnd);
     bowl2 = bufferBowl;
     
@@ -62,16 +63,16 @@ class Bowl {
       CircleBody section = null;
       if (i == 0 ) {
         PVector sectionPos = new PVector( RectanglePos.get(0).x, RectanglePos.get(0).y );
-         section = new CircleBody( sectionPos.x, sectionPos.y, circleRad, BodyType.KINEMATIC, mBox2DRef);
+        section = new CircleBody(bowlIndex, sectionPos.x, sectionPos.y, circleRad, BodyType.KINEMATIC, mBox2DRef);
       }
       else if ( i == numSections ) {
         PVector sectionPos = new PVector( RectanglePos.get(numSections - 1 ).x, RectanglePos.get(numSections - 1).y );
-        section = new CircleBody( sectionPos.x, sectionPos.y, circleRad, BodyType.KINEMATIC, mBox2DRef);
+        section = new CircleBody(bowlIndex, sectionPos.x, sectionPos.y, circleRad, BodyType.KINEMATIC, mBox2DRef);
       }
       else {//all middle sections
        PVector sectionPos = new PVector( RectanglePos.get(i).x, RectanglePos.get(i).y );
-       section = new CircleBody(sectionPos.x, sectionPos.y, circleRad, BodyType.KINEMATIC, mBox2DRef);
-       }
+       section = new CircleBody(bowlIndex, sectionPos.x, sectionPos.y, circleRad, BodyType.KINEMATIC, mBox2DRef);
+      }
        
        //now that we have all pieces we want to connect them together with a "stretchy" joint
        if (i > 0) {
@@ -149,7 +150,7 @@ class Bowl {
   
   Vec2 getPos()
   {
-    return new Vec2(bowlPosition.x+bowlBack.width/2,bowlPosition.y);
+    return new Vec2(bowlPosition.x+bowlBack.width/2,bowlPosition.y + bowlBack.height);
   }
   
   boolean isDead()

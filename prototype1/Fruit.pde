@@ -2,7 +2,10 @@ class Fruit {
   Box2DProcessing box2d;
   PolygonShape bananaShape;
   Body body;
+  int collidedBowlIndex;
+  int fruitIndex;
   float fruit_w, fruit_h;
+  boolean dead;
   PImage fruit_img;
   
   //Sound effect variables
@@ -15,6 +18,9 @@ class Fruit {
 
   Fruit(float x, float y, Box2DProcessing mBox2DRef, PImage fruitImage, int identifier) {
     
+    collidedBowlIndex = -1;
+    dead = false;
+    fruitIndex = identifier;
     fruit_img = fruitImage;
     box2d = mBox2DRef;
     Vec2 center = new Vec2(x, y);
@@ -96,7 +102,7 @@ class Fruit {
     // Parameters that affect physics
     fd.density = 0.1f;
     fd.friction = 0.3f;
-    fd.restitution = 0.5f;
+    fd.restitution = 0f;
     // Define the body and make it from the shape
     BodyDef bd = new BodyDef();
     bd.type = BodyType.DYNAMIC;
@@ -134,7 +140,7 @@ class Fruit {
     // Parameters that affect physics
     fd.density = 10f;
     fd.friction = 30f;
-    fd.restitution = 0.5f;
+    fd.restitution = 0f;
 
     // Define the body and make it from the shape
     BodyDef bd = new BodyDef();
@@ -161,12 +167,19 @@ class Fruit {
     box2d.destroyBody(body);
   }
   
+  void setDeath() {
+    dead = true;
+  }
+  
+  boolean isDead() {
+    return dead;
+  }
+  
   // Is the particle ready for deletion?
   boolean isOffScreen() {
     Vec2 pos = box2d.getBodyPixelCoord(body);
     // Is it off the bottom of the screen?
     if (pos.y > height+height*2) {
-      killBody();
       return true;
     }
     return false;
@@ -198,6 +211,18 @@ class Fruit {
     startStick(target);
   }
   
+  int getFruitIndex() {
+    return fruitIndex;
+  }
+  
+  int getBowlCollidedIndex() {
+    return collidedBowlIndex;
+  }
+  
+  void setBowlCollidedIndex(int bowlIdx) {
+    collidedBowlIndex = bowlIdx;
+  }
+  
   int getBowlId()
   {
     return bowlId;
@@ -209,7 +234,7 @@ class Fruit {
     Vec2 worldTarget = box2d.coordPixelsToWorld(target.x,target.y);   
     Vec2 bodyVec = body.getWorldCenter();
     worldTarget.subLocal(bodyVec);
-    worldTarget = new Vec2(worldTarget.x*5,worldTarget.y-10);
+    worldTarget = new Vec2(worldTarget.x*5,worldTarget.y-40);
     worldTarget.normalize();
     worldTarget.mulLocal((float) 1000);
     body.applyForce(worldTarget, bodyVec);
@@ -219,6 +244,7 @@ class Fruit {
   {
     collidedWithTheBowl=false;
     stopStick();
+    collidedBowlIndex = -1;
   }
   
   void stopStick()

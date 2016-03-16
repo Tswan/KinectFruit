@@ -9,8 +9,10 @@ import kinect4WinSDK.SkeletonData;
 import ddf.minim.*; //used for music
 import org.jbox2d.dynamics.joints.*;
 
-//For adding in mulitiple images of the fruit
+//For adding in mulitiple images
 PImage[] fruit_images;
+PImage[] tree_images;
+PImage[] fruit_particle_images;
 float img_scale;
 ArrayList<PVector> svgVrts;
 
@@ -24,8 +26,10 @@ PImage backgroundImg;
 // A reference to our box2d world
 Box2DProcessing box2d;
 
-// An ArrayList of particles that will fall on the surface
+// An ArrayList of fruit related objects
 ArrayList<Fruit> fruits;
+ArrayList<Tree> trees;
+ArrayList<FruitParticleSystem> explodingFruits;
 
 PVector[] posRight = new PVector[2];
 PVector[] posLeft = new PVector[2];
@@ -58,13 +62,27 @@ void setup() {
   
   pentanana_hit_sound = minim.loadFile("bananaHits/banana_hit_2.mp3");
   
-  backgroundImg = loadImage("backgroundImg2.png");
-  fruit_images = new PImage[6];
+  backgroundImg = loadImage("backgroundImgBlue.png");
+  fruit_images = new PImage[5];
   fruit_images[0] = loadImage("banana.png");
   fruit_images[1] = loadImage("coconut.png");
   fruit_images[2] = loadImage("orange.png");
   fruit_images[3] = loadImage("apple.png");
   fruit_images[4] = loadImage("strawberry.png");
+  
+  tree_images = new PImage[5];
+  tree_images[0] = loadImage("Tree_Banana_Final_Small.png");
+  tree_images[1] = loadImage("Tree_Coconut_Final_Small.png");
+  tree_images[2] = loadImage("Tree_Orange_Final_Small.png");
+  tree_images[3] = loadImage("Tree_Apple_Final_Small.png");
+  tree_images[4] = loadImage("Tree_Strawberry_Final_Small.png");
+  
+  fruit_particle_images = new PImage[5];
+  fruit_particle_images[0] = loadImage("Final_Banana_Particle.png");
+  fruit_particle_images[1] = loadImage("Final_Coconut_Particle.png");
+  fruit_particle_images[2] = loadImage("Final_Orange_Particle.png");
+  fruit_particle_images[3] = loadImage("Final_Apple_Particle.png");
+  fruit_particle_images[4] = loadImage("Final_Strawberry_Particle.png");
 
   // Initialize box2d physics and create the world
   box2d = new Box2DProcessing(this);
@@ -74,7 +92,8 @@ void setup() {
 
   // Create the empty list
   fruits = new ArrayList<Fruit>();
-  //bowl = new ArrayList<Bowl>();
+  trees = new ArrayList<Tree>();
+  explodingFruits = new ArrayList<FruitParticleSystem>();
   
   
   //Listen for collisions
@@ -85,19 +104,39 @@ void setup() {
 void draw() {
   // If the mouse is pressed, we make new particles
   if ((int) random(0, 10) == 1) {
-    float h = random(50,10);
+    float w = random(5,10);
     int fruitIdx = (int) random(0,5);
+    if (fruitIdx == 1) 
+    {
+      int addedRand = (int) random(0, 5);
+      if (addedRand != 1) 
+      {
+        fruitIdx = addedRand;
+      }
+    }
     fruits.add(new Fruit(random(0, width),-80,box2d,fruit_images[fruitIdx],fruitIdx));//So we can have a randome value the corisponds to the fruit image and the fruit being made
   }
   background(255);
-  image(backgroundImg, 0, 0);
   
+  image(backgroundImg, 0, 0);
+  if (trees != null) {
+    for (Tree tree : trees) {
+      tree.display();
+    }
+  }
 
   // Particles that leave the screen, we delete them
   // (note they have to be deleted from both the box2d world and our list
   for (int i = fruits.size()-1; i >= 0; i--) {
     Fruit p = fruits.get(i);
-    if (p.isOffScreen()) {
+    if (p.isDead()) 
+    {
+      p.killBody();
+      fruits.remove(i);
+    }
+    else if (p.isOffScreen()) 
+    {
+      p.killBody();
       fruits.remove(i);
     }
   }
@@ -113,20 +152,18 @@ void draw() {
   }
   
   box2d.step();
-  println("step");
   // Just drawing the framerate to see how many particles it can handle
   fill(0);
   text("framerate: " + (int)frameRate,12,16);
   
   for (int i=0; i<tracker.getBodySize(); i++) 
   {
-    if(i<2)
+    tracker.drawSkeleton(tracker.bodies.get(i));
+    println(i);
+    if(i<2) //BUG CAUSE: tracker.getBodySize() is the number of users ever tracked
     {
-      tracker.drawSkeleton(tracker.bodies.get(i));
-      
       posRight[i] = tracker.getRightHandPos(tracker.bodies.get(i));
       posLeft[i] = tracker.getLeftHandPos(tracker.bodies.get(i));
-    
     }
          
   }
@@ -135,10 +172,9 @@ void draw() {
   {
     if (posLeft[x] != null && posRight[x] != null) 
     {
-      
       if (bowl[x] == null) 
-      {println("bowl " + x );
-        bowl[x] = new Bowl(box2d);
+      {
+        bowl[x] = new Bowl(box2d,x);
       } 
       else 
       {
@@ -152,23 +188,35 @@ void draw() {
     {
      if (bowl[x] != null) 
      {
-       println("bowl " + x + " not null");
        bowl[x].kill();
+       /* If above breaks try
+       bowl[x].destroyBowl();
+       bowl[x] = null;
+       */
      }
     }
   }
   
   for (int y = 0; y < posLeft.length; y++) {
     if(posLeft[y] != null || posRight[y] != null && bowl[y] != null) {
-      println("displaying bowl "+y);
       bowl[y].displayFront();
     }
   }
   // Draw all particles
   for (Fruit p: fruits) {
-    p.display();
+    if (p != null) {
+      p.display();
+    }
   }
   
+  for (int w = 0; w < explodingFruits.size(); w++) {
+    if (!explodingFruits.get(w).isDead()) {
+      explodingFruits.get(w).update();
+      explodingFruits.get(w).display();
+    } else {
+      explodingFruits.remove(w);
+    }
+  }
   
   posRight[0] = null;
   posLeft[0] = null;
@@ -192,9 +240,10 @@ void beginContact(Contact cp)
   ///Hit sound trigger
   if(o1.getClass() == Fruit.class || o2.getClass() == Fruit.class)
   {
-    if(o1.getClass() == RectangleBody.class)
+    if(o1.getClass() == CircleBody.class)
     {
       Fruit f = (Fruit)o2;
+      CircleBody c = (CircleBody) o1;
       if(f.body.getLinearVelocity().y < -5)
       {
         if(!f.hasCollided())
@@ -205,9 +254,10 @@ void beginContact(Contact cp)
       }
       
     }
-    else if(o2.getClass() == RectangleBody.class)
+    else if(o2.getClass() == CircleBody.class)
     {
       Fruit f = (Fruit)o1;
+      CircleBody c = (CircleBody) o2;
       if(f.body.getLinearVelocity().y < -5)
       {
         if(!f.hasCollided())
@@ -225,6 +275,7 @@ void beginContact(Contact cp)
     Fruit fruit1 = (Fruit)o1;
     CircleBody c2 = (CircleBody)o2;
     fruit1.bowlCollision(c2.getPos());
+    fruit1.setBowlCollidedIndex(c2.getBowlIndex());
   }
   
   if(o2.getClass() == Fruit.class && o1.getClass() == CircleBody.class)
@@ -232,6 +283,7 @@ void beginContact(Contact cp)
     Fruit fruit2 = (Fruit)o2;
     CircleBody c1 = (CircleBody)o1;
     fruit2.bowlCollision(c1.getPos());
+    fruit2.setBowlCollidedIndex(c1.getBowlIndex());
   }
   
   if(o1.getClass() == Fruit.class && o2.getClass() == Fruit.class)
@@ -242,15 +294,82 @@ void beginContact(Contact cp)
     
     if(fruit2.hasCollidedWithBowl())
     {
-      fruit1.bowlCollision(new Vec2(bowl[fruit2.getBowlId()].getPos().x,fruit2.getPos().y));
+      int coconutIndex = 1;
+      int strawberryIndex = 4;
+      if (fruit1.getFruitIndex() == coconutIndex && fruit2.getFruitIndex() != coconutIndex) {
+        if (fruit2.getPos().y > fruit1.getPos().y) {
+          fruit2.setDeath();
+          explodingFruits.add(new FruitParticleSystem(fruit2.getPos().x, fruit2.getPos().y, fruit_particle_images[fruit2.getFruitIndex()]));
+        } else {
+          fruit1.bowlCollision(new Vec2(bowl[fruit2.getBowlCollidedIndex()].getPos().x,fruit2.getPos().y));
+          fruit1.setBowlCollidedIndex(fruit2.getBowlCollidedIndex());
+        }
+      }
+      else if (fruit2.getFruitIndex() == strawberryIndex && fruit1.getFruitIndex() != strawberryIndex) {
+        if (fruit2.getPos().y > fruit1.getPos().y) {
+          fruit2.setDeath();
+          explodingFruits.add(new FruitParticleSystem(fruit2.getPos().x, fruit2.getPos().y, fruit_particle_images[fruit2.getFruitIndex()]));
+        } else {
+          fruit1.bowlCollision(new Vec2(bowl[fruit2.getBowlCollidedIndex()].getPos().x,fruit2.getPos().y));
+          fruit1.setBowlCollidedIndex(fruit2.getBowlCollidedIndex());
+        }
+      }
+      else {
+        fruit1.bowlCollision(new Vec2(bowl[fruit2.getBowlCollidedIndex()].getPos().x,fruit2.getPos().y));
+        fruit1.setBowlCollidedIndex(fruit2.getBowlCollidedIndex());
+      }
     }
     
     if(fruit1.hasCollidedWithBowl())
     {
-      fruit2.bowlCollision(new Vec2(bowl[fruit2.getBowlId()].getPos().x,fruit1.getPos().y));
+      int coconutIndex = 1;
+      int strawberryIndex = 4;
+      if (fruit2.getFruitIndex() == coconutIndex && fruit1.getFruitIndex() != coconutIndex) {
+        if (fruit1.getPos().y > fruit2.getPos().y) {
+          fruit1.setDeath();
+          explodingFruits.add(new FruitParticleSystem(fruit1.getPos().x, fruit1.getPos().y, fruit_particle_images[fruit1.getFruitIndex()]));
+        } else {
+          fruit2.bowlCollision(new Vec2(bowl[fruit1.getBowlCollidedIndex()].getPos().x,fruit1.getPos().y));
+          fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex()); 
+        }
+      } else if (fruit1.getFruitIndex() == strawberryIndex && fruit2.getFruitIndex() != strawberryIndex) {
+        if (fruit1.getPos().y > fruit2.getPos().y) {
+          fruit1.setDeath();
+          explodingFruits.add(new FruitParticleSystem(fruit1.getPos().x, fruit1.getPos().y, fruit_particle_images[fruit1.getFruitIndex()]));
+        } else {
+          fruit2.bowlCollision(new Vec2(bowl[fruit1.getBowlCollidedIndex()].getPos().x,fruit1.getPos().y));
+          fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex());
+        }
+      }
+      else {
+        fruit2.bowlCollision(new Vec2(bowl[fruit1.getBowlCollidedIndex()].getPos().x,fruit1.getPos().y));
+        fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex()); 
+      }
+    }
+    
+    // tree code
+    if (!fruit1.isDead() && fruit1.hasCollidedWithBowl()) {
+      if (fruit1.getPos().y < 0) { 
+        trees.add(new Tree(random(0, 1800), 900, tree_images[fruit1.getFruitIndex()], fruit1.getFruitIndex()));
+        killAllBowlFruits();  
+      }
+    }
+    if (!fruit2.isDead() && fruit2.hasCollidedWithBowl()) {
+      if (fruit2.getPos().y < 0) { 
+        trees.add(new Tree(random(0, 1800), 900, tree_images[fruit2.getFruitIndex()], fruit2.getFruitIndex()));
+        killAllBowlFruits();  
+      }
     }
   }
-  
+}
+
+void killAllBowlFruits(){
+  for(Fruit fruit : fruits) {
+    if (fruit.hasCollidedWithBowl()) {
+      fruit.setDeath();
+      explodingFruits.add(new FruitParticleSystem(fruit.getPos().x, fruit.getPos().y, fruit_particle_images[fruit.getFruitIndex()]));
+    }   
+  }  
 }
 
 void endContact(Contact cp)
