@@ -153,12 +153,12 @@ void draw() {
   
   box2d.step();
   // Just drawing the framerate to see how many particles it can handle
-  fill(0);
-  text("framerate: " + (int)frameRate,12,16);
+  //fill(0);
+  //text("framerate: " + (int)frameRate,12,16);
   
-  for (int i=0; i<tracker.getBodySize(); i++) 
+  for (int i=0; i<tracker.getBodySize(); i++)
   {
-    tracker.drawSkeleton(tracker.bodies.get(i));
+    //tracker.drawSkeleton(tracker.bodies.get(i));
     println(i);
     println(tracker.getRightHandPos(tracker.bodies.get(i)));
     if(tracker.getRightHandPos(tracker.bodies.get(i)) != null) 
@@ -382,7 +382,26 @@ void killAllBowlFruits(){
 
 void endContact(Contact cp)
 {
+  Fixture f1 = cp.getFixtureA();
+  Fixture f2 = cp.getFixtureB();
   
+  Body b1 = f1.getBody();
+  Body b2 = f2.getBody();
+  
+  Object o1 = b1.getUserData();
+  Object o2 = b2.getUserData();
+  
+  if(o1.getClass() == Fruit.class)
+  {
+    Fruit fruit1 = (Fruit)o1;
+    fruit1.bowlCollisionEnd();
+  }
+  
+  if(o2.getClass() == Fruit.class)
+  {
+    Fruit fruit2 = (Fruit)o1;
+    fruit2.bowlCollisionEnd();
+  }
 }
 
 

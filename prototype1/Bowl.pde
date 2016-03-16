@@ -114,7 +114,8 @@ class Bowl {
       
       //New way of moving bowl
       float velX = (posRight.x + posLeft.x) / 2 - previous.x;
-      float velY = previous.y - (posLeft.y + (0.5*(posRight.y - posLeft.y)));
+      
+      float velY = previous.y - (posLeft.y + (0.5*(posRight.y - posLeft.y))) - 200;
       for (CircleBody shape : bowl2) {
         shape.MoveBody(new Vec2(velX, velY));
       }
@@ -142,9 +143,9 @@ class Bowl {
       noTint();
     popMatrix();
     fill(0);
-    for(CircleBody c : bowl2) {
+    /*for(CircleBody c : bowl2) {
       c.draw();
-    }
+    }*/
     noFill();
   }
   
