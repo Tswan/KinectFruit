@@ -7,6 +7,8 @@ import org.jbox2d.dynamics.contacts.*;
 import kinect4WinSDK.Kinect;
 import kinect4WinSDK.SkeletonData;
 import ddf.minim.*; //used for music
+import ddf.minim.spi.*;
+import ddf.minim.ugens.*;
 import org.jbox2d.dynamics.joints.*;
 
 //For adding in mulitiple images
@@ -20,7 +22,7 @@ Tracking tracker;
 
 Minim minim;
 AudioPlayer backgroundMusic;
-AudioPlayer pentanana_hit_sound;
+AudioPlayer[] fruit_hit_sounds;
 
 PImage backgroundImg;
 // A reference to our box2d world
@@ -60,7 +62,18 @@ void setup() {
   backgroundMusic = minim.loadFile("alpha_musicBg_original.mp3");
   backgroundMusic.loop();
   
-  pentanana_hit_sound = minim.loadFile("bananaHits/banana_hit_2.mp3");
+  fruit_hit_sounds = new AudioPlayer[5];
+  fruit_hit_sounds[0] = minim.loadFile("hitSounds/Banana_Hitting_Bowl_Normalized.mp3");
+  fruit_hit_sounds[0].setGain(0.0);
+  fruit_hit_sounds[1] = minim.loadFile("hitSounds/Coconut_Hitting_Bowl_Normalized.mp3");
+  fruit_hit_sounds[1].setGain(0.0);
+  fruit_hit_sounds[2] = minim.loadFile("hitSounds/Orange_Hitting_Bowl_Normalized.mp3");
+  fruit_hit_sounds[2].setGain(0.0);
+  fruit_hit_sounds[3] = minim.loadFile("hitSounds/Apple_Hitting_Bowl_Normalized.mp3");
+  fruit_hit_sounds[3].setGain(0.0);
+  fruit_hit_sounds[4] = minim.loadFile("hitSounds/Strawberry_Hitting_Bowl_Normalized.mp3");
+  fruit_hit_sounds[4].setGain(0.0);
+
   
   backgroundImg = loadImage("backgroundImgBlue.png");
   fruit_images = new PImage[5];
@@ -251,12 +264,11 @@ void beginContact(Contact cp)
     if(o1.getClass() == CircleBody.class)
     {
       Fruit f = (Fruit)o2;
-      CircleBody c = (CircleBody) o1;
-      if(f.body.getLinearVelocity().y < -5)
+      if(f.body.getLinearVelocity().y < -2)
       {
         if(!f.hasCollided())
         {
-          pentanana_hit_sound.play(0);
+          fruit_hit_sounds[f.getFruitIndex()].play(0);
           f.collision();
         }
       }
@@ -265,12 +277,11 @@ void beginContact(Contact cp)
     else if(o2.getClass() == CircleBody.class)
     {
       Fruit f = (Fruit)o1;
-      CircleBody c = (CircleBody) o2;
-      if(f.body.getLinearVelocity().y < -5)
+      if(f.body.getLinearVelocity().y < -2)
       {
         if(!f.hasCollided())
         {
-          pentanana_hit_sound.play(0);
+          fruit_hit_sounds[f.getFruitIndex()].play(0);
           f.collision();
         }
       }
