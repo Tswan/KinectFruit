@@ -160,10 +160,18 @@ void draw() {
   {
     tracker.drawSkeleton(tracker.bodies.get(i));
     println(i);
-    if(i<2) //BUG CAUSE: tracker.getBodySize() is the number of users ever tracked
+    println(tracker.getRightHandPos(tracker.bodies.get(i)));
+    if(tracker.getRightHandPos(tracker.bodies.get(i)) != null) 
     {
-      posRight[i] = tracker.getRightHandPos(tracker.bodies.get(i));
-      posLeft[i] = tracker.getLeftHandPos(tracker.bodies.get(i));
+      for(int j = 0; j < posRight.length; j++)
+      {
+        if(posRight[j] == null)
+        {
+          posRight[j] = tracker.getRightHandPos(tracker.bodies.get(i));
+          posLeft[j] = tracker.getLeftHandPos(tracker.bodies.get(i));
+          break;
+        }
+      }
     }
          
   }
