@@ -1,16 +1,17 @@
-class RectangleBody
+class Branch
 {
    Body      mBody;
    float     mWidth;
    float     mHeight;
    float     mAngle;
+   
    Box2DProcessing mBox2DRef;
    
    color mColor = color(255,255,255);
    
    boolean dead = false;
   
-   RectangleBody(float xInit, float yInit, float initWidth, float initHeight, float initAngle, BodyType type, Box2DProcessing box2D)
+   Branch(float xInit, float yInit, float initWidth, float initHeight, float initAngle, BodyType type, Box2DProcessing box2D)
    {
      mWidth = initWidth;
      mHeight = initHeight;
@@ -83,9 +84,10 @@ class RectangleBody
    
    void MoveBody(Vec2 newVelocity)
    {
-     /*Vec2 previous = mBox2DRef.getBodyPixelCoord( mBody );
-     float velX = mouseX - previous.x;
-     float velY = mouseY + previous.y;*/
-     mBody.setLinearVelocity(newVelocity);
+     Vec2 previous = mBox2DRef.getBodyPixelCoord( mBody );
+     Vec2 velocity = newVelocity.subLocal(previous);
+     velocity.normalize();
+     velocity.mulLocal((float) 50);
+     mBody.applyForce(newVelocity,previous);
    }
 }

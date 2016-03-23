@@ -33,10 +33,15 @@ ArrayList<Fruit> fruits;
 ArrayList<Tree> trees;
 ArrayList<FruitParticleSystem> explodingFruits;
 
-PVector[] posRight = new PVector[2];
-PVector[] posLeft = new PVector[2];
+
+PVector[] handPosRight = new PVector[2];
+PVector[] handPosLeft = new PVector[2];
+PVector[] sholderPosRight = new PVector[2];
+PVector[] sholderPosLeft = new PVector[2];
 // An object to store information about the uneven surface
 Bowl[] bowl = new Bowl[2];
+Branch[] branchesLeft = new Branch[2];
+Branch[] branchesRight = new Branch[2];
 
 
 
@@ -50,11 +55,22 @@ void setup() {
   bowl[0] = null;
   bowl[1] = null;
   
-  posRight[0] = null;
-  posRight[1] = null;
+  handPosRight[0] = null;
+  handPosRight[1] = null;
   
-  posLeft[0] = null;
-  posLeft[1] = null;
+  handPosLeft[0] = null;
+  handPosLeft[1] = null;
+  
+  branchesLeft[0] = null;
+  branchesLeft[1] = null;
+  branchesRight[0] = null;
+  branchesRight[1] = null;
+  
+   sholderPosRight[0] = null;
+   sholderPosRight[1] = null;
+   
+   sholderPosLeft[0] = null;
+   sholderPosLeft[1] = null;
   
   //Music initialization
   minim = new Minim(this);
@@ -107,6 +123,7 @@ void setup() {
   fruits = new ArrayList<Fruit>();
   trees = new ArrayList<Tree>();
   explodingFruits = new ArrayList<FruitParticleSystem>();
+  //branches = new ArrayList<RectangleBody>();
   
   
   //Listen for collisions
@@ -164,6 +181,30 @@ void draw() {
     }
   }
   
+  for(int i = 1; i >=0; i--)
+  {
+    if(branchesLeft[i] != null)
+    {
+     if(branchesLeft[i].isDead())
+     {
+       branchesLeft[i].destroyBody();
+       branchesLeft[i] = null;
+     }
+    }
+  }
+  
+  for(int i = 1; i >=0; i--)
+  {
+    if(branchesRight[i] != null)
+    {
+     if(branchesRight[i].isDead())
+     {
+       branchesRight[i].destroyBody();
+       branchesRight[i] = null;
+     }
+    }
+  }
+  
   box2d.step();
   // Just drawing the framerate to see how many particles it can handle
   //fill(0);
@@ -171,17 +212,26 @@ void draw() {
   
   for (int i=0; i<tracker.getBodySize(); i++)
   {
-    //tracker.drawSkeleton(tracker.bodies.get(i));
-    println(i);
-    println(tracker.getRightHandPos(tracker.bodies.get(i)));
+    tracker.drawSkeleton(tracker.bodies.get(i));
+    //println(i);
+    ///println(tracker.getRightHandPos(tracker.bodies.get(i)));
     if(tracker.getRightHandPos(tracker.bodies.get(i)) != null) 
     {
-      for(int j = 0; j < posRight.length; j++)
+      for(int j = 0; j < handPosRight.length; j++)
       {
-        if(posRight[j] == null)
+        if(handPosRight[j] == null)
         {
-          posRight[j] = tracker.getRightHandPos(tracker.bodies.get(i));
-          posLeft[j] = tracker.getLeftHandPos(tracker.bodies.get(i));
+          if(tracker.getRightHandPos(tracker.bodies.get(i)) != null && tracker.getRightSholderPos(tracker.bodies.get(i)) != null)
+          {    
+            handPosRight[j] = new PVector(tracker.getRightHandPos(tracker.bodies.get(i)).x, tracker.getRightHandPos(tracker.bodies.get(i)).y);
+            sholderPosRight[j] = new PVector(tracker.getRightSholderPos(tracker.bodies.get(i)).x, tracker.getRightSholderPos(tracker.bodies.get(i)).y);
+          }
+          if(tracker.getLeftHandPos(tracker.bodies.get(i)) != null && tracker.getLeftSholderPos(tracker.bodies.get(i)) != null)
+          {
+            handPosLeft[j] = new PVector(tracker.getLeftHandPos(tracker.bodies.get(i)).x, tracker.getLeftHandPos(tracker.bodies.get(i)).y);
+            sholderPosLeft[j] = new PVector(tracker.getLeftSholderPos(tracker.bodies.get(i)).x, tracker.getLeftSholderPos(tracker.bodies.get(i)).y);
+          }
+          
           break;
         }
       }
@@ -189,37 +239,73 @@ void draw() {
          
   }
   
-  for (int x = 0; x < posLeft.length; x++) 
+  for (int x = 0; x < handPosLeft.length; x++) 
   {
-    if (posLeft[x] != null && posRight[x] != null) 
+    if (handPosLeft[x] != null && handPosRight[x] != null)
     {
-      if (bowl[x] == null) 
+      if( handPosLeft[x].y < sholderPosLeft[x].y && handPosRight[x].y < sholderPosRight[x].y) 
       {
-        bowl[x] = new Bowl(box2d,x);
-      } 
-      else 
-      {
-        ellipse(posRight[x].x,posRight[x].y,10,10);
-        ellipse(posLeft[x].x,posLeft[x].y,10,10);
-        bowl[x].update(posLeft[x], posRight[x]);
-        // Draw the surface
-        bowl[x].display();
+        if (bowl[x] == null) 
+        {
+          bowl[x] = new Bowl(box2d,x,handPosLeft[x],handPosRight[x]);
+        } 
+        else 
+        {
+          ellipse(handPosRight[x].x,handPosRight[x].y,10,10);
+          ellipse(handPosLeft[x].x,handPosLeft[x].y,10,10);
+          bowl[x].update(handPosLeft[x], handPosRight[x]);
+          // Draw the surface
+          bowl[x].display();
+        }
+        if(branchesLeft[x] != null)
+          branchesLeft[x].kill();
+        if(branchesRight[x] != null)  
+          branchesRight[x].kill();
       }
-    } else if(posLeft[x] == null || posRight[x] == null) 
+      else
+      {
+        if (bowl[x] != null) 
+     {
+       bowl[x].kill();
+     }
+        if(branchesLeft[x] == null)
+        {
+          branchesLeft[x] = new Branch(handPosLeft[x].x, handPosLeft[x].y,100,10,0,BodyType.KINEMATIC, box2d);
+        }
+        if(branchesLeft[x] != null)
+        {
+          branchesLeft[x].MoveBody(new Vec2(handPosLeft[x].x,handPosLeft[x].y));
+          branchesLeft[x].draw();
+        }
+        
+        if(branchesRight[x] == null)
+        {
+          branchesRight[x] = new Branch(handPosRight[x].x, handPosRight[x].y,100,10,0,BodyType.KINEMATIC, box2d);
+        }
+        if(branchesLeft[x] != null)
+        {
+          branchesRight[x].MoveBody(new Vec2(handPosRight[x].x,handPosRight[x].y));
+          branchesRight[x].draw();
+        }
+        
+        
+      }
+    } else if(handPosLeft[x] == null || handPosRight[x] == null) 
     {
      if (bowl[x] != null) 
      {
        bowl[x].kill();
-       /* If above breaks try
-       bowl[x].destroyBowl();
-       bowl[x] = null;
-       */
+       if(branchesLeft[x] != null)
+          branchesLeft[x].kill();
+        if(branchesRight[x] != null)  
+          branchesRight[x].kill();
+       
      }
     }
   }
   
-  for (int y = 0; y < posLeft.length; y++) {
-    if(posLeft[y] != null || posRight[y] != null && bowl[y] != null) {
+  for (int y = 0; y < handPosLeft.length; y++) {
+    if(handPosLeft[y] != null && handPosRight[y] != null && bowl[y] != null) {
       bowl[y].displayFront();
     }
   }
@@ -230,6 +316,7 @@ void draw() {
     }
   }
   
+  
   for (int w = 0; w < explodingFruits.size(); w++) {
     if (!explodingFruits.get(w).isDead()) {
       explodingFruits.get(w).update();
@@ -239,10 +326,10 @@ void draw() {
     }
   }
   
-  posRight[0] = null;
-  posLeft[0] = null;
-  posRight[1] = null;
-  posLeft[1] = null;
+  handPosRight[0] = null;
+  handPosLeft[0] = null;
+  handPosRight[1] = null;
+  handPosLeft[1] = null;
 }
 
 //Collision Detection

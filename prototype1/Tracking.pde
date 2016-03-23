@@ -73,6 +73,38 @@ class Tracking
     return pos;
   }
   
+  PVector getLeftSholderPos(SkeletonData _s)
+  {
+    //ArrayList<PVector> Positions = new ArrayList<PVector>();
+    PVector pos = checkJoint(_s,Kinect.NUI_SKELETON_POSITION_SHOULDER_LEFT);
+    //Positions.add(pos);
+    return pos;
+  }
+  
+  PVector getRightSholderPos(SkeletonData _s)
+  {
+    //ArrayList<PVector> Positions = new ArrayList<PVector>();
+    PVector pos = checkJoint(_s,Kinect.NUI_SKELETON_POSITION_SHOULDER_RIGHT);
+   // Positions.add(pos);
+    return pos;
+  }
+  
+  PVector getLeftElbowPos(SkeletonData _s)
+  {
+    //ArrayList<PVector> Positions = new ArrayList<PVector>();
+    PVector pos = checkJoint(_s,Kinect.NUI_SKELETON_POSITION_ELBOW_LEFT);
+    //Positions.add(pos);
+    return pos;
+  }
+  
+  PVector getRightElbowPos(SkeletonData _s)
+  {
+    //ArrayList<PVector> Positions = new ArrayList<PVector>();
+    PVector pos = checkJoint(_s,Kinect.NUI_SKELETON_POSITION_ELBOW_RIGHT);
+   // Positions.add(pos);
+    return pos;
+  }
+  
   void drawPosition(SkeletonData _s) 
   {
     noStroke();
