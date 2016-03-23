@@ -82,12 +82,22 @@ class Branch
      mBox2DRef.destroyBody(mBody);
    }
    
-   void MoveBody(Vec2 newVelocity)
+   void MoveBody(Vec2 handPos)
    {
      Vec2 previous = mBox2DRef.getBodyPixelCoord( mBody );
-     Vec2 velocity = newVelocity.subLocal(previous);
+     /*Vec2 previous = mBody.getWorldCenter();
+     
+     Vec2 velocity = previous.add(newVelocity);
+     velocity.subLocal(previous);
      velocity.normalize();
      velocity.mulLocal((float) 50);
-     mBody.applyForce(newVelocity,previous);
+     //println(previous);
+     */
+     float velX =  handPos.x - previous.x;
+      
+      
+      float velY = previous.y - handPos.y;
+      
+     mBody.setLinearVelocity(new Vec2(velX,velY));
    }
 }

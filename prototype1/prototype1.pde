@@ -243,7 +243,7 @@ void draw() {
   {
     if (handPosLeft[x] != null && handPosRight[x] != null)
     {
-      if( handPosLeft[x].y < sholderPosLeft[x].y && handPosRight[x].y < sholderPosRight[x].y) 
+      if( handPosLeft[x].y < sholderPosLeft[x].y+200 && handPosRight[x].y < sholderPosRight[x].y+200) 
       {
         if (bowl[x] == null) 
         {
@@ -282,7 +282,7 @@ void draw() {
         {
           branchesRight[x] = new Branch(handPosRight[x].x, handPosRight[x].y,100,10,0,BodyType.KINEMATIC, box2d);
         }
-        if(branchesLeft[x] != null)
+        if(branchesRight[x] != null)
         {
           branchesRight[x].MoveBody(new Vec2(handPosRight[x].x,handPosRight[x].y));
           branchesRight[x].draw();

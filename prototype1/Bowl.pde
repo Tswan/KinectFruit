@@ -6,7 +6,7 @@ class Bowl {
   
   int bowlWidth = 430;
   int bowlHeight = 130;
-  int imageOffsetY = 15;
+  int imageOffsetY = 50;
   int circleRad = 5;
   int bowlIndex;
   
@@ -23,6 +23,7 @@ class Bowl {
   Vec2 bowlPosition;
   float actualBowlAngle = 0; 
   float bowlPositionOffsetX;
+  float angleOffsetY;
   
   int numSections = bowlWidth / circleRad * 2 + 1;
   int rotateOffset = 180 / numSections;
@@ -40,7 +41,7 @@ class Bowl {
     ArrayList<CircleBody> bufferBowl = getHalfCircle(new PVector(leftEnd.x ,(leftPoint.y < rightPoint.y ? rightPoint.y : leftPoint.y)),new PVector(rightEnd.x ,(leftPoint.y < rightPoint.y ? rightPoint.y : leftPoint.y)));
     bowl2 = bufferBowl;
     
-    CircleBody middleBody = bowl2.get(bowl2.size() - 1);
+    CircleBody middleBody = bowl2.get((bowl2.size() - 1)/2);
     bowlPosition = mBox2DRef.getBodyPixelCoord( middleBody.mBody );
     
     CircleBody firstBody = bowl2.get(bowl2.size() - 1);
@@ -49,7 +50,8 @@ class Bowl {
     Vec2 endBowlPos = mBox2DRef.getBodyPixelCoord( endBody.mBody );
     
     actualBowlAngle = atan((endBowlPos.y - firstBowlPos.y) / (endBowlPos.x - firstBowlPos.x));
-    bowlPositionOffsetX = (degrees(actualBowlAngle) / 360) * 200;
+    bowlPositionOffsetX = (degrees(actualBowlAngle) / 360) * 500;
+    angleOffsetY = (degrees(actualBowlAngle) / 360) * 200;
     bowlPosition.y -= 10;
   }
   
@@ -148,7 +150,7 @@ class Bowl {
   void update(PVector posLeft, PVector posRight) {
       //ArrayList<RectangleBody> bufferBowl = getHalfCircle(posLeft, posRight);
       //destroyBowl();
-      CircleBody middleBody = bowl2.get(bowl2.size() - 1);
+      CircleBody middleBody = bowl2.get((bowl2.size() - 1)/2);
       
       Vec2 previous = mBox2DRef.getBodyPixelCoord( middleBody.mBody );
       /*old Way of moving bowl
@@ -177,7 +179,7 @@ class Bowl {
         increment++;
       }
       //bowl2 = bufferBowl;
-      middleBody = bowl2.get(bowl2.size() - 1);
+      middleBody = bowl2.get((bowl2.size() - 1)/2);
       bowlPosition = mBox2DRef.getBodyPixelCoord( middleBody.mBody );
       //bowlPosition.y = map(bowlPosition.y,mBox2DRef.scalarPixelsToWorld(0),mBox2DRef.scalarPixelsToWorld(height), mBox2DRef.scalarPixelsToWorld(height - height/10), mBox2DRef.scalarPixelsToWorld(height));
       bowlPosition.y -= 10;
@@ -186,24 +188,29 @@ class Bowl {
       CircleBody endBody = bowl2.get(0);
       Vec2 endBowlPos = mBox2DRef.getBodyPixelCoord( endBody.mBody );
       actualBowlAngle = atan((endBowlPos.y - firstBowlPos.y) / (endBowlPos.x - firstBowlPos.x));
-      bowlPositionOffsetX = (degrees(actualBowlAngle) / 360) * 200;
+      bowlPositionOffsetX = (degrees(actualBowlAngle) / 360) * 500;
+      angleOffsetY = (degrees(actualBowlAngle) / 360) * 200;
   }
   
   // A simple function to just draw the edge chain as a series of vertex points
   void display() {
     pushMatrix();
-    translate(bowlPosition.x + bowlPositionOffsetX, bowlPosition.y - imageOffsetY);
+    translate(bowlPosition.x + bowlPositionOffsetX, bowlPosition.y - imageOffsetY - angleOffsetY);
       rotate(actualBowlAngle);
+      imageMode(CENTER);
       image(bowlBack, 0, 0);
+      imageMode(CORNER);
     popMatrix();
   }
   
   void displayFront() {
     pushMatrix();
-      translate(bowlPosition.x + bowlPositionOffsetX, bowlPosition.y - imageOffsetY);
+      translate(bowlPosition.x + bowlPositionOffsetX, bowlPosition.y - imageOffsetY - angleOffsetY);
       rotate(actualBowlAngle);
       tint(255, 60);
+      imageMode(CENTER);
       image(bowlFront, 0, 0);
+      imageMode(CORNER);
       noTint();
     popMatrix();
     fill(0);
