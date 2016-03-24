@@ -238,6 +238,7 @@ class Fruit {
     worldTarget.normalize();
     worldTarget.mulLocal((float) 1000);
     body.applyForce(worldTarget, bodyVec);
+    println("Sticking");
   }
   
   void bowlCollisionEnd()

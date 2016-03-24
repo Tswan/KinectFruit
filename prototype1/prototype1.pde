@@ -25,6 +25,7 @@ AudioPlayer backgroundMusic;
 AudioPlayer[] fruit_hit_sounds;
 
 PImage backgroundImg;
+PImage branchImg;
 // A reference to our box2d world
 Box2DProcessing box2d;
 
@@ -92,6 +93,7 @@ void setup() {
 
   
   backgroundImg = loadImage("backgroundImgBlue.png");
+  branchImg = loadImage("Tree_Branch.png");
   fruit_images = new PImage[5];
   fruit_images[0] = loadImage("banana.png");
   fruit_images[1] = loadImage("coconut.png");
@@ -243,7 +245,7 @@ void draw() {
   {
     if (handPosLeft[x] != null && handPosRight[x] != null)
     {
-      if( handPosLeft[x].y < sholderPosLeft[x].y+200 && handPosRight[x].y < sholderPosRight[x].y+200) 
+      if( handPosLeft[x].y < sholderPosLeft[x].y && handPosRight[x].y < sholderPosRight[x].y) 
       {
         if (bowl[x] == null) 
         {
@@ -274,7 +276,7 @@ void draw() {
         }
         if(branchesLeft[x] != null)
         {
-          branchesLeft[x].MoveBody(new Vec2(handPosLeft[x].x,handPosLeft[x].y));
+          branchesLeft[x].MoveBody(new Vec2(handPosLeft[x].x,handPosLeft[x].y), new Vec2(sholderPosLeft[x].x,sholderPosLeft[x].y));
           branchesLeft[x].draw();
         }
         
@@ -284,7 +286,7 @@ void draw() {
         }
         if(branchesRight[x] != null)
         {
-          branchesRight[x].MoveBody(new Vec2(handPosRight[x].x,handPosRight[x].y));
+          branchesRight[x].MoveBody(new Vec2(handPosRight[x].x,handPosRight[x].y), new Vec2(sholderPosRight[x].x,sholderPosRight[x].y));
           branchesRight[x].draw();
         }
         

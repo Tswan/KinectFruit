@@ -28,11 +28,20 @@ class Branch
      mBody = mBox2DRef.createBody(bd);
      
      //shape
-     PolygonShape ps = new PolygonShape();
-     float box2DW = mBox2DRef.scalarPixelsToWorld(mWidth);
-     float box2DH = mBox2DRef.scalarPixelsToWorld(mHeight);
-     ps.setAsBox(box2DW, box2DH);
      
+     
+     Vec2[] vertices = new Vec2[8];
+      vertices[0] = box2d.vectorPixelsToWorld(new Vec2(42, 0)); 
+      vertices[1] = box2d.vectorPixelsToWorld(new Vec2(0, 55)); 
+      vertices[2] = box2d.vectorPixelsToWorld(new Vec2(82, 157)); 
+      vertices[3] = box2d.vectorPixelsToWorld(new Vec2(98, 331)); 
+      vertices[4] = box2d.vectorPixelsToWorld(new Vec2(113, 336)); 
+      vertices[5] = box2d.vectorPixelsToWorld(new Vec2(126, 249));
+      vertices[6] = box2d.vectorPixelsToWorld(new Vec2(156, 194));
+      vertices[7] = box2d.vectorPixelsToWorld(new Vec2(169, 47));
+     
+     PolygonShape ps = new PolygonShape();
+    ps.set(vertices, vertices.length);
      //fixture
      FixtureDef fd = new FixtureDef();
      fd.shape = ps;
@@ -48,22 +57,28 @@ class Branch
    
    void draw()
    {
-     Vec2 pos = mBox2DRef.getBodyPixelCoord( mBody );
-     float angle = -mBody.getAngle();
-     
-     pushMatrix();
-       translate(pos.x, pos.y);
-       rotate(angle);
-       
-       if (mBody.isAwake()) {
-         fill(mColor);
-       }
-       else {
-         fill(red(mColor) * 0.9f, green(mColor) * 0.9f, blue(mColor) * 0.9f); 
-       }
-       rectMode(CENTER);
-       rect( 0, 0, mWidth, mHeight );
-     popMatrix();
+     // We look at each body and get its screen position
+    Vec2 pos = box2d.getBodyPixelCoord(mBody);
+    // Get its angle of rotation
+    float a = mBody.getAngle();
+    Fixture f = mBody.getFixtureList();
+    PolygonShape ps = (PolygonShape) f.getShape();
+    
+    pushMatrix();
+      translate(pos.x, pos.y);
+      rotate(-a);
+      
+      image(branchImg, 0, 0); 
+      beginShape();
+    //println(vertices.length);
+    // For every vertex, convert to pixel vector
+    for (int i = 0; i < ps.getVertexCount(); i++) {
+      Vec2 v = box2d.vectorWorldToPixels(ps.getVertex(i));
+      vertex(v.x, v.y);
+    }
+    endShape(CLOSE);
+    popMatrix();
+    
    }
    
    boolean isDead()
@@ -82,22 +97,21 @@ class Branch
      mBox2DRef.destroyBody(mBody);
    }
    
-   void MoveBody(Vec2 handPos)
+   void MoveBody(Vec2 handPos, Vec2 sholderPos)
    {
      Vec2 previous = mBox2DRef.getBodyPixelCoord( mBody );
-     /*Vec2 previous = mBody.getWorldCenter();
      
-     Vec2 velocity = previous.add(newVelocity);
-     velocity.subLocal(previous);
-     velocity.normalize();
-     velocity.mulLocal((float) 50);
-     //println(previous);
-     */
      float velX =  handPos.x - previous.x;
+     float velY = previous.y - handPos.y;
+     Vec2 velocity = new Vec2(velX,velY);
+     
+     Vec2 target = handPos.sub(sholderPos);
+     //target.mul(-1);
+     
+     float desiredAngle = atan2(-target.x,target.y)*-1;
+     //println("angle: " + desiredAngle);
+     mBody.setTransform(mBody.getPosition(), desiredAngle);
       
-      
-      float velY = previous.y - handPos.y;
-      
-     mBody.setLinearVelocity(new Vec2(velX,velY));
+     mBody.setLinearVelocity(velocity);
    }
 }

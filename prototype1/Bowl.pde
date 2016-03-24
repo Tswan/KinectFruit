@@ -36,8 +36,8 @@ class Bowl {
   Bowl(Box2DProcessing box2D, int bowlId, PVector leftPoint, PVector rightPoint) {
     mBox2DRef = box2D;
     bowlIndex = bowlId;
-    println(leftPoint);
-    println(rightPoint);
+    //println(leftPoint);
+    //println(rightPoint);
     ArrayList<CircleBody> bufferBowl = getHalfCircle(new PVector(leftEnd.x ,(leftPoint.y < rightPoint.y ? rightPoint.y : leftPoint.y)),new PVector(rightEnd.x ,(leftPoint.y < rightPoint.y ? rightPoint.y : leftPoint.y)));
     bowl2 = bufferBowl;
     
