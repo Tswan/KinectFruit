@@ -377,6 +377,7 @@ void beginContact(Contact cp)
     }
   }
   
+  
   //Sticking trigger
   if(o1.getClass() == Fruit.class && o2.getClass() == CircleBody.class)
   {
@@ -409,8 +410,11 @@ void beginContact(Contact cp)
           fruit2.setDeath();
           explodingFruits.add(new FruitParticleSystem(fruit2.getPos().x, fruit2.getPos().y, fruit_particle_images[fruit2.getFruitIndex()]));
         } else {
-          fruit1.bowlCollision(new Vec2(bowl[fruit2.getBowlCollidedIndex()].getPos().x,fruit2.getPos().y));
-          fruit1.setBowlCollidedIndex(fruit2.getBowlCollidedIndex());
+          if(bowl[fruit2.getBowlCollidedIndex()] != null)
+          {
+            fruit1.bowlCollision(new Vec2(bowl[fruit2.getBowlCollidedIndex()].getPos().x,fruit2.getPos().y));
+            fruit1.setBowlCollidedIndex(fruit2.getBowlCollidedIndex());
+          }
         }
       }
       else if (fruit2.getFruitIndex() == strawberryIndex && fruit1.getFruitIndex() != strawberryIndex) {
@@ -418,13 +422,19 @@ void beginContact(Contact cp)
           fruit2.setDeath();
           explodingFruits.add(new FruitParticleSystem(fruit2.getPos().x, fruit2.getPos().y, fruit_particle_images[fruit2.getFruitIndex()]));
         } else {
-          fruit1.bowlCollision(new Vec2(bowl[fruit2.getBowlCollidedIndex()].getPos().x,fruit2.getPos().y));
-          fruit1.setBowlCollidedIndex(fruit2.getBowlCollidedIndex());
+          if(bowl[fruit2.getBowlCollidedIndex()] != null)
+          {
+            fruit1.bowlCollision(new Vec2(bowl[fruit2.getBowlCollidedIndex()].getPos().x,fruit2.getPos().y));
+            fruit1.setBowlCollidedIndex(fruit2.getBowlCollidedIndex());
+          }
         }
       }
       else {
-        fruit1.bowlCollision(new Vec2(bowl[fruit2.getBowlCollidedIndex()].getPos().x,fruit2.getPos().y));
-        fruit1.setBowlCollidedIndex(fruit2.getBowlCollidedIndex());
+        if(bowl[fruit2.getBowlCollidedIndex()] != null)
+        {
+          fruit1.bowlCollision(new Vec2(bowl[fruit2.getBowlCollidedIndex()].getPos().x,fruit2.getPos().y));
+          fruit1.setBowlCollidedIndex(fruit2.getBowlCollidedIndex());
+        }
       }
     }
     
@@ -437,21 +447,30 @@ void beginContact(Contact cp)
           fruit1.setDeath();
           explodingFruits.add(new FruitParticleSystem(fruit1.getPos().x, fruit1.getPos().y, fruit_particle_images[fruit1.getFruitIndex()]));
         } else {
-          fruit2.bowlCollision(new Vec2(bowl[fruit1.getBowlCollidedIndex()].getPos().x,fruit1.getPos().y));
-          fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex()); 
+          if(bowl[fruit1.getBowlCollidedIndex()] != null)
+          {
+            fruit2.bowlCollision(new Vec2(bowl[fruit1.getBowlCollidedIndex()].getPos().x,fruit1.getPos().y));
+            fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex()); 
+          }
         }
       } else if (fruit1.getFruitIndex() == strawberryIndex && fruit2.getFruitIndex() != strawberryIndex) {
         if (fruit2.body.getLinearVelocity().y < -2) {
           fruit1.setDeath();
           explodingFruits.add(new FruitParticleSystem(fruit1.getPos().x, fruit1.getPos().y, fruit_particle_images[fruit1.getFruitIndex()]));
         } else {
-          fruit2.bowlCollision(new Vec2(bowl[fruit1.getBowlCollidedIndex()].getPos().x,fruit1.getPos().y));
-          fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex());
+          if(bowl[fruit1.getBowlCollidedIndex()] != null)
+          {
+            fruit2.bowlCollision(new Vec2(bowl[fruit1.getBowlCollidedIndex()].getPos().x,fruit1.getPos().y));
+            fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex());
+          }
         }
       }
       else {
-        fruit2.bowlCollision(new Vec2(bowl[fruit1.getBowlCollidedIndex()].getPos().x,fruit1.getPos().y));
-        fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex()); 
+        if(bowl[fruit1.getBowlCollidedIndex()] != null)
+        {
+          fruit2.bowlCollision(new Vec2(bowl[fruit1.getBowlCollidedIndex()].getPos().x,fruit1.getPos().y));
+          fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex()); 
+        }
       }
     }
     
