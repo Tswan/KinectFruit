@@ -223,12 +223,12 @@ void draw() {
       {
         if(handPosRight[j] == null)
         {
-          if(tracker.getRightHandPos(tracker.bodies.get(i)) != null && tracker.getRightSholderPos(tracker.bodies.get(i)) != null)
+          if(tracker.getRightHandPos(tracker.bodies.get(i)) != null && tracker.getRightElbowPos(tracker.bodies.get(i)) != null)
           {    
             handPosRight[j] = new PVector(tracker.getRightHandPos(tracker.bodies.get(i)).x, tracker.getRightHandPos(tracker.bodies.get(i)).y);
             sholderPosRight[j] = new PVector(tracker.getRightElbowPos(tracker.bodies.get(i)).x, tracker.getRightElbowPos(tracker.bodies.get(i)).y);
           }
-          if(tracker.getLeftHandPos(tracker.bodies.get(i)) != null && tracker.getLeftSholderPos(tracker.bodies.get(i)) != null)
+          if(tracker.getLeftHandPos(tracker.bodies.get(i)) != null && tracker.getLeftElbowPos(tracker.bodies.get(i)) != null)
           {
             handPosLeft[j] = new PVector(tracker.getLeftHandPos(tracker.bodies.get(i)).x, tracker.getLeftHandPos(tracker.bodies.get(i)).y);
             sholderPosLeft[j] = new PVector(tracker.getLeftElbowPos(tracker.bodies.get(i)).x, tracker.getLeftElbowPos(tracker.bodies.get(i)).y);
@@ -270,25 +270,33 @@ void draw() {
      {
        bowl[x].kill();
      }
-        if(branchesLeft[x] == null)
+        if(branchesLeft[x] == null && sholderPosLeft[x].y < sholderPosRight[x].y )
         {
           branchesLeft[x] = new Branch(sholderPosLeft[x].x,sholderPosLeft[x].y,100,10,0,BodyType.KINEMATIC, box2d);
         }
         if(branchesLeft[x] != null)
         {
+          if(sholderPosLeft[x].y > sholderPosRight[x].y)
+            branchesLeft[x].kill();
+            
           branchesLeft[x].MoveBody(new Vec2(handPosLeft[x].x,handPosLeft[x].y), new Vec2(sholderPosLeft[x].x,sholderPosLeft[x].y));
           branchesLeft[x].draw();
         }
         
-        if(branchesRight[x] == null)
+        if(branchesRight[x] == null && sholderPosLeft[x].y > sholderPosRight[x].y)
         {
           branchesRight[x] = new Branch(sholderPosRight[x].x,sholderPosRight[x].y,100,10,0,BodyType.KINEMATIC, box2d);
         }
         if(branchesRight[x] != null)
         {
+          if(sholderPosLeft[x].y < sholderPosRight[x].y)
+            branchesRight[x].kill();
+          
           branchesRight[x].MoveBody(new Vec2(handPosRight[x].x,handPosRight[x].y), new Vec2(sholderPosRight[x].x,sholderPosRight[x].y));
           branchesRight[x].draw();
+          
         }
+        
         
         
       }
