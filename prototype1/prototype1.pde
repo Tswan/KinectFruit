@@ -269,6 +269,7 @@ void draw() {
         if (bowl[x] != null) 
      {
        bowl[x].kill();
+       unsetBowlCollision(x);
      }
         if(branchesLeft[x] == null && sholderPosLeft[x].y < sholderPosRight[x].y )
         {
@@ -503,6 +504,14 @@ void killAllBowlFruits(){
     if (fruit.hasCollidedWithBowl()) {
       fruit.setDeath();
       explodingFruits.add(new FruitParticleSystem(fruit.getPos().x, fruit.getPos().y, fruit_particle_images[fruit.getFruitIndex()]));
+    }   
+  }  
+}
+
+void unsetBowlCollision(int bowlIndex){
+  for(Fruit fruit : fruits) {
+    if (fruit.hasCollidedWithBowl()&& fruit.getBowlCollidedIndex() == bowlIndex) {
+      fruit.bowlCollisionEnd();
     }   
   }  
 }
