@@ -226,12 +226,12 @@ void draw() {
           if(tracker.getRightHandPos(tracker.bodies.get(i)) != null && tracker.getRightSholderPos(tracker.bodies.get(i)) != null)
           {    
             handPosRight[j] = new PVector(tracker.getRightHandPos(tracker.bodies.get(i)).x, tracker.getRightHandPos(tracker.bodies.get(i)).y);
-            sholderPosRight[j] = new PVector(tracker.getRightSholderPos(tracker.bodies.get(i)).x, tracker.getRightSholderPos(tracker.bodies.get(i)).y);
+            sholderPosRight[j] = new PVector(tracker.getRightElbowPos(tracker.bodies.get(i)).x, tracker.getRightElbowPos(tracker.bodies.get(i)).y);
           }
           if(tracker.getLeftHandPos(tracker.bodies.get(i)) != null && tracker.getLeftSholderPos(tracker.bodies.get(i)) != null)
           {
             handPosLeft[j] = new PVector(tracker.getLeftHandPos(tracker.bodies.get(i)).x, tracker.getLeftHandPos(tracker.bodies.get(i)).y);
-            sholderPosLeft[j] = new PVector(tracker.getLeftSholderPos(tracker.bodies.get(i)).x, tracker.getLeftSholderPos(tracker.bodies.get(i)).y);
+            sholderPosLeft[j] = new PVector(tracker.getLeftElbowPos(tracker.bodies.get(i)).x, tracker.getLeftElbowPos(tracker.bodies.get(i)).y);
           }
           
           break;
@@ -272,7 +272,7 @@ void draw() {
      }
         if(branchesLeft[x] == null)
         {
-          branchesLeft[x] = new Branch(handPosLeft[x].x, handPosLeft[x].y,100,10,0,BodyType.KINEMATIC, box2d);
+          branchesLeft[x] = new Branch(sholderPosLeft[x].x,sholderPosLeft[x].y,100,10,0,BodyType.KINEMATIC, box2d);
         }
         if(branchesLeft[x] != null)
         {
@@ -282,7 +282,7 @@ void draw() {
         
         if(branchesRight[x] == null)
         {
-          branchesRight[x] = new Branch(handPosRight[x].x, handPosRight[x].y,100,10,0,BodyType.KINEMATIC, box2d);
+          branchesRight[x] = new Branch(sholderPosRight[x].x,sholderPosRight[x].y,100,10,0,BodyType.KINEMATIC, box2d);
         }
         if(branchesRight[x] != null)
         {

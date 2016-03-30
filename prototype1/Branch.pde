@@ -90,17 +90,26 @@ class Branch
    {
      Vec2 previous = mBox2DRef.getBodyPixelCoord( mBody );
      
-     float velX =  handPos.x - previous.x;
-     float velY = previous.y - handPos.y;
+     float velX =  sholderPos.x - previous.x;
+     float velY = previous.y - sholderPos.y;
      Vec2 velocity = new Vec2(velX,velY);
      
      Vec2 target = handPos.sub(sholderPos);
      //target.mul(-1);
+     float bodyAngle = mBody.getAngle();
+     float desiredAngle = atan2(-target.x,target.y) *-1;
      
-     float desiredAngle = atan2(-target.x,target.y)*-1;
-     //println("angle: " + desiredAngle);
+     /*float nextAngle = bodyAngle + mBody.getAngularVelocity()/60;
+     float totalRotation = desiredAngle - nextAngle;
+    
+     while(totalRotation < radians(-180) ){ totalRotation += radians(360); }
+     while(totalRotation > radians(180) ){ totalRotation -= radians(360); }
+     
+     float desiredAngularVelocity = totalRotation * 60;
+     float impulse =  degrees(atan2(-velocity.x,velocity.y)) - mBody.getAngularVelocity();// * desiredAngle;*/
+     
      mBody.setTransform(mBody.getPosition(), desiredAngle);
-      
+     
      mBody.setLinearVelocity(velocity);
    }
 }
