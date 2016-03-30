@@ -49,17 +49,12 @@ class Bowl {
     
     bowlPosition = new Vec2( (bowlMiddlePosition.x + middleTop.x) / 2, (bowlMiddlePosition.y + middleTop.y) / 2 );
     actualBowlAngle = atan((bowlendPosition.y - bowlStartPosition.y) / (bowlendPosition.x - bowlStartPosition.x));
-    
-    //bowlPositionOffsetX = (degrees(actualBowlAngle) / 360) * 200;
-    //angleOffsetY = (degrees(actualBowlAngle) / 360) * 100;
-    //bowlPosition.y -= 10;
   }
   
   ArrayList<Vec2> getWantedPos(PVector leftPoint, PVector rightPoint) {
     Vec2 mCircleCenter = new Vec2((rightPoint.x + leftPoint.x) / 2, (rightPoint.y + leftPoint.y) / 2); 
     float mRadius = bowlWidth/2;
     mAngleBetweenTwoPoints = atan((rightPoint.y - leftPoint.y) / (rightPoint.x - leftPoint.x));
-    
     ArrayList<Vec2> RectanglePos = new ArrayList<Vec2>();
     
     for (int i = (int) degrees(mAngleBetweenTwoPoints) + 5; i < (int) degrees(mAngleBetweenTwoPoints) + 180; i+=rotateOffset) {
@@ -68,7 +63,7 @@ class Bowl {
       // get a shallow bowl
       
       if (mAngleBetweenTwoPoints == 0) {
-        float newPointOffsetY = newPointY / 2;
+        newPointY = (newPointY + leftPoint.y) / 2;
       } else {
         Vec2 vecLeftWithNew = new Vec2(leftPoint.x - newPointX, leftPoint.y - newPointY);
         Vec2 vecRightAndLeft = new Vec2(rightPoint.x - leftPoint.x, rightPoint.y - leftPoint.y);
@@ -80,7 +75,6 @@ class Bowl {
         newPointX = pol.x + ((newPointX - pol.x) / 2);
         newPointY = pol.y + ((newPointY - pol.y) / 2);
       }
-      //newPointY -= newPointOffsetY;
       RectanglePos.add(new Vec2((int) newPointX, (int) newPointY));
     }
     
@@ -93,8 +87,6 @@ class Bowl {
     //float radius = sqrt(pow(circleCenter.x - leftPoint.x, 2) + pow(circleCenter.y - leftPoint.y, 2));
     float radius = bowlWidth/2;
     angleBetweenTwoPoints = atan((rightPoint.y - leftPoint.y) / (rightPoint.x - leftPoint.x));
-    //println(degrees(angleBetweenTwoPoints));
-    //println("numSections: " + numSections);
     
     ArrayList<Vec2> RectanglePos = new ArrayList<Vec2>();
     
@@ -156,8 +148,11 @@ class Bowl {
       Vec2 previous = mBox2DRef.getBodyPixelCoord( middleBody.mBody );
       
       float velX = (posRight.x + posLeft.x) / 2 - previous.x;
-      //float velY = 0;
       float velY = previous.y - (posLeft.y + (0.5*(posRight.y - posLeft.y)));
+      /*if (posLeft.y == posRight.y) {
+        print("it does");
+        velY = previous.y - (posLeft.y + (90));
+      }*/
       for (CircleBody shape : bowl2) {
         shape.MoveBody(new Vec2(velX, velY));
       }
@@ -169,7 +164,6 @@ class Bowl {
         shape.MoveBody(new Vec2(velWithAngleX + velX, velWithAngleY + velY));
         increment++;
       }
-      //bowl2 = bufferBowl;
       middleBody = bowl2.get((bowl2.size()/2) - 1);
       CircleBody beginBody = bowl2.get(bowl2.size() - 1);
       CircleBody endBody = bowl2.get(0);
@@ -188,9 +182,7 @@ class Bowl {
   void display() {
     pushMatrix();
     imageMode(CENTER);
-    //translate(bowlPosition.x + bowlPositionOffsetX, bowlPosition.y - imageOffsetY);
     translate(bowlPosition.x, bowlPosition.y);
-      //println(bowlPositionOffsetX);
       rotate(actualBowlAngle);
       image(bowlBack, 0, 0);
     popMatrix();
@@ -201,7 +193,6 @@ class Bowl {
   void displayFront() {
     pushMatrix();
     imageMode(CENTER);
-    //translate(bowlPosition.x + bowlPositionOffsetX, bowlPosition.y - imageOffsetY);
     translate(bowlPosition.x, bowlPosition.y);
       rotate(actualBowlAngle);
       tint(255, 60);
