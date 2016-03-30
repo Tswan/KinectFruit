@@ -176,7 +176,7 @@ void draw() {
   //text("framerate: " + (int)frameRate,12,16);
   
   handPosRight[0] = new PVector(mouseX, mouseY);
-  
+  /*
   if(branchesRight[0] == null)
   {
     branchesRight[0] = new Branch(handPosRight[0].x, handPosRight[0].y,100,10,0,BodyType.KINEMATIC, box2d);
@@ -188,7 +188,7 @@ void draw() {
     branchesRight[0].MoveBody(new Vec2(handPosRight[0].x,handPosRight[0].y), new Vec2(handPosLeft[0].x,handPosLeft[0].y));
     branchesRight[0].draw();
   }
-  /*
+  */
   for (int x = 0; x < handPosLeft.length; x++) {
     if (handPosLeft[x] != null && handPosRight[x] != null) {
       if (bowl[x] == null) {
@@ -206,7 +206,7 @@ void draw() {
        bowl[x] = null;
      }
     }
-  }*/
+  }
   // Draw all particles
   for (Fruit p: fruits) {
     if (p != null) {
@@ -215,12 +215,12 @@ void draw() {
   }
   
   
-  /*
+  
   for (int y = 0; y < handPosLeft.length; y++) {
     if(handPosLeft[y] != null || handPosRight[y] != null && bowl[y] != null) {
       bowl[y].displayFront();
     }
-  }*/
+  }
   
   // exploding fruits
   for (int w = 0; w < explodingFruits.size(); w++) {
@@ -306,7 +306,7 @@ void beginContact(Contact cp)
       int coconutIndex = 1;
       int strawberryIndex = 4;
       if (fruit1.getFruitIndex() == coconutIndex && fruit2.getFruitIndex() != coconutIndex) {
-        if (fruit2.getPos().y > fruit1.getPos().y) {
+        if (fruit1.body.getLinearVelocity().y < -2) {
           fruit2.setDeath();
           explodingFruits.add(new FruitParticleSystem(fruit2.getPos().x, fruit2.getPos().y, fruit_particle_images[fruit2.getFruitIndex()]));
         } else {
@@ -315,7 +315,7 @@ void beginContact(Contact cp)
         }
       }
       else if (fruit2.getFruitIndex() == strawberryIndex && fruit1.getFruitIndex() != strawberryIndex) {
-        if (fruit2.getPos().y > fruit1.getPos().y) {
+        if (fruit1.body.getLinearVelocity().y < -2) {
           fruit2.setDeath();
           explodingFruits.add(new FruitParticleSystem(fruit2.getPos().x, fruit2.getPos().y, fruit_particle_images[fruit2.getFruitIndex()]));
         } else {
@@ -334,7 +334,7 @@ void beginContact(Contact cp)
       int coconutIndex = 1;
       int strawberryIndex = 4;
       if (fruit2.getFruitIndex() == coconutIndex && fruit1.getFruitIndex() != coconutIndex) {
-        if (fruit1.getPos().y > fruit2.getPos().y) {
+        if (fruit2.body.getLinearVelocity().y < -2) {
           fruit1.setDeath();
           explodingFruits.add(new FruitParticleSystem(fruit1.getPos().x, fruit1.getPos().y, fruit_particle_images[fruit1.getFruitIndex()]));
         } else {
@@ -342,7 +342,7 @@ void beginContact(Contact cp)
           fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex()); 
         }
       } else if (fruit1.getFruitIndex() == strawberryIndex && fruit2.getFruitIndex() != strawberryIndex) {
-        if (fruit1.getPos().y > fruit2.getPos().y) {
+        if (fruit2.body.getLinearVelocity().y < -2) {
           fruit1.setDeath();
           explodingFruits.add(new FruitParticleSystem(fruit1.getPos().x, fruit1.getPos().y, fruit_particle_images[fruit1.getFruitIndex()]));
         } else {
