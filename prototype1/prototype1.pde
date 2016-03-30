@@ -256,7 +256,6 @@ void beginContact(Contact cp)
       {
         if(!f.hasCollided())
         {
-          println("Play sound");
           fruit_hit_sounds[f.getFruitIndex()].play(0);
           f.collision();
         }
@@ -270,7 +269,6 @@ void beginContact(Contact cp)
       {
         if(!f.hasCollided())
         {
-          println("Play sound");
           fruit_hit_sounds[f.getFruitIndex()].play(0);
           f.collision();
         }
@@ -382,7 +380,7 @@ void killAllBowlFruits(){
 
 void endContact(Contact cp)
 {
-  /*
+  
   Fixture f1 = cp.getFixtureA();
   Fixture f2 = cp.getFixtureB();
   
@@ -398,16 +396,16 @@ void endContact(Contact cp)
     Fruit fruit1 = (Fruit)o1;
     Fruit fruit2 = (Fruit)o2;
     
-    if(fruit1.hasCollidedWithBowl())
+    if(fruit1.hasCollidedWithBowl() && fruit1.body.getLinearVelocity().y > 2)
     {
       fruit1.bowlCollisionEnd();
       
     }
-    if(fruit2.hasCollidedWithBowl())
+    if(fruit2.hasCollidedWithBowl() && fruit1.body.getLinearVelocity().y > 2)
     {
       fruit2.bowlCollisionEnd();
     }
-  }*/
+  }
 }
 
 

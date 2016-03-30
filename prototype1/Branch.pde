@@ -100,7 +100,6 @@ class Branch
      //target.mul(-1);
      
      float desiredAngle = atan2(-target.x,target.y)*-1;
-     //println("angle: " + desiredAngle);
      mBody.setTransform(mBody.getPosition(), desiredAngle);
       
      mBody.setLinearVelocity(velocity);

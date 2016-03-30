@@ -224,7 +224,8 @@ class Fruit {
     collidedBowlIndex = bowlIdx;
   }
   
-  //trigger the fruits to stick
+  //trigger the fruits to stick, sticking is turn off if the fruit hasnt collided with bowl
+  // the function is only called in the collision dectection
   void startStick(Vec2 target)
   {
     Vec2 worldTarget = box2d.coordPixelsToWorld(target.x,target.y);   
@@ -239,14 +240,11 @@ class Fruit {
   void bowlCollisionEnd()
   {
     collidedWithTheBowl=false;
-    stopStick();
+    // stopStick(); //no need for this function
     collidedBowlIndex = -1;
   }
   
-  void stopStick()
-  {
-    
-  }
+  
     
   
 }

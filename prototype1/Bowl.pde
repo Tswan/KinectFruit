@@ -181,7 +181,7 @@ class Bowl {
   void display() {
     pushMatrix();
     translate(bowlPosition.x + bowlPositionOffsetX, bowlPosition.y - imageOffsetY);
-      println(bowlPositionOffsetX);
+      //println(bowlPositionOffsetX);
       rotate(actualBowlAngle);
       image(bowlBack, 0, 0);
     popMatrix();
