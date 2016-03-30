@@ -24,6 +24,7 @@ AudioPlayer backgroundMusic;
 AudioPlayer[] fruit_hit_sounds;
 
 PImage backgroundImg;
+PImage branchImg;
 // A reference to our box2d world
 Box2DProcessing box2d;
 
@@ -34,10 +35,14 @@ ArrayList<Tree> trees;
 
 ArrayList<FruitParticleSystem> explodingFruits;
 
-PVector[] posRight = new PVector[2];
-PVector[] posLeft = new PVector[2];
+PVector[] handPosRight = new PVector[2];
+PVector[] handPosLeft = new PVector[2];
+PVector[] sholderPosRight = new PVector[2];
+PVector[] sholderPosLeft = new PVector[2];
 
 Bowl[] bowl = new Bowl[2];
+Branch[] branchesLeft = new Branch[2];
+Branch[] branchesRight = new Branch[2];
 
 void setup() {
   size(1920, 1080, P3D);
@@ -49,11 +54,22 @@ void setup() {
   bowl[0] = null;
   bowl[1] = null;
   
-  posRight[0] = null;
-  posRight[1] = null;
+  handPosRight[0] = null;
+  handPosRight[1] = null;
   
-  posLeft[0] = null;
-  posLeft[1] = null;
+  handPosLeft[0] = null;
+  handPosLeft[1] = null;
+  
+  branchesLeft[0] = null;
+  branchesLeft[1] = null;
+  branchesRight[0] = null;
+  branchesRight[1] = null;
+  
+   sholderPosRight[0] = null;
+   sholderPosRight[1] = null;
+   
+   sholderPosLeft[0] = null;
+   sholderPosLeft[1] = null;
   
   //Music initialization
   minim = new Minim(this);
@@ -74,6 +90,7 @@ void setup() {
   fruit_hit_sounds[4].setGain(0.0);
   
   backgroundImg = loadImage("backgroundImgBlue.png");
+  branchImg = loadImage("Tree_Branch.png");
   fruit_images = new PImage[5];
   fruit_images[0] = loadImage("banana.png");
   fruit_images[1] = loadImage("coconut.png");
@@ -111,7 +128,7 @@ void setup() {
   //bowl = new Bowl(box2d);
   box2d.listenForCollisions();
   
-  posLeft[0] = new PVector(200, 500);
+  handPosLeft[0] = new PVector(200, 500);
 }
 
 void draw() {
@@ -158,26 +175,38 @@ void draw() {
   //fill(0);
   //text("framerate: " + (int)frameRate,12,16);
   
-  posRight[0] = new PVector(mouseX, mouseY);
+  handPosRight[0] = new PVector(mouseX, mouseY);
   
-  for (int x = 0; x < posLeft.length; x++) {
-    if (posLeft[x] != null && posRight[x] != null) {
+  if(branchesRight[0] == null)
+  {
+    branchesRight[0] = new Branch(handPosRight[0].x, handPosRight[0].y,100,10,0,BodyType.KINEMATIC, box2d);
+  }
+  if(branchesRight[0] != null)
+  { 
+    ellipse(handPosRight[0].x,handPosRight[0].y,10,10);
+    ellipse(handPosLeft[0].x,handPosLeft[0].y,10,10);
+    branchesRight[0].MoveBody(new Vec2(handPosRight[0].x,handPosRight[0].y), new Vec2(handPosLeft[0].x,handPosLeft[0].y));
+    branchesRight[0].draw();
+  }
+  /*
+  for (int x = 0; x < handPosLeft.length; x++) {
+    if (handPosLeft[x] != null && handPosRight[x] != null) {
       if (bowl[x] == null) {
         bowl[x] = new Bowl(box2d, x);
       } else {
-        ellipse(posRight[x].x,posRight[x].y,10,10);
-        ellipse(posLeft[x].x,posLeft[x].y,10,10);
-        bowl[x].update(posLeft[x], posRight[x]);
+        ellipse(handPosRight[x].x,handPosRight[x].y,10,10);
+        ellipse(handPosLeft[x].x,handPosLeft[x].y,10,10);
+        bowl[x].update(handPosLeft[x], handPosRight[x]);
         // Draw the surface
         bowl[x].display();
       }
-    } else if(posLeft[x] == null || posRight[x] == null) {
+    } else if(handPosLeft[x] == null || handPosRight[x] == null) {
      if (bowl[x] != null) {
        bowl[x].destroyBowl();
        bowl[x] = null;
      }
     }
-  }
+  }*/
   // Draw all particles
   for (Fruit p: fruits) {
     if (p != null) {
@@ -185,11 +214,13 @@ void draw() {
     }
   }
   
-  for (int y = 0; y < posLeft.length; y++) {
-    if(posLeft[y] != null || posRight[y] != null && bowl[y] != null) {
+  
+  /*
+  for (int y = 0; y < handPosLeft.length; y++) {
+    if(handPosLeft[y] != null || handPosRight[y] != null && bowl[y] != null) {
       bowl[y].displayFront();
     }
-  }
+  }*/
   
   // exploding fruits
   for (int w = 0; w < explodingFruits.size(); w++) {
