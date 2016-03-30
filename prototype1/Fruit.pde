@@ -49,7 +49,7 @@ class Fruit {
         vertices[3] = box2d.vectorPixelsToWorld(new Vec2(0, 75));
         vertices[4] = box2d.vectorPixelsToWorld(new Vec2(31, 132));
         vertices[5] = box2d.vectorPixelsToWorld(new Vec2(77, 132));
-        vertices[6] = box2d.vectorPixelsToWorld(new Vec2(114, 192));
+        vertices[6] = box2d.vectorPixelsToWorld(new Vec2(104, 102));
         vertices[7] = box2d.vectorPixelsToWorld(new Vec2(111, 48));
         name = "coconut";
         break;
@@ -244,13 +244,7 @@ class Fruit {
   void bowlCollisionEnd()
   {
     collidedWithTheBowl=false;
-    stopStick();
     collidedBowlIndex = -1;
-  }
-  
-  void stopStick()
-  {
-    
   }
 
 }

@@ -31,14 +31,14 @@ class Branch
      
      
      Vec2[] vertices = new Vec2[8];
-      vertices[0] = box2d.vectorPixelsToWorld(new Vec2(42, 0)); 
-      vertices[1] = box2d.vectorPixelsToWorld(new Vec2(0, 55)); 
-      vertices[2] = box2d.vectorPixelsToWorld(new Vec2(82, 157)); 
-      vertices[3] = box2d.vectorPixelsToWorld(new Vec2(98, 331)); 
-      vertices[4] = box2d.vectorPixelsToWorld(new Vec2(113, 336)); 
-      vertices[5] = box2d.vectorPixelsToWorld(new Vec2(126, 249));
-      vertices[6] = box2d.vectorPixelsToWorld(new Vec2(156, 194));
-      vertices[7] = box2d.vectorPixelsToWorld(new Vec2(169, 47));
+     vertices[0] = box2d.vectorPixelsToWorld(new Vec2(-13, 0)); 
+     vertices[1] = box2d.vectorPixelsToWorld(new Vec2(2, 6)); 
+     vertices[2] = box2d.vectorPixelsToWorld(new Vec2(18, 179)); 
+     vertices[3] = box2d.vectorPixelsToWorld(new Vec2(100, 281)); 
+     vertices[4] = box2d.vectorPixelsToWorld(new Vec2(58, 336)); 
+     vertices[5] = box2d.vectorPixelsToWorld(new Vec2(-69, 289));
+     vertices[6] = box2d.vectorPixelsToWorld(new Vec2(-56, 142));
+     vertices[7] = box2d.vectorPixelsToWorld(new Vec2(-26, 87));
      
      PolygonShape ps = new PolygonShape();
     ps.set(vertices, vertices.length);
@@ -61,22 +61,11 @@ class Branch
     Vec2 pos = box2d.getBodyPixelCoord(mBody);
     // Get its angle of rotation
     float a = mBody.getAngle();
-    Fixture f = mBody.getFixtureList();
-    PolygonShape ps = (PolygonShape) f.getShape();
     
     pushMatrix();
       translate(pos.x, pos.y);
       rotate(-a);
-      
-      image(branchImg, 0, 0); 
-      beginShape();
-    //println(vertices.length);
-    // For every vertex, convert to pixel vector
-    for (int i = 0; i < ps.getVertexCount(); i++) {
-      Vec2 v = box2d.vectorWorldToPixels(ps.getVertex(i));
-      vertex(v.x, v.y);
-    }
-    endShape(CLOSE);
+      image(branchImg, -branchImg.width/2 +20, 0); 
     popMatrix();
     
    }

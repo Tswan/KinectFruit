@@ -405,7 +405,7 @@ void beginContact(Contact cp)
       int coconutIndex = 1;
       int strawberryIndex = 4;
       if (fruit1.getFruitIndex() == coconutIndex && fruit2.getFruitIndex() != coconutIndex) {
-        if (fruit2.getPos().y > fruit1.getPos().y) {
+        if (fruit1.body.getLinearVelocity().y < -2) {
           fruit2.setDeath();
           explodingFruits.add(new FruitParticleSystem(fruit2.getPos().x, fruit2.getPos().y, fruit_particle_images[fruit2.getFruitIndex()]));
         } else {
@@ -414,7 +414,7 @@ void beginContact(Contact cp)
         }
       }
       else if (fruit2.getFruitIndex() == strawberryIndex && fruit1.getFruitIndex() != strawberryIndex) {
-        if (fruit2.getPos().y > fruit1.getPos().y) {
+        if (fruit1.body.getLinearVelocity().y < -2) {
           fruit2.setDeath();
           explodingFruits.add(new FruitParticleSystem(fruit2.getPos().x, fruit2.getPos().y, fruit_particle_images[fruit2.getFruitIndex()]));
         } else {
@@ -433,7 +433,7 @@ void beginContact(Contact cp)
       int coconutIndex = 1;
       int strawberryIndex = 4;
       if (fruit2.getFruitIndex() == coconutIndex && fruit1.getFruitIndex() != coconutIndex) {
-        if (fruit1.getPos().y > fruit2.getPos().y) {
+        if (fruit2.body.getLinearVelocity().y < -2) {
           fruit1.setDeath();
           explodingFruits.add(new FruitParticleSystem(fruit1.getPos().x, fruit1.getPos().y, fruit_particle_images[fruit1.getFruitIndex()]));
         } else {
@@ -441,7 +441,7 @@ void beginContact(Contact cp)
           fruit2.setBowlCollidedIndex(fruit1.getBowlCollidedIndex()); 
         }
       } else if (fruit1.getFruitIndex() == strawberryIndex && fruit2.getFruitIndex() != strawberryIndex) {
-        if (fruit1.getPos().y > fruit2.getPos().y) {
+        if (fruit2.body.getLinearVelocity().y < -2) {
           fruit1.setDeath();
           explodingFruits.add(new FruitParticleSystem(fruit1.getPos().x, fruit1.getPos().y, fruit_particle_images[fruit1.getFruitIndex()]));
         } else {
@@ -491,16 +491,21 @@ void endContact(Contact cp)
   Object o1 = b1.getUserData();
   Object o2 = b2.getUserData();
   
-  if(o1.getClass() == Fruit.class)
+  if(o1.getClass() == Fruit.class && o2.getClass() == Fruit.class)
   {
+    
     Fruit fruit1 = (Fruit)o1;
-    fruit1.bowlCollisionEnd();
-  }
-  
-  if(o2.getClass() == Fruit.class)
-  {
-    Fruit fruit2 = (Fruit)o1;
-    fruit2.bowlCollisionEnd();
+    Fruit fruit2 = (Fruit)o2;
+    
+    if(fruit1.hasCollidedWithBowl() && fruit1.body.getLinearVelocity().y > 2)
+    {
+      fruit1.bowlCollisionEnd();
+      
+    }
+    if(fruit2.hasCollidedWithBowl() && fruit1.body.getLinearVelocity().y > 2)
+    {
+      fruit2.bowlCollisionEnd();
+    }
   }
 }
 
