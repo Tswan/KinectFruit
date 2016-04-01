@@ -327,9 +327,15 @@ void draw() {
   for (Fruit p: fruits) {
     if (p != null) {
       p.display();
+      
+      if(p.hasCollidedWithBowl() && p.body.getLinearVelocity().y > 1)
+      {
+        p.bowlCollisionEnd();
+        
+      }
+      
     }
   }
-  
   
   for (int w = 0; w < explodingFruits.size(); w++) {
     if (!explodingFruits.get(w).isDead()) {
@@ -337,6 +343,14 @@ void draw() {
       explodingFruits.get(w).display();
     } else {
       explodingFruits.remove(w);
+    }
+  }
+  
+  if(bowl[0] != null && bowl[1] != null)
+  {
+    if(bowl[0].getPos().x == bowl[1].getPos().x && bowl[0].getPos().y == bowl[1].getPos().y)
+    {
+      bowl[0].kill();
     }
   }
   
@@ -538,12 +552,12 @@ void endContact(Contact cp)
     Fruit fruit1 = (Fruit)o1;
     Fruit fruit2 = (Fruit)o2;
     
-    if(fruit1.hasCollidedWithBowl() && fruit1.body.getLinearVelocity().y > 2)
+    if(fruit1.hasCollidedWithBowl() && fruit1.body.getLinearVelocity().y > 1)
     {
       fruit1.bowlCollisionEnd();
       
     }
-    if(fruit2.hasCollidedWithBowl() && fruit1.body.getLinearVelocity().y > 2)
+    if(fruit2.hasCollidedWithBowl() && fruit1.body.getLinearVelocity().y > 1)
     {
       fruit2.bowlCollisionEnd();
     }

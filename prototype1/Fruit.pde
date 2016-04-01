@@ -100,7 +100,7 @@ class Fruit {
     FixtureDef fd = new FixtureDef();
     fd.shape = sd;
     // Parameters that affect physics
-    fd.density = 0.1f;
+    fd.density = 1f;
     fd.friction = 0.3f;
     fd.restitution = 0f;
     // Define the body and make it from the shape
@@ -238,7 +238,7 @@ class Fruit {
     worldTarget.normalize();
     worldTarget.mulLocal((float) 1000);
     body.applyForce(worldTarget, bodyVec);
-    println("Sticking");
+    //println("Sticking");
   }
   
   void bowlCollisionEnd()

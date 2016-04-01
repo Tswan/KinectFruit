@@ -99,17 +99,16 @@ class Branch
      float bodyAngle = mBody.getAngle();
      float desiredAngle = atan2(-target.x,target.y) *-1;
      
-     /*float nextAngle = bodyAngle + mBody.getAngularVelocity()/60;
+     float nextAngle = bodyAngle + mBody.getAngularVelocity()/60;
      float totalRotation = desiredAngle - nextAngle;
-    
+     
      while(totalRotation < radians(-180) ){ totalRotation += radians(360); }
      while(totalRotation > radians(180) ){ totalRotation -= radians(360); }
      
-     float desiredAngularVelocity = totalRotation * 60;
-     float impulse =  degrees(atan2(-velocity.x,velocity.y)) - mBody.getAngularVelocity();// * desiredAngle;*/
-     
-     mBody.setTransform(mBody.getPosition(), desiredAngle);
+     float desiredAngularVelocity = totalRotation * 5;
+     mBody.setAngularVelocity(desiredAngularVelocity);
      
      mBody.setLinearVelocity(velocity);
+     
    }
 }
