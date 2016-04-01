@@ -211,7 +211,7 @@ class Bowl {
   
   Vec2 getPos()
   {
-    return new Vec2(bowlPosition.x+bowlBack.width/2,bowlPosition.y + bowlBack.height);
+    return new Vec2(bowlPosition.x, bowlPosition.y);
   }
   
   boolean isDead()

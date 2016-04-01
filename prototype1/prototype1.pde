@@ -23,6 +23,7 @@ Tracking tracker;
 Minim minim;
 AudioPlayer backgroundMusic;
 AudioPlayer[] fruit_hit_sounds;
+AudioPlayer treeGrowingSfx;
 
 PImage backgroundImg;
 PImage branchImg;
@@ -91,6 +92,8 @@ void setup() {
   fruit_hit_sounds[4] = minim.loadFile("hitSounds/Strawberry_Hitting_Bowl_Normalized.mp3");
   fruit_hit_sounds[4].setGain(0.0);
 
+  treeGrowingSfx = minim.loadFile("tree_sfx_final.mp3");
+  treeGrowingSfx.setGain(0.0);
   
   backgroundImg = loadImage("backgroundImgBlue.png");
   branchImg = loadImage("Tree_Branch.png");
@@ -487,12 +490,14 @@ void beginContact(Contact cp)
     if (!fruit1.isDead() && fruit1.hasCollidedWithBowl()) {
       if (fruit1.getPos().y < 0) { 
         trees.add(new Tree(random(0, 1800), 900, tree_images[fruit1.getFruitIndex()], fruit1.getFruitIndex()));
+        treeGrowingSfx.play(0);
         killAllBowlFruits();  
       }
     }
     if (!fruit2.isDead() && fruit2.hasCollidedWithBowl()) {
       if (fruit2.getPos().y < 0) { 
         trees.add(new Tree(random(0, 1800), 900, tree_images[fruit2.getFruitIndex()], fruit2.getFruitIndex()));
+        treeGrowingSfx.play(0);
         killAllBowlFruits();  
       }
     }
