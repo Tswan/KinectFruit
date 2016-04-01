@@ -77,7 +77,7 @@ void setup() {
   //Music initialization
   minim = new Minim(this);
 
-  backgroundMusic = minim.loadFile("alpha_musicBg_original.mp3");
+  backgroundMusic = minim.loadFile("FallingFruit_009.mp3");
   backgroundMusic.loop();
   
   fruit_hit_sounds = new AudioPlayer[5];
