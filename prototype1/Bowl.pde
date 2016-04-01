@@ -35,7 +35,7 @@ class Bowl {
   Bowl(Box2DProcessing box2D, int bowlId, PVector leftPoint, PVector rightPoint) {
     mBox2DRef = box2D;
     bowlIndex = bowlId;
-    ArrayList<CircleBody> bufferBowl = getHalfCircle(new PVector(leftEnd.x ,(leftPoint.y < rightPoint.y ? rightPoint.y : leftPoint.y)),new PVector(rightEnd.x ,(leftPoint.y < rightPoint.y ? rightPoint.y : leftPoint.y)));
+    ArrayList<CircleBody> bufferBowl = getHalfCircle(leftPoint,rightPoint);
     bowl2 = bufferBowl;
     
     CircleBody middleBody = bowl2.get((bowl2.size()/2) - 1);
@@ -98,8 +98,8 @@ class Bowl {
       float newPointX = radius * cos(radians(i)) + circleCenter.x;
       float newPointY = radius * sin(radians(i)) + circleCenter.y;
       // get a shallow bowl
-      float newPointOffsetY = newPointY / 2;
-      newPointY -= newPointOffsetY;
+      //float newPointOffsetY = newPointY / 2;
+      //newPointY -= newPointOffsetY;
       RectanglePos.add(new Vec2((int) newPointX, (int) newPointY));
     }
     

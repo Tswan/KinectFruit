@@ -351,7 +351,7 @@ void draw() {
     if(bowl[0].getPos().x == bowl[1].getPos().x && bowl[0].getPos().y == bowl[1].getPos().y)
     {
       bowl[0].kill();
-      bowl[1].kill();
+      //bowl[1].kill();
     }
   }
   
