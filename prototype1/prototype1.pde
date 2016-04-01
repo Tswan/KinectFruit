@@ -348,7 +348,7 @@ void draw() {
   
   if(bowl[0] != null && bowl[1] != null)
   {
-    if(bowl[0].getPos().x == bowl[1].getPos().x && bowl[0].getPos().y == bowl[1].getPos().y)
+    if(bowl[0].bowlIndex == bowl[1].bowlIndex)
     {
       bowl[0].kill();
       //bowl[1].kill();
