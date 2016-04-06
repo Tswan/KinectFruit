@@ -5,6 +5,10 @@ class Branch
    float     mHeight;
    float     mAngle;
    
+   boolean collided;
+   int timer;
+   int soundDelay = 1000;
+   
    Box2DProcessing mBox2DRef;
    
    color mColor = color(255,255,255);
@@ -111,4 +115,18 @@ class Branch
      mBody.setLinearVelocity(velocity);
      
    }
+   
+   void collision()
+   {
+     timer = millis();
+     collided = true;
+   }
+   
+   boolean hasCollided()
+  {
+    if(millis() - timer >= soundDelay)
+      collided = false;
+      
+    return collided;
+  }
 }

@@ -422,9 +422,23 @@ void beginContact(Contact cp)
         }
       }
     }
-    else if(o2.getClass() == Branch.class || o1.getClass() == Branch.class)
+    else if(o2.getClass() == Branch.class)
     {
-      fruit_hit_sounds[5].play(0);
+      Branch b = (Branch)o2;
+      if(!b.hasCollided())
+      {
+        fruit_hit_sounds[5].play(0);
+        b.collision();
+      }
+    }
+    else if(o1.getClass() == Branch.class)
+    {
+      Branch b = (Branch)o1;
+      if(!b.hasCollided())
+      {
+        fruit_hit_sounds[5].play(0);
+        b.collision();
+      }
     }
   }
   
