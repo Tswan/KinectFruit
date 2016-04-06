@@ -135,6 +135,23 @@ void setup() {
   handPosLeft[0] = new PVector(200, 500);
 }
 
+void treeReorder(ArrayList<Tree> trees) {
+  ArrayList<Tree> treeBuffer = new ArrayList<Tree>();
+  for (int i = 0; i < trees.size() - 1; i++) {
+    if (this.trees.get(this.trees.size()-1).getY() > this.trees.get(i).getY()) {
+      treeBuffer.add(this.trees.get(i));
+    } else {
+      treeBuffer.add(this.trees.get(trees.size() - 1));
+      treeBuffer.add(this.trees.get(i));
+    }
+  }
+  for (int m = 0; m < treeBuffer.size(); m++)
+  {
+    print(treeBuffer.get(m).getY());
+  }
+  trees = treeBuffer;
+}
+
 void draw() {
   // If the mouse is pressed, we make new particles
   if ((int) random(0, 10) == 1) {
@@ -361,16 +378,18 @@ void beginContact(Contact cp)
     if (!fruit1.isDead() && fruit1.hasCollidedWithBowl()) {
       if (fruit1.getPos().y < 0) { 
         ///
-        trees.add(new Tree(random(width*0.05, width*0.95), height*0.90, tree_images[fruit1.getFruitIndex()], fruit1.getFruitIndex()));
+        trees.add(new Tree(random(width*0.05, width*0.95), random(height*0.85, height*0.97), tree_images[fruit1.getFruitIndex()], fruit1.getFruitIndex()));
         treeGrowingSfx.play(0);
         killAllBowlFruits();  
+        treeReorder(trees);
       }
     }
     if (!fruit2.isDead() && fruit2.hasCollidedWithBowl()) {
       if (fruit2.getPos().y < 0) { 
-        trees.add(new Tree(random(width*0.05, width*0.95), height*0.90, tree_images[fruit2.getFruitIndex()], fruit2.getFruitIndex()));
+        trees.add(new Tree(random(width*0.05, width*0.95), random(height*0.85, height*0.97), tree_images[fruit2.getFruitIndex()], fruit2.getFruitIndex()));
         treeGrowingSfx.play(0);
-        killAllBowlFruits();  
+        killAllBowlFruits(); 
+        treeReorder(trees);
       }
     }
   }

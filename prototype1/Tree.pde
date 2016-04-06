@@ -22,6 +22,10 @@ class Tree {
     y = yPos - tree_height;
   }
   
+  float getY() {
+    return y + tree_img.height;
+  }
+  
   void display() {
     pushMatrix();
     translate(x, y);
