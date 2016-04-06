@@ -41,7 +41,7 @@ class Branch
      vertices[7] = box2d.vectorPixelsToWorld(new Vec2(-26, 87));
      
      PolygonShape ps = new PolygonShape();
-    ps.set(vertices, vertices.length);
+     ps.set(vertices, vertices.length);
      //fixture
      FixtureDef fd = new FixtureDef();
      fd.shape = ps;

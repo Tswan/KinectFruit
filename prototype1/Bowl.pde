@@ -97,9 +97,21 @@ class Bowl {
     for (int i = (int) degrees(angleBetweenTwoPoints) + 5; i < (int) degrees(angleBetweenTwoPoints) + 180; i+=rotateOffset) {
       float newPointX = radius * cos(radians(i)) + circleCenter.x;
       float newPointY = radius * sin(radians(i)) + circleCenter.y;
-      // get a shallow bowl
-      //float newPointOffsetY = newPointY / 2;
-      //newPointY -= newPointOffsetY;
+      
+      if (mAngleBetweenTwoPoints == 0) {
+        newPointY = (newPointY + leftPoint.y) / 2;
+      } else {
+        Vec2 vecLeftWithNew = new Vec2(leftPoint.x - newPointX, leftPoint.y - newPointY);
+        Vec2 vecRightAndLeft = new Vec2(rightPoint.x - leftPoint.x, rightPoint.y - leftPoint.y);
+        float dotProduct = vecLeftWithNew.x * vecRightAndLeft.x + vecLeftWithNew.y * vecRightAndLeft.y;
+        float squareDist = pow(vecRightAndLeft.x, 2) + pow(vecRightAndLeft.y, 2);
+        float t = -dotProduct / squareDist;
+        Vec2 pol = new Vec2(leftPoint.x + t * (rightPoint.x - leftPoint.x), leftPoint.y + t * (rightPoint.y - leftPoint.y));
+        
+        newPointX = pol.x + ((newPointX - pol.x) / 2);
+        newPointY = pol.y + ((newPointY - pol.y) / 2);
+      }
+      
       RectanglePos.add(new Vec2((int) newPointX, (int) newPointY));
     }
     
@@ -154,9 +166,7 @@ class Bowl {
       float velX = (posRight.x + posLeft.x) / 2 - previous.x;
       
       
-      float velY = previous.y - (posLeft.y + (0.5*(posRight.y - posLeft.y)));
-      
-      
+      float velY = previous.y - (posLeft.y + (0.5*(posRight.y - posLeft.y)));      
       for (CircleBody shape : bowl2) {
         shape.MoveBody(new Vec2(velX, velY));
       }
@@ -187,6 +197,10 @@ class Bowl {
   
   // A simple function to just draw the edge chain as a series of vertex points
   void display() {
+    
+    for (CircleBody p: bowl2) {
+      p.draw();
+    }
     pushMatrix();
     translate(bowlPosition.x, bowlPosition.y);
       rotate(actualBowlAngle);

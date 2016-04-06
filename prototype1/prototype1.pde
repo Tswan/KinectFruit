@@ -83,7 +83,7 @@ void setup()
   backgroundMusic = minim.loadFile("FallingFruit_009.mp3");
   backgroundMusic.loop();
   
-  fruit_hit_sounds = new AudioPlayer[5];
+  fruit_hit_sounds = new AudioPlayer[6];
   fruit_hit_sounds[0] = minim.loadFile("hitSounds/Banana_Hitting_Bowl_Normalized.mp3");
   fruit_hit_sounds[0].setGain(0.0);
   fruit_hit_sounds[1] = minim.loadFile("hitSounds/Coconut_Hitting_Bowl_Normalized.mp3");
@@ -94,6 +94,8 @@ void setup()
   fruit_hit_sounds[3].setGain(0.0);
   fruit_hit_sounds[4] = minim.loadFile("hitSounds/Strawberry_Hitting_Bowl_Normalized.mp3");
   fruit_hit_sounds[4].setGain(0.0);
+  fruit_hit_sounds[5] = minim.loadFile("hitSounds/Tree_Branch_Hitting.mp3");
+  fruit_hit_sounds[5].setGain(0.0);
 
   treeGrowingSfx = minim.loadFile("tree_sfx_final.mp3");
   treeGrowingSfx.setGain(0.0);
@@ -420,7 +422,14 @@ void beginContact(Contact cp)
         }
       }
     }
+    else if(o2.getClass() == Branch.class || o1.getClass() == Branch.class)
+    {
+      fruit_hit_sounds[5].play(0);
+    }
   }
+  
+  
+  
   
   
   //Sticking trigger
