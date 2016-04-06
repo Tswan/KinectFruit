@@ -46,7 +46,7 @@ Branch[] branchesLeft = new Branch[2];
 Branch[] branchesRight = new Branch[2];
 
 void setup() {
-  size(1920, 1080, P3D);
+  size(1280, 800, P3D);
   background(175, 238, 238);
   smooth(4);
   colorMode(RGB, 255, 255, 255, 100);
@@ -151,7 +151,7 @@ void draw() {
   }
 
   background(255);
-  image(backgroundImg, 0, 0);
+  image(backgroundImg, 0, -(0.10 * height));
   
   // draw the trees if there's any
   if (trees != null) {
@@ -361,14 +361,14 @@ void beginContact(Contact cp)
     if (!fruit1.isDead() && fruit1.hasCollidedWithBowl()) {
       if (fruit1.getPos().y < 0) { 
         ///
-        trees.add(new Tree(random(0, 1800), 900, tree_images[fruit1.getFruitIndex()], fruit1.getFruitIndex()));
+        trees.add(new Tree(random(width*0.05, width*0.95), height*0.90, tree_images[fruit1.getFruitIndex()], fruit1.getFruitIndex()));
         treeGrowingSfx.play(0);
         killAllBowlFruits();  
       }
     }
     if (!fruit2.isDead() && fruit2.hasCollidedWithBowl()) {
       if (fruit2.getPos().y < 0) { 
-        trees.add(new Tree(random(0, 1800), 900, tree_images[fruit2.getFruitIndex()], fruit2.getFruitIndex()));
+        trees.add(new Tree(random(width*0.05, width*0.95), height*0.90, tree_images[fruit2.getFruitIndex()], fruit2.getFruitIndex()));
         treeGrowingSfx.play(0);
         killAllBowlFruits();  
       }

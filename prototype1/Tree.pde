@@ -4,6 +4,7 @@ class Tree {
   boolean dead;
   PImage tree_img;
   int tree_height;
+  int fadeInLife = 120;
   float x, y;
   
   //Sound effect variables
@@ -25,7 +26,14 @@ class Tree {
     pushMatrix();
     translate(x, y);
     imageMode(CORNER);
+    float initialOpacity = 120 - fadeInLife;
+    float opacity = map(initialOpacity, 0.0f, 60.0f, 0.0f, 255.0f);
+    tint(255, opacity);  // Display at half opacity
     image(tree_img, 0, 0); 
     popMatrix();
+    if (fadeInLife > 0) {
+      fadeInLife--;
+    }
+    noTint();
   }
 }
