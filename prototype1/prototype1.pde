@@ -160,6 +160,7 @@ void draw()
   background(255);
   image(backgroundImg, 0, -(0.10 * height));
   
+  treeReorder();
   if (trees != null) 
   {
     for (Tree tree : trees) 
@@ -564,18 +565,41 @@ void beginContact(Contact cp)
     {
       if (fruit1.getPos().y < 0) 
       { 
-        trees.add(new Tree(random(width*0.05, width*0.95), height*0.90, tree_images[fruit1.getFruitIndex()], fruit1.getFruitIndex()));
+        trees.add(new Tree(random(0, width*0.95)-100, random(height*0.85, height*0.97), tree_images[fruit1.getFruitIndex()], fruit1.getFruitIndex()));
         treeGrowingSfx.play(0);
         killAllBowlFruits();  
+        
       }
     }
     if (!fruit2.isDead() && fruit2.hasCollidedWithBowl()) 
     {
       if (fruit2.getPos().y < 0) 
       { 
-        trees.add(new Tree(random(width*0.05, width*0.95), height*0.90, tree_images[fruit2.getFruitIndex()], fruit2.getFruitIndex()));
+        trees.add(new Tree(random(0, width*0.95)-100, random(height*0.85, height*0.97), tree_images[fruit2.getFruitIndex()], fruit2.getFruitIndex()));
         treeGrowingSfx.play(0);
         killAllBowlFruits();  
+        
+      }
+    }
+  }
+}
+
+void treeReorder() 
+{
+  if(trees.size() > 1)
+  {
+    for (int i = 0; i < trees.size(); i++) 
+    {
+      for(int j = 0; j < trees.size(); j++)
+      {
+        if (i != j) {
+          if(trees.get(i).getY() < trees.get(j).getY())
+          {
+            Tree tempTree = trees.get(j);
+            trees.set(j,trees.get(i));
+            trees.set(i,tempTree);
+          }
+        }
       }
     }
   }

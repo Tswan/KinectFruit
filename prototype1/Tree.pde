@@ -14,7 +14,8 @@ class Tree {
   int soundDelay = 10000;
   String name;
   
-  Tree(float xPos, float yPos, PImage treeImage, int treeIdx) {
+  Tree(float xPos, float yPos, PImage treeImage, int treeIdx) 
+  {
     treeTypeIndex = treeIdx;
     tree_img = treeImage;
     tree_height = treeImage.height;
@@ -22,7 +23,13 @@ class Tree {
     y = yPos - tree_height;
   }
   
-  void display() {
+  float getY() 
+  {
+    return y + tree_img.height;
+  }
+  
+  void display() 
+  {
     pushMatrix();
     translate(x, y);
     imageMode(CORNER);

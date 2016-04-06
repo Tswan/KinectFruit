@@ -197,10 +197,7 @@ class Bowl {
   
   // A simple function to just draw the edge chain as a series of vertex points
   void display() {
-    
-    for (CircleBody p: bowl2) {
-      p.draw();
-    }
+
     pushMatrix();
     translate(bowlPosition.x, bowlPosition.y);
       rotate(actualBowlAngle);
