@@ -1,5 +1,6 @@
 class Branch
 {
+  
    Body      mBody;
    float     mWidth;
    float     mHeight;
@@ -32,8 +33,6 @@ class Branch
      mBody = mBox2DRef.createBody(bd);
      
      //shape
-     
-     
      Vec2[] vertices = new Vec2[8];
      vertices[0] = box2d.vectorPixelsToWorld(new Vec2(-13, 0)); 
      vertices[1] = box2d.vectorPixelsToWorld(new Vec2(2, 6)); 
@@ -46,6 +45,7 @@ class Branch
      
      PolygonShape ps = new PolygonShape();
      ps.set(vertices, vertices.length);
+     
      //fixture
      FixtureDef fd = new FixtureDef();
      fd.shape = ps;
@@ -62,56 +62,57 @@ class Branch
    void draw()
    {
      // We look at each body and get its screen position
-    Vec2 pos = box2d.getBodyPixelCoord(mBody);
-    // Get its angle of rotation
-    float a = mBody.getAngle();
+     Vec2 pos = box2d.getBodyPixelCoord(mBody);
+     // Get its angle of rotation
+     float a = mBody.getAngle();
     
-    pushMatrix();
-      translate(pos.x, pos.y);
-      rotate(-a);
-      image(branchImg, -branchImg.width/2 +20, 0); 
-    popMatrix();
-    
+     pushMatrix();
+       translate(pos.x, pos.y);
+       rotate(-a);
+       image(branchImg, -branchImg.width/2 +20, 0); 
+     popMatrix();
    }
    
    boolean isDead()
-  {
-    return dead;
-  }
+   {
+     return dead;
+   }
   
-  void kill()
-  {
-    dead = true;
-  }
-  
+   void kill()
+   {
+     dead = true;
+   }
   
    void destroyBody()
    {
      mBox2DRef.destroyBody(mBody);
    }
    
-   void MoveBody(Vec2 handPos, Vec2 sholderPos)
+   void MoveBody(Vec2 handPos, Vec2 elbowPos)
    {
+     //Calculating velocity to reach target
      Vec2 previous = mBox2DRef.getBodyPixelCoord( mBody );
      
-     float velX =  sholderPos.x - previous.x;
-     float velY = previous.y - sholderPos.y;
+     float velX =  elbowPos.x - previous.x;
+     float velY = previous.y - elbowPos.y;
      Vec2 velocity = new Vec2(velX,velY);
      
-     Vec2 target = handPos.sub(sholderPos);
-     //target.mul(-1);
+     Vec2 target = handPos.sub(elbowPos);
+     
+     //Calculating angular velocity to reach targets angle in realtion to two points (hand and elbow)
      float bodyAngle = mBody.getAngle();
      float desiredAngle = atan2(-target.x,target.y) *-1;
      
      float nextAngle = bodyAngle + mBody.getAngularVelocity()/60;
      float totalRotation = desiredAngle - nextAngle;
      
-     while(totalRotation < radians(-180) ){ totalRotation += radians(360); }
-     while(totalRotation > radians(180) ){ totalRotation -= radians(360); }
+     while(totalRotation < radians(-180) ) { totalRotation += radians(360); }
+     while(totalRotation > radians(180) ) { totalRotation -= radians(360); }
      
      float desiredAngularVelocity = totalRotation * 5;
-     mBody.setAngularVelocity(desiredAngularVelocity);
      
+     //Setting velocities
+     mBody.setAngularVelocity(desiredAngularVelocity);
      mBody.setLinearVelocity(velocity);
      
    }
@@ -129,4 +130,5 @@ class Branch
       
     return collided;
   }
+  
 }

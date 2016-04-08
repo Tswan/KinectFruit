@@ -1,4 +1,3 @@
-
 import shiffman.box2d.*;
 import org.jbox2d.collision.shapes.*;
 import org.jbox2d.common.*;
@@ -47,8 +46,6 @@ Bowl[] bowl = new Bowl[2];
 Branch[] branchesLeft = new Branch[2];
 Branch[] branchesRight = new Branch[2];
 
-
-
 void setup() 
 {
   size(1280, 800, P3D);
@@ -80,19 +77,19 @@ void setup()
   //Music initialization
   minim = new Minim(this);
 
-  backgroundMusic = minim.loadFile("FallingFruit_009.mp3");
+  backgroundMusic = minim.loadFile("FallingFruit.mp3");
   backgroundMusic.loop();
   
   fruit_hit_sounds = new AudioPlayer[6];
-  fruit_hit_sounds[0] = minim.loadFile("hitSounds/Banana_Hitting_Bowl_Normalized.mp3");
+  fruit_hit_sounds[0] = minim.loadFile("hitSounds/Banana_Hitting_Bowl.mp3");
   fruit_hit_sounds[0].setGain(0.0);
-  fruit_hit_sounds[1] = minim.loadFile("hitSounds/Coconut_Hitting_Bowl_Normalized.mp3");
+  fruit_hit_sounds[1] = minim.loadFile("hitSounds/Coconut_Hitting_Bowl.mp3");
   fruit_hit_sounds[1].setGain(0.0);
-  fruit_hit_sounds[2] = minim.loadFile("hitSounds/Orange_Hitting_Bowl_Normalized.mp3");
+  fruit_hit_sounds[2] = minim.loadFile("hitSounds/Orange_Hitting_Bowl.mp3");
   fruit_hit_sounds[2].setGain(0.0);
-  fruit_hit_sounds[3] = minim.loadFile("hitSounds/Apple_Hitting_Bowl_Normalized.mp3");
+  fruit_hit_sounds[3] = minim.loadFile("hitSounds/Apple_Hitting_Bowl.mp3");
   fruit_hit_sounds[3].setGain(0.0);
-  fruit_hit_sounds[4] = minim.loadFile("hitSounds/Strawberry_Hitting_Bowl_Normalized.mp3");
+  fruit_hit_sounds[4] = minim.loadFile("hitSounds/Strawberry_Hitting_Bowl.mp3");
   fruit_hit_sounds[4].setGain(0.0);
   fruit_hit_sounds[5] = minim.loadFile("hitSounds/Tree_Branch_Hitting.mp3");
   fruit_hit_sounds[5].setGain(0.0);
@@ -103,25 +100,25 @@ void setup()
   backgroundImg = loadImage("backgroundImgBlue.png");
   branchImg = loadImage("Tree_Branch.png");
   fruit_images = new PImage[5];
-  fruit_images[0] = loadImage("banana.png");
-  fruit_images[1] = loadImage("coconut.png");
-  fruit_images[2] = loadImage("orange.png");
-  fruit_images[3] = loadImage("apple.png");
-  fruit_images[4] = loadImage("strawberry.png");
+  fruit_images[0] = loadImage("fruitImages/banana.png");
+  fruit_images[1] = loadImage("fruitImages/coconut.png");
+  fruit_images[2] = loadImage("fruitImages/orange.png");
+  fruit_images[3] = loadImage("fruitImages/apple.png");
+  fruit_images[4] = loadImage("fruitImages/strawberry.png");
   
   tree_images = new PImage[5];
-  tree_images[0] = loadImage("Tree_Banana_Final_Small.png");
-  tree_images[1] = loadImage("Tree_Coconut_Final_Small.png");
-  tree_images[2] = loadImage("Tree_Orange_Final_Small.png");
-  tree_images[3] = loadImage("Tree_Apple_Final_Small.png");
-  tree_images[4] = loadImage("Tree_Strawberry_Final_Small.png");
+  tree_images[0] = loadImage("treeImages/Tree_Banana_Final_Small.png");
+  tree_images[1] = loadImage("treeImages/Tree_Coconut_Final_Small.png");
+  tree_images[2] = loadImage("treeImages/Tree_Orange_Final_Small.png");
+  tree_images[3] = loadImage("treeImages/Tree_Apple_Final_Small.png");
+  tree_images[4] = loadImage("treeImages/Tree_Strawberry_Final_Small.png");
   
   fruit_particle_images = new PImage[5];
-  fruit_particle_images[0] = loadImage("Final_Banana_Particle.png");
-  fruit_particle_images[1] = loadImage("Final_Coconut_Particle.png");
-  fruit_particle_images[2] = loadImage("Final_Orange_Particle.png");
-  fruit_particle_images[3] = loadImage("Final_Apple_Particle.png");
-  fruit_particle_images[4] = loadImage("Final_Strawberry_Particle.png");
+  fruit_particle_images[0] = loadImage("particleImages/Final_Banana_Particle.png");
+  fruit_particle_images[1] = loadImage("particleImages/Final_Coconut_Particle.png");
+  fruit_particle_images[2] = loadImage("particleImages/Final_Orange_Particle.png");
+  fruit_particle_images[3] = loadImage("particleImages/Final_Apple_Particle.png");
+  fruit_particle_images[4] = loadImage("particleImages/Final_Strawberry_Particle.png");
 
   // Initialize box2d physics and create the world
   box2d = new Box2DProcessing(this);

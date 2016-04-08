@@ -1,4 +1,5 @@
-class Fruit {
+class Fruit 
+{
   Box2DProcessing box2d;
   PolygonShape bananaShape;
   Body body;
@@ -16,8 +17,8 @@ class Fruit {
   int soundDelay = 10000;
   String name;
 
-  Fruit(float x, float y, Box2DProcessing mBox2DRef, PImage fruitImage, int identifier) {
-    
+  Fruit(float x, float y, Box2DProcessing mBox2DRef, PImage fruitImage, int identifier) 
+  {  
     collidedBowlIndex = -1;
     dead = false;
     fruitIndex = identifier;
@@ -28,8 +29,8 @@ class Fruit {
     collided = false;
     collidedWithTheBowl = false;
     switch(identifier)
-     {
-       case 0://Banana custom polyshape
+    {
+      case 0://Banana custom polyshape
          vertices = new Vec2[8];
          vertices[0] = box2d.vectorPixelsToWorld(new Vec2(40, 0)); 
          vertices[1] = box2d.vectorPixelsToWorld(new Vec2(25, 0)); 
@@ -89,7 +90,7 @@ class Fruit {
         vertices[7] = box2d.vectorPixelsToWorld(new Vec2(29, 25));
         name = "strawberry";
         break;
-     }
+    }
     
     // This function puts the fruit in the Box2d world
     PolygonShape sd = new PolygonShape();
@@ -113,7 +114,8 @@ class Fruit {
     body.setUserData(this);
   }
   
-  void display() {
+  void display() 
+  {
     // We look at each body and get its screen position
     Vec2 pos = box2d.getBodyPixelCoord(body);
     // Get its angle of rotation
@@ -126,8 +128,8 @@ class Fruit {
   }
   
   // This function adds the rectangle to the box2d world
-  void makeBody(Vec2 center, float w_, float h_) {
-
+  void makeBody(Vec2 center, float w_, float h_) 
+  {
     // Define a polygon (this is what we use for a rectangle)
     PolygonShape sd = new PolygonShape();
     float box2dW = box2d.scalarPixelsToWorld(w_/2);
@@ -163,23 +165,28 @@ class Fruit {
   }
   
   // This function removes the particle from the box2d world
-  void killBody() {
+  void killBody() 
+  {
     box2d.destroyBody(body);
   }
   
-  void setDeath() {
+  void setDeath() 
+  {
     dead = true;
   }
   
-  boolean isDead() {
+  boolean isDead() 
+  {
     return dead;
   }
   
   // Is the particle ready for deletion?
-  boolean isOffScreen() {
+  boolean isOffScreen() 
+  {
     Vec2 pos = box2d.getBodyPixelCoord(body);
     // Is it off the bottom of the screen?
-    if (pos.y > height+height*2) {
+    if (pos.y > height+height*2) 
+    {
       return true;
     }
     return false;
@@ -211,15 +218,18 @@ class Fruit {
     startStick(target);
   }
   
-  int getFruitIndex() {
+  int getFruitIndex() 
+  {
     return fruitIndex;
   }
   
-  int getBowlCollidedIndex() {
+  int getBowlCollidedIndex() 
+  {
     return collidedBowlIndex;
   }
   
-  void setBowlCollidedIndex(int bowlIdx) {
+  void setBowlCollidedIndex(int bowlIdx) 
+  {
     collidedBowlIndex = bowlIdx;
   }
   
@@ -238,7 +248,6 @@ class Fruit {
     worldTarget.normalize();
     worldTarget.mulLocal((float) 1000);
     body.applyForce(worldTarget, bodyVec);
-    //println("Sticking");
   }
   
   void bowlCollisionEnd()

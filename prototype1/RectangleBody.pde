@@ -54,10 +54,12 @@ class RectangleBody
        translate(pos.x, pos.y);
        rotate(angle);
        
-       if (mBody.isAwake()) {
+       if (mBody.isAwake()) 
+       {
          fill(mColor);
        }
-       else {
+       else 
+       {
          fill(red(mColor) * 0.9f, green(mColor) * 0.9f, blue(mColor) * 0.9f); 
        }
        rectMode(CENTER);
@@ -66,15 +68,14 @@ class RectangleBody
    }
    
    boolean isDead()
-  {
-    return dead;
-  }
+   {
+     return dead;
+   }
   
-  void kill()
-  {
-    dead = true;
-  }
-  
+   void kill()
+   {
+     dead = true;
+   }
   
    void destroyBody()
    {
@@ -83,9 +84,7 @@ class RectangleBody
    
    void MoveBody(Vec2 newVelocity)
    {
-     /*Vec2 previous = mBox2DRef.getBodyPixelCoord( mBody );
-     float velX = mouseX - previous.x;
-     float velY = mouseY + previous.y;*/
      mBody.setLinearVelocity(newVelocity);
    }
+   
 }

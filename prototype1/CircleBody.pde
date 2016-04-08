@@ -44,10 +44,12 @@ class CircleBody
      
      pushMatrix();
        translate(pos.x, pos.y);     
-       if (mBody.isAwake()) {
+       if (mBody.isAwake()) 
+       {
          fill(mColor);
        }
-       else {
+       else 
+       {
          fill(red(mColor) * 0.9f, green(mColor) * 0.9f, blue(mColor) * 0.9f); 
        }
        rectMode(CENTER);
@@ -75,4 +77,5 @@ class CircleBody
    {
      mBody.setLinearVelocity(newVelocity);
    }
+   
 }

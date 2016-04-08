@@ -1,5 +1,6 @@
 class Tracking
 {
+  
   Kinect kinect;
   ArrayList <SkeletonData> bodies;
   int skeletonIndex;
@@ -8,7 +9,6 @@ class Tracking
   {
     kinect = new Kinect(_p);
     bodies = new ArrayList<SkeletonData>();
-    
   }
   
   Kinect returnKinect()
@@ -59,49 +59,37 @@ class Tracking
   
   PVector getLeftHandPos(SkeletonData _s)
   {
-    //ArrayList<PVector> Positions = new ArrayList<PVector>();
     PVector pos = checkJoint(_s,Kinect.NUI_SKELETON_POSITION_HAND_LEFT);
-    //Positions.add(pos);
     return pos;
   }
   
   PVector getRightHandPos(SkeletonData _s)
   {
-    //ArrayList<PVector> Positions = new ArrayList<PVector>();
     PVector pos = checkJoint(_s,Kinect.NUI_SKELETON_POSITION_HAND_RIGHT);
-   // Positions.add(pos);
     return pos;
   }
   
   PVector getLeftSholderPos(SkeletonData _s)
   {
-    //ArrayList<PVector> Positions = new ArrayList<PVector>();
     PVector pos = checkJoint(_s,Kinect.NUI_SKELETON_POSITION_SHOULDER_LEFT);
-    //Positions.add(pos);
     return pos;
   }
   
   PVector getRightSholderPos(SkeletonData _s)
   {
-    //ArrayList<PVector> Positions = new ArrayList<PVector>();
     PVector pos = checkJoint(_s,Kinect.NUI_SKELETON_POSITION_SHOULDER_RIGHT);
-   // Positions.add(pos);
     return pos;
   }
   
   PVector getLeftElbowPos(SkeletonData _s)
   {
-    //ArrayList<PVector> Positions = new ArrayList<PVector>();
     PVector pos = checkJoint(_s,Kinect.NUI_SKELETON_POSITION_ELBOW_LEFT);
-    //Positions.add(pos);
     return pos;
   }
   
   PVector getRightElbowPos(SkeletonData _s)
   {
-    //ArrayList<PVector> Positions = new ArrayList<PVector>();
     PVector pos = checkJoint(_s,Kinect.NUI_SKELETON_POSITION_ELBOW_RIGHT);
-   // Positions.add(pos);
     return pos;
   }
   
@@ -111,7 +99,6 @@ class Tracking
     fill(0, 0, 0);
     String s1 = str(_s.dwTrackingID);
     text(s1, _s.position.x*width, _s.position.y*height);
-    //text(s1, _s.position.x*width/2, _s.position.y*height/2);
   }
   
   void drawSkeleton(SkeletonData _s) 
@@ -204,11 +191,12 @@ class Tracking
     noFill();
     stroke(0, 0, 0);
     if (_s.skeletonPositionTrackingState[_j1] != Kinect.NUI_SKELETON_POSITION_NOT_TRACKED &&
-      _s.skeletonPositionTrackingState[_j2] != Kinect.NUI_SKELETON_POSITION_NOT_TRACKED) {
-      line(_s.skeletonPositions[_j1].x*width, // /2,
-      _s.skeletonPositions[_j1].y*height, // /2,
-      _s.skeletonPositions[_j2].x*width, // /2,
-      _s.skeletonPositions[_j2].y*height); // /2);
+      _s.skeletonPositionTrackingState[_j2] != Kinect.NUI_SKELETON_POSITION_NOT_TRACKED) 
+    {
+      line(_s.skeletonPositions[_j1].x*width,
+      _s.skeletonPositions[_j1].y*height,
+      _s.skeletonPositions[_j2].x*width,
+      _s.skeletonPositions[_j2].y*height);
     }
   }
   
@@ -257,19 +245,14 @@ class Tracking
   void printTestCoord(SkeletonData _s, int _j1, int _j2)
   {
     if (_s.skeletonPositionTrackingState[_j1] != Kinect.NUI_SKELETON_POSITION_NOT_TRACKED &&
-      _s.skeletonPositionTrackingState[_j2] != Kinect.NUI_SKELETON_POSITION_NOT_TRACKED) {
-      //print(" wristX: " + _s.skeletonPositions[_j1].x*width); 
-      //print(" wristY: " + _s.skeletonPositions[_j1].y*height);
+      _s.skeletonPositionTrackingState[_j2] != Kinect.NUI_SKELETON_POSITION_NOT_TRACKED) 
+    {
       noStroke();
       fill(0,255,0);
       ellipse(_s.skeletonPositions[_j1].x*width, _s.skeletonPositions[_j1].y*height,10,10);
       fill(0,0,255);
       ellipse(_s.skeletonPositions[_j2].x*width, _s.skeletonPositions[_j2].y*height,20,20);
-      //print(" handX: " + _s.skeletonPositions[_j2].x*width);
-      //print(" handY: " + _s.skeletonPositions[_j2].y*height);
     }
   }
-  
-  
-  
+
 }

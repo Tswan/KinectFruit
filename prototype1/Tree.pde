@@ -1,4 +1,6 @@
-class Tree {
+class Tree 
+{
+
   int treeTypeIndex;
   float fruit_w, fruit_h;
   boolean dead;
@@ -38,9 +40,11 @@ class Tree {
     tint(255, opacity); 
     image(tree_img, 0, 0); 
     popMatrix();
-    if (fadeInLife > 0) {
+    if (fadeInLife > 0) 
+    {
       fadeInLife--;
     }
     noTint();
   }
+  
 }
